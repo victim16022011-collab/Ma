@@ -479,7 +479,7 @@ local function SmartServerHop()
     local function HandleTeleportFail()
         Notify("Teleport Fail! Thu lai nhanh...")
         IsHopping = false
-        task.wait(0.5) 
+        task.wait(1) -- [UPDATED] 1s de giam lag
         SmartServerHop() 
     end
 
