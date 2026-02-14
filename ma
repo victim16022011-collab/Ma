@@ -1,4 +1,4 @@
-local Players = game:GetService("Players")
+Local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
 local TeleportService = game:GetService("TeleportService")
@@ -261,7 +261,7 @@ local MaxSearchDistance = 3000
 local IgnoreList = {}
 local IsInMatch = false
 local IsHopping = false
-local SafeDistance = 40 -- [UPDATED] Tang len 40 studs theo yeu cau
+local SafeDistance = 20 -- [UPDATED] Ha xuong con 20 studs
 
 -- Vị trí sửa: Trước -> Phải -> Trái
 local RepairOffsets = {
