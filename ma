@@ -261,7 +261,7 @@ local MaxSearchDistance = 3000
 local IgnoreList = {}
 local IsInMatch = false
 local IsHopping = false
-local SafeDistance = 20 -- [UPDATED] Ha xuong con 20 studs
+local SafeDistance = 40 -- [UPDATED] Tang len 40 studs theo yeu cau
 
 -- Vị trí sửa: Trước -> Phải -> Trái
 local RepairOffsets = {
@@ -493,7 +493,7 @@ local function SmartServerHop()
         local Cursor = ""
         local Found = false
         
-        for i = 1, 5 do
+        for i = 1, 10 do -- [UPDATED] Tang len 10 trang (Gap doi)
             local url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100", PlaceId)
             if Cursor ~= "" then url = url .. "&cursor=" .. Cursor end
             
