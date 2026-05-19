@@ -1,5 +1,5 @@
 -- ==================================================
--- Phiên bản: Amethyst Hub Tối Thượng + Collection (SIÊU COMBO)
+-- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
 -- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
@@ -7,8 +7,8 @@
 -- Cập nhật: Thêm Mục Setting (Tự động LƯU CẤU HÌNH NO LAG + Chuyển Ngôn Ngữ VN/EN)
 -- Cập nhật: FIX LỖI DELAY TELEPORT CỦA AUTO NÉ V2 + THÊM 7 BÀI NHẠC MỚI
 -- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
--- Cập nhật HOT: HỢP NHẤT Bảng Hub Tối Thượng và Bảng Collection V7
--- Cập nhật MỚI NHẤT: Thêm "Auto Farm Level V1" (Tự động đổi tướng chưa max khi con đang xài đã lv100)
+-- Cập nhật HOT: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
+-- Cập nhật MỚI NHẤT: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -212,7 +212,7 @@ getgenv().AutoFarm_V2 = false
 getgenv().AutoEvade_V1 = true    
 getgenv().AutoEvade_V2 = false   
 getgenv().AutoFarm_Killer_V1 = false 
-getgenv().AutoFarm_Level_V1 = false -- [NEW]
+getgenv().AutoFarm_Level_V1 = true -- [NEW] BẬT SẴN (True)
 getgenv().MusicEnabled = true
 getgenv().MusicVolumePercent = 60
 getgenv().CurrentSongIndex = 1
@@ -991,330 +991,6 @@ task.spawn(function()
 end)
 
 -- ======================================================================
--- BẢNG 2: AMETHYST COLLECTION & SMART EQUIPPED (V7) - CHẠY SONG SONG
--- ======================================================================
-local Col_RefreshData = nil
-
-local Col_UI = Instance.new("ScreenGui")
-Col_UI.Name = "AmethystCollectionScanner"
-Col_UI.Parent = CoreGui
-
-local Col_MainFrame = Instance.new("Frame")
-Col_MainFrame.Parent = Col_UI
-Col_MainFrame.Size = UDim2.new(0, 360, 0, 520) 
-Col_MainFrame.Position = UDim2.new(0.5, -180, 0.2, 0)
-Col_MainFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
-Col_MainFrame.BackgroundTransparency = 0.1
-Col_MainFrame.BorderSizePixel = 0
-Col_MainFrame.Active = true
-Instance.new("UICorner", Col_MainFrame).CornerRadius = UDim.new(0, 12)
-
-local Col_Stroke = Instance.new("UIStroke")
-Col_Stroke.Parent = Col_MainFrame
-Col_Stroke.Color = Color3.fromRGB(170, 0, 255) 
-Col_Stroke.Thickness = 2.5
-Col_Stroke.Transparency = 0.2
-
-local Col_Title = Instance.new("TextLabel")
-Col_Title.Parent = Col_MainFrame
-Col_Title.Size = UDim2.new(1, 0, 0, 40)
-Col_Title.Position = UDim2.new(0, 0, 0, 5)
-Col_Title.BackgroundTransparency = 1
-Col_Title.Font = Enum.Font.FredokaOne
-Col_Title.Text = "✧ AMETHYST COLLECTION ✧"
-Col_Title.TextColor3 = Color3.fromRGB(200, 100, 255)
-Col_Title.TextSize = 18
-
-local Col_ScrollFrame = Instance.new("ScrollingFrame")
-Col_ScrollFrame.Parent = Col_MainFrame
-Col_ScrollFrame.Size = UDim2.new(1, -20, 1, -150)
-Col_ScrollFrame.Position = UDim2.new(0, 10, 0, 50)
-Col_ScrollFrame.BackgroundTransparency = 1
-Col_ScrollFrame.ScrollBarThickness = 4
-Col_ScrollFrame.ScrollBarImageColor3 = Color3.fromRGB(170, 0, 255)
-
-local Col_UIList = Instance.new("UIListLayout")
-Col_UIList.Parent = Col_ScrollFrame
-Col_UIList.SortOrder = Enum.SortOrder.LayoutOrder
-Col_UIList.Padding = UDim.new(0, 8)
-
-local Col_ScanBtn = Instance.new("TextButton")
-Col_ScanBtn.Parent = Col_MainFrame
-Col_ScanBtn.Size = UDim2.new(0.9, 0, 0, 40)
-Col_ScanBtn.Position = UDim2.new(0.05, 0, 1, -95)
-Col_ScanBtn.BackgroundColor3 = Color3.fromRGB(130, 0, 255)
-Col_ScanBtn.Font = Enum.Font.GothamBlack
-Col_ScanBtn.Text = "CẬP NHẬT DỮ LIỆU"
-Col_ScanBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-Col_ScanBtn.TextSize = 15
-Instance.new("UICorner", Col_ScanBtn).CornerRadius = UDim.new(0, 8)
-
-local Col_EquipKillerBtn = Instance.new("TextButton")
-Col_EquipKillerBtn.Parent = Col_MainFrame
-Col_EquipKillerBtn.Size = UDim2.new(0.43, 0, 0, 35)
-Col_EquipKillerBtn.Position = UDim2.new(0.05, 0, 1, -45)
-Col_EquipKillerBtn.BackgroundColor3 = Color3.fromRGB(200, 40, 40)
-Col_EquipKillerBtn.Font = Enum.Font.GothamBlack
-Col_EquipKillerBtn.Text = "ĐỔI SÁT NHÂN"
-Col_EquipKillerBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-Col_EquipKillerBtn.TextSize = 12
-Instance.new("UICorner", Col_EquipKillerBtn).CornerRadius = UDim.new(0, 6)
-
-local Col_EquipSurvBtn = Instance.new("TextButton")
-Col_EquipSurvBtn.Parent = Col_MainFrame
-Col_EquipSurvBtn.Size = UDim2.new(0.43, 0, 0, 35)
-Col_EquipSurvBtn.Position = UDim2.new(0.52, 0, 1, -45)
-Col_EquipSurvBtn.BackgroundColor3 = Color3.fromRGB(40, 150, 200)
-Col_EquipSurvBtn.Font = Enum.Font.GothamBlack
-Col_EquipSurvBtn.Text = "ĐỔI SỐNG SÓT"
-Col_EquipSurvBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-Col_EquipSurvBtn.TextSize = 12
-Instance.new("UICorner", Col_EquipSurvBtn).CornerRadius = UDim.new(0, 6)
-
--- Kéo thả UI Collection
-local Col_dragging, Col_dragInput, Col_dragStart, Col_startPos
-Col_MainFrame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        Col_dragging = true; Col_dragStart = input.Position; Col_startPos = Col_MainFrame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then Col_dragging = false end
-        end)
-    end
-end)
-Col_MainFrame.InputChanged:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then Col_dragInput = input end
-end)
-UserInputService.InputChanged:Connect(function(input)
-    if input == Col_dragInput and Col_dragging then
-        local delta = input.Position - Col_dragStart
-        Col_MainFrame.Position = UDim2.new(Col_startPos.X.Scale, Col_startPos.X.Offset + delta.X, Col_startPos.Y.Scale, Col_startPos.Y.Offset + delta.Y)
-    end
-end)
-
-local function Col_GetMS(lvl)
-    if lvl >= 100 then return "MS 4"
-    elseif lvl >= 75 then return "MS 3"
-    elseif lvl >= 50 then return "MS 2"
-    elseif lvl >= 25 then return "MS 1"
-    else return "0" end
-end
-
-local function Col_CreateCharRow(name, level, role, isEquipped)
-    local Row = Instance.new("Frame")
-    Row.Size = UDim2.new(1, -10, 0, 55)
-    Row.BackgroundColor3 = isEquipped and Color3.fromRGB(40, 30, 60) or Color3.fromRGB(25, 25, 35)
-    Row.BackgroundTransparency = 0.2
-    Row.Parent = Col_ScrollFrame
-    Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 8)
-    
-    local Border = Instance.new("UIStroke", Row)
-    Border.Thickness = isEquipped and 2.5 or 1.5
-    Border.Transparency = isEquipped and 0 or 0.5
-    
-    if isEquipped then
-        Border.Color = Color3.fromRGB(255, 255, 255)
-        task.spawn(function()
-            while Row.Parent do
-                TweenService:Create(Border, TweenInfo.new(0.8), {Color = (role == "Killer") and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(0, 255, 255)}):Play()
-                task.wait(0.8)
-                TweenService:Create(Border, TweenInfo.new(0.8), {Color = Color3.fromRGB(255, 255, 255)}):Play()
-                task.wait(0.8)
-            end
-        end)
-    else
-        Border.Color = (role == "Killer") and Color3.fromRGB(200, 50, 50) or Color3.fromRGB(50, 120, 200)
-    end
-
-    local NameLabel = Instance.new("TextLabel")
-    NameLabel.Parent = Row
-    NameLabel.Size = UDim2.new(0.6, 0, 0.5, 0)
-    NameLabel.Position = UDim2.new(0, 12, 0.15, 0)
-    NameLabel.BackgroundTransparency = 1
-    NameLabel.Font = Enum.Font.GothamBold
-    NameLabel.Text = isEquipped and "⭐ " .. name or name
-    NameLabel.TextColor3 = isEquipped and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(220, 220, 220)
-    NameLabel.TextSize = 14
-    NameLabel.TextXAlignment = Enum.TextXAlignment.Left
-
-    local LvlLabel = Instance.new("TextLabel")
-    LvlLabel.Parent = Row
-    LvlLabel.Size = UDim2.new(0.4, 0, 1, 0)
-    LvlLabel.Position = UDim2.new(0.6, -10, 0, 0)
-    LvlLabel.BackgroundTransparency = 1
-    LvlLabel.Font = Enum.Font.GothamMedium
-    LvlLabel.Text = "Lv: " .. level .. " [" .. Col_GetMS(level) .. "]"
-    LvlLabel.TextColor3 = isEquipped and Color3.fromRGB(255, 255, 0) or Color3.fromRGB(0, 255, 150)
-    LvlLabel.TextSize = 13
-    LvlLabel.TextXAlignment = Enum.TextXAlignment.Right
-
-    if isEquipped then
-        local Tag = Instance.new("TextLabel")
-        Tag.Parent = Row
-        Tag.Size = UDim2.new(0, 100, 0, 15)
-        Tag.Position = UDim2.new(0, 12, 0.65, 0)
-        Tag.BackgroundColor3 = (role == "Killer") and Color3.fromRGB(255, 0, 0) or Color3.fromRGB(0, 170, 255)
-        Tag.Font = Enum.Font.GothamBlack
-        Tag.Text = "ĐANG TRANG BỊ"
-        Tag.TextColor3 = Color3.fromRGB(255, 255, 255)
-        Tag.TextSize = 9
-        Instance.new("UICorner", Tag).CornerRadius = UDim.new(0, 4)
-    else
-        local RoleLabel = Instance.new("TextLabel")
-        RoleLabel.Parent = Row
-        RoleLabel.Size = UDim2.new(0, 100, 0, 15)
-        RoleLabel.Position = UDim2.new(0, 12, 0.65, 0)
-        RoleLabel.BackgroundTransparency = 1
-        RoleLabel.Font = Enum.Font.GothamMedium
-        RoleLabel.Text = (role == "Killer") and "Sát Nhân" or "Người Sống Sót"
-        RoleLabel.TextColor3 = (role == "Killer") and Color3.fromRGB(150, 50, 50) or Color3.fromRGB(50, 100, 150)
-        RoleLabel.TextSize = 11
-        RoleLabel.TextXAlignment = Enum.TextXAlignment.Left
-    end
-end
-
-local Col_KillersData = {}
-local Col_SurvivorsData = {}
-local Col_EquippedNames = {}
-
-Col_RefreshData = function()
-    for _, v in pairs(Col_ScrollFrame:GetChildren()) do
-        if not v:IsA("UIListLayout") then v:Destroy() end
-    end
-
-    local pd = LocalPlayer:FindFirstChild("PlayerData")
-    if not pd then return end
-
-    Col_KillersData = {}
-    Col_SurvivorsData = {}
-    Col_EquippedNames = {}
-
-    local achievements = pd:FindFirstChild("Achievements")
-    if not achievements then return end
-
-    local kmFolder = achievements:FindFirstChild("KillersMilestones")
-    local smFolder = achievements:FindFirstChild("SurvivorsMilestones")
-
-    if kmFolder then
-        for _, v in pairs(kmFolder:GetChildren()) do
-            Col_KillersData[string.gsub(v.Name, "Milestone", "")] = v.Value
-        end
-    end
-    if smFolder then
-        for _, v in pairs(smFolder:GetChildren()) do
-            Col_SurvivorsData[string.gsub(v.Name, "Milestone", "")] = v.Value
-        end
-    end
-
-    for _, v in pairs(pd:GetDescendants()) do
-        if v:IsA("StringValue") then
-            local val = v.Value
-            if Col_KillersData[val] or Col_SurvivorsData[val] then
-                Col_EquippedNames[val] = true
-            end
-        end
-    end
-
-    local function CreateHeader(text)
-        local H = Instance.new("TextLabel", Col_ScrollFrame)
-        H.Size = UDim2.new(1, 0, 0, 35)
-        H.BackgroundTransparency = 1
-        H.Font = Enum.Font.GothamBlack
-        H.Text = "═══ " .. string.upper(text) .. " ═══"
-        H.TextColor3 = Color3.fromRGB(100, 100, 100)
-        H.TextSize = 12
-    end
-
-    CreateHeader("Kẻ Sát Nhân")
-    for name, lvl in pairs(Col_KillersData) do
-        Col_CreateCharRow(name, lvl, "Killer", Col_EquippedNames[name] or false)
-    end
-
-    CreateHeader("Người Sống Sót")
-    for name, lvl in pairs(Col_SurvivorsData) do
-        Col_CreateCharRow(name, lvl, "Survivor", Col_EquippedNames[name] or false)
-    end
-
-    task.wait(0.1)
-    Col_ScrollFrame.CanvasSize = UDim2.new(0, 0, 0, Col_UIList.AbsoluteContentSize.Y + 20)
-end
-
-Col_ScanBtn.MouseButton1Click:Connect(function()
-    TweenService:Create(Col_ScanBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(100, 0, 200)}):Play()
-    task.wait(0.1)
-    TweenService:Create(Col_ScanBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(130, 0, 255)}):Play()
-    Col_RefreshData()
-end)
-
-local function Col_AutoEquipRandom(role)
-    local targetData = (role == "Killer") and Col_KillersData or Col_SurvivorsData
-    local availableChars = {}
-    
-    for name, lvl in pairs(targetData) do
-        if lvl > 0 and not Col_EquippedNames[name] then
-            table.insert(availableChars, name)
-        end
-    end
-
-    if #availableChars == 0 then
-        pcall(function()
-            game.StarterGui:SetCore("SendNotification", {Title = "Thất Bại", Text = "Sếp đéo có con " .. role .. " nào khác trên cấp 0!", Duration = 3})
-        end)
-        return
-    end
-
-    local randomChar = availableChars[math.random(1, #availableChars)]
-    local rs = game:GetService("ReplicatedStorage")
-    local assets = rs:FindFirstChild("Assets")
-    if not assets then return end
-    
-    local roleFolder = (role == "Killer") and assets:FindFirstChild("Killers") or assets:FindFirstChild("Survivors")
-    if not roleFolder then return end
-    
-    local charModel = roleFolder:FindFirstChild(randomChar)
-    if not charModel then return end
-
-    local remote = rs:FindFirstChild("Modules") 
-        and rs.Modules:FindFirstChild("Network") 
-        and rs.Modules.Network:FindFirstChild("Network") 
-        and rs.Modules.Network.Network:FindFirstChild("RemoteEvent")
-
-    if remote then
-        pcall(function()
-            local args = { "EquipState", { charModel, buffer.fromstring("\001\001") } }
-            remote:FireServer(unpack(args))
-        end)
-        
-        pcall(function()
-            game.StarterGui:SetCore("SendNotification", {Title = "Đổi Tướng OK", Text = "Đã trang bị: " .. randomChar, Duration = 3})
-        end)
-        
-        task.wait(0.5)
-        Col_RefreshData()
-    end
-end
-
-Col_EquipKillerBtn.MouseButton1Click:Connect(function()
-    TweenService:Create(Col_EquipKillerBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(150, 30, 30)}):Play()
-    task.wait(0.1)
-    TweenService:Create(Col_EquipKillerBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(200, 40, 40)}):Play()
-    Col_RefreshData()
-    Col_AutoEquipRandom("Killer")
-end)
-
-Col_EquipSurvBtn.MouseButton1Click:Connect(function()
-    TweenService:Create(Col_EquipSurvBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(30, 100, 150)}):Play()
-    task.wait(0.1)
-    TweenService:Create(Col_EquipSurvBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 150, 200)}):Play()
-    Col_RefreshData()
-    Col_AutoEquipRandom("Survivor")
-end)
-
-task.spawn(function()
-    task.wait(0.5)
-    Col_RefreshData()
-end)
-
--- ======================================================================
 -- [SỰ KIỆN NÚT BẤM MENU MAIN HUB]
 -- ======================================================================
 local isMenuVisible = true
@@ -1428,6 +1104,10 @@ Notify("Script Da Bat! Dang cho Survivor...")
 
 -- ================= [ HÀM AUTO QUẢN LÝ CẤP ĐỘ V1 ] =================
 local function CheckAndEquipUnmaxed()
+    -- LOBBY CHECK: Nếu phát hiện có Map Ingame thì ĐÉO CHO ĐỔI TƯỚNG (chỉ đổi ở Lobby)
+    local ingameCheck = Workspace:FindFirstChild("Map") and Workspace.Map:FindFirstChild("Ingame")
+    if ingameCheck then return end
+
     local pd = LocalPlayer:FindFirstChild("PlayerData")
     if not pd then return end
     
@@ -1471,7 +1151,6 @@ local function CheckAndEquipUnmaxed()
                                     pcall(function()
                                         game.StarterGui:SetCore("SendNotification", {Title = "Auto Level V1", Text = roleName .. " đã MAX! Tự đổi sang: " .. randomChar, Duration = 5})
                                     end)
-                                    if Col_RefreshData then task.defer(function() task.wait(0.5); Col_RefreshData() end) end
                                 end
                             end
                         end
@@ -1870,7 +1549,9 @@ task.spawn(function()
                 if not mapLoaded then
                     -- [AUTO FARM LEVEL V1 LOBBY CHECK]
                     if getgenv().AutoFarm_Level_V1 then
-                        if tick() - lastEquipCheck >= 5 then
+                        local ingameCheck = Workspace:FindFirstChild("Map") and Workspace.Map:FindFirstChild("Ingame")
+                        -- Chỉ kiểm tra trang bị nếu CHẮC CHẮN ĐANG Ở LOBBY (Không tìm thấy Ingame map)
+                        if not ingameCheck and tick() - lastEquipCheck >= 5 then
                             CheckAndEquipUnmaxed()
                             lastEquipCheck = tick()
                         end
