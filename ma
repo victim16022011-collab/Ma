@@ -9,6 +9,7 @@
 -- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
 -- Cập nhật HOT: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
 -- Cập nhật MỚI NHẤT: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật VIP: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -212,12 +213,16 @@ getgenv().AutoFarm_V2 = false
 getgenv().AutoEvade_V1 = true    
 getgenv().AutoEvade_V2 = false   
 getgenv().AutoFarm_Killer_V1 = false 
-getgenv().AutoFarm_Level_V1 = true -- [NEW] BẬT SẴN (True)
+getgenv().AutoFarm_Level_V1 = true
 getgenv().MusicEnabled = true
 getgenv().MusicVolumePercent = 60
 getgenv().CurrentSongIndex = 1
 getgenv().AutoSave = true        
 getgenv().LanguageIndex = 1      
+
+-- [NEW STATE CHO CUSTOM NHẠC]
+getgenv().IsUsingCustomMusic = false
+getgenv().CustomMusicID = ""
 
 getgenv().SongList = {
     {Name = "Câu cá vạn cân", ID = "rbxassetid://124384558101360"},
@@ -812,6 +817,114 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     end)
 end
 
+local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, callback)
+    local RowFrame = Instance.new("Frame")
+    local RowCorner = Instance.new("UICorner")
+    local RowStroke = Instance.new("UIStroke")
+    
+    local IconLabel = Instance.new("TextLabel")
+    local Title = Instance.new("TextLabel")
+    local Desc = Instance.new("TextLabel")
+    
+    RowFrame.Name = "Row_" .. id
+    RowFrame.Parent = ScrollingFrame
+    RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
+    RowFrame.ZIndex = 11
+
+    RowCorner.CornerRadius = UDim.new(0, 12)
+    RowCorner.Parent = RowFrame
+
+    RowStroke.Color = Color3.fromRGB(80, 80, 120)
+    RowStroke.Thickness = 1
+    RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    RowStroke.Transparency = 0.5
+    RowStroke.Parent = RowFrame
+
+    IconLabel.Parent = RowFrame
+    IconLabel.BackgroundTransparency = 1
+    IconLabel.Position = UDim2.new(0, 15, 0.5, -20)
+    IconLabel.Size = UDim2.new(0, 40, 0, 40)
+    IconLabel.Font = Enum.Font.GothamBlack
+    IconLabel.Text = id
+    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+    IconLabel.TextSize = 28
+    IconLabel.ZIndex = 12
+
+    Title.Parent = RowFrame
+    Title.BackgroundTransparency = 1
+    Title.Position = UDim2.new(0, 65, 0, 15)
+    Title.Size = UDim2.new(0, 300, 0, 25)
+    Title.Font = Enum.Font.GothamBold
+    Title.Text = titleText
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.TextSize = 20
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.ZIndex = 12
+
+    Desc.Parent = RowFrame
+    Desc.BackgroundTransparency = 1
+    Desc.Position = UDim2.new(0, 65, 0, 40)
+    Desc.Size = UDim2.new(0, 350, 0, 20)
+    Desc.Font = Enum.Font.GothamMedium
+    Desc.Text = descText
+    Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
+    Desc.TextSize = 13
+    Desc.TextXAlignment = Enum.TextXAlignment.Left
+    Desc.ZIndex = 12
+
+    local InputBg = Instance.new("Frame")
+    InputBg.Parent = RowFrame
+    InputBg.AnchorPoint = Vector2.new(1, 0.5)
+    InputBg.Position = UDim2.new(1, -65, 0.5, 0)
+    InputBg.Size = UDim2.new(0, 100, 0, 30)
+    InputBg.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    InputBg.ZIndex = 12
+    Instance.new("UICorner", InputBg).CornerRadius = UDim.new(0, 6)
+    local IStroke = Instance.new("UIStroke", InputBg)
+    IStroke.Color = Color3.fromRGB(100, 100, 150)
+    IStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+    local TextBox = Instance.new("TextBox")
+    TextBox.Parent = InputBg
+    TextBox.Size = UDim2.new(1, 0, 1, 0)
+    TextBox.BackgroundTransparency = 1
+    TextBox.Font = Enum.Font.GothamMedium
+    TextBox.Text = ""
+    TextBox.PlaceholderText = placeholder
+    TextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TextBox.TextSize = 13
+    TextBox.ZIndex = 13
+    TextBox.ClearTextOnFocus = false
+
+    local PlayBtn = Instance.new("TextButton")
+    PlayBtn.Parent = RowFrame
+    PlayBtn.AnchorPoint = Vector2.new(1, 0.5)
+    PlayBtn.Position = UDim2.new(1, -15, 0.5, 0)
+    PlayBtn.Size = UDim2.new(0, 40, 0, 30)
+    PlayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    PlayBtn.Text = "▶"
+    PlayBtn.Font = Enum.Font.GothamBlack
+    PlayBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
+    PlayBtn.TextSize = 16
+    PlayBtn.ZIndex = 13
+    Instance.new("UICorner", PlayBtn).CornerRadius = UDim.new(0, 6)
+    local PStroke = Instance.new("UIStroke", PlayBtn)
+    PStroke.Color = Color3.fromRGB(100, 255, 100)
+    PStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+    PlayBtn.MouseButton1Click:Connect(function()
+        PlaySound(HoverSound)
+        TweenService:Create(PlayBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(100, 255, 100), TextColor3 = Color3.fromRGB(0,0,0)}):Play()
+        if callback then callback(TextBox.Text) end
+        task.wait(0.1)
+        TweenService:Create(PlayBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50), TextColor3 = Color3.fromRGB(100, 255, 100)}):Play()
+    end)
+    
+    return TextBox
+end
+
 local SliderFarmV1, SliderFarmV2, SliderEvadeV1, SliderEvadeV2, SliderKillerV1, SliderFarmLevelV1
 
 CreateSectionHeader("Sec1", "I: Auto Farm")
@@ -864,29 +977,45 @@ end)
 
 CreateCyberpunkCycleRow("7", "Chọn Bài Hát", "Đổi bài hát yêu thích của bạn.", getgenv().SongList, getgenv().CurrentSongIndex, function(index)
     getgenv().CurrentSongIndex = index
+    getgenv().IsUsingCustomMusic = false
     if getgenv().ApplyMusicSettings then getgenv().ApplyMusicSettings() end
+end)
+
+CreateCyberpunkInputRow("8", "Nhạc Custom (ID)", "Dán ID nhạc và nhấn nút ▶ để phát đè lên nhạc có sẵn.", "Nhập ID...", function(text)
+    local id = text:gsub("%D", "") 
+    if id ~= "" then
+        getgenv().IsUsingCustomMusic = true
+        getgenv().CustomMusicID = "rbxassetid://" .. id
+        if getgenv().ApplyMusicSettings then getgenv().ApplyMusicSettings() end
+        pcall(function()
+            game.StarterGui:SetCore("SendNotification", {Title = "Nhạc Custom", Text = "Đang phát ID: " .. id, Duration = 5})
+        end)
+    else
+        pcall(function()
+            game.StarterGui:SetCore("SendNotification", {Title = "Lỗi", Text = "Vui lòng nhập ID hợp lệ!", Duration = 3})
+        end)
+    end
 end)
 
 CreateSectionHeader("Sec4", "IV: Auto Farm Killer")
 
-SliderKillerV1 = CreateCyberpunkSettingRow("8", "Auto Farm Killer V1", "Đợi 3s tàng hình, săn Survivor, quét sạch auto Hop.", getgenv().AutoFarm_Killer_V1, function(state)
+SliderKillerV1 = CreateCyberpunkSettingRow("9", "Auto Farm Killer V1", "Đợi 3s tàng hình, săn Survivor, quét sạch auto Hop.", getgenv().AutoFarm_Killer_V1, function(state)
     getgenv().AutoFarm_Killer_V1 = state
 end)
 
--- [NEW] MỤC V: AUTO FARM LEVEL
 CreateSectionHeader("Sec5", "V: Auto Farm Level")
 
-SliderFarmLevelV1 = CreateCyberpunkSettingRow("9", "Auto Farm Level V1", "Tự đổi tướng < Lv100 khi con đang xài đã max.", getgenv().AutoFarm_Level_V1, function(state)
+SliderFarmLevelV1 = CreateCyberpunkSettingRow("10", "Auto Farm Level V1", "Tự đổi tướng < Lv100 khi con đang xài đã max.", getgenv().AutoFarm_Level_V1, function(state)
     getgenv().AutoFarm_Level_V1 = state
 end)
 
 CreateSectionHeader("Sec6", "VI: Setting")
 
-CreateCyberpunkSettingRow("10", "Lưu Cài Đặt (Save)", "Tự động lưu trạng thái bật/tắt (No Lag).", getgenv().AutoSave, function(state)
+CreateCyberpunkSettingRow("11", "Lưu Cài Đặt (Save)", "Tự động lưu trạng thái bật/tắt (No Lag).", getgenv().AutoSave, function(state)
     getgenv().AutoSave = state
 end)
 
-CreateCyberpunkCycleRow("11", "Ngôn Ngữ (Language)", "Chuyển đổi ngôn ngữ hiển thị UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
+CreateCyberpunkCycleRow("12", "Ngôn Ngữ (Language)", "Chuyển đổi ngôn ngữ hiển thị UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
     getgenv().LanguageIndex = index
     if getgenv().ApplyLanguageUI then getgenv().ApplyLanguageUI(index) end
 end)
@@ -914,10 +1043,11 @@ local Translations = {
         T5 = "Bật/Tắt Nhạc Nền", D5 = "Nghe nhạc cực chill.",
         T6 = "Âm Lượng Nhạc", D6 = "Điều chỉnh to nhỏ cho phù hợp.",
         T7 = "Chọn Bài Hát", D7 = "Đổi bài hát yêu thích của bạn.",
-        T8 = "Auto Farm Killer V1", D8 = "Chờ 3s tàng hình, săn Survivor, diệt sạch tự Hop.",
-        T9 = "Auto Farm Level V1", D9 = "Tự đổi tướng < Lv100 khi con đang xài đã max.",
-        T10 = "Lưu Cài Đặt (Save)", D10 = "Tự động lưu trạng thái bật/tắt (No Lag).",
-        T11 = "Ngôn Ngữ (Language)", D11 = "Chuyển đổi Tiếng Việt / English.",
+        T8 = "Nhạc Custom (ID)", D8 = "Dán ID nhạc và nhấn nút ▶ để phát đè lên nhạc có sẵn.",
+        T9 = "Auto Farm Killer V1", D9 = "Chờ 3s tàng hình, săn Survivor, diệt sạch tự Hop.",
+        T10 = "Auto Farm Level V1", D10 = "Tự đổi tướng < Lv100 khi con đang xài đã max.",
+        T11 = "Lưu Cài Đặt (Save)", D11 = "Tự động lưu trạng thái bật/tắt (No Lag).",
+        T12 = "Ngôn Ngữ (Language)", D12 = "Chuyển đổi Tiếng Việt / English.",
         Title = "✧ AMETHYST QUẢN LÝ TỐI THƯỢNG ✧",
         Note = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
     },
@@ -930,10 +1060,11 @@ local Translations = {
         T5 = "Toggle BGM", D5 = "Listen to chill music.",
         T6 = "Music Volume", D6 = "Adjust the volume level.",
         T7 = "Select Song", D7 = "Change your background music.",
-        T8 = "Auto Farm Killer V1", D8 = "Wait 3s invis, hunt Survivors, hop when cleared.",
-        T9 = "Auto Farm Level V1", D9 = "Auto equip < Lv100 char when current is maxed.",
-        T10 = "Save Settings", D10 = "Auto save configurations (No Lag).",
-        T11 = "UI Language", D11 = "Switch UI language (VN / EN).",
+        T8 = "Play Custom Music", D8 = "Paste Sound ID and press Play to override defaults.",
+        T9 = "Auto Farm Killer V1", D9 = "Wait 3s invis, hunt Survivors, hop when cleared.",
+        T10 = "Auto Farm Level V1", D10 = "Auto equip < Lv100 char when current is maxed.",
+        T11 = "Save Settings", D11 = "Auto save configurations (No Lag).",
+        T12 = "UI Language", D12 = "Switch UI language (VN / EN).",
         Title = "✧ AMETHYST SUPREME MANAGER ✧",
         Note = "Enabling V2 automatically disables V1 to prevent conflicts."
     }
@@ -982,6 +1113,7 @@ getgenv().ApplyLanguageUI = function(idx)
         UpdateRowText("9", t.T9, t.D9)
         UpdateRowText("10", t.T10, t.D10)
         UpdateRowText("11", t.T11, t.D11)
+        UpdateRowText("12", t.T12, t.D12)
     end)
 end
 
@@ -1104,7 +1236,6 @@ Notify("Script Da Bat! Dang cho Survivor...")
 
 -- ================= [ HÀM AUTO QUẢN LÝ CẤP ĐỘ V1 ] =================
 local function CheckAndEquipUnmaxed()
-    -- LOBBY CHECK: Nếu phát hiện có Map Ingame thì ĐÉO CHO ĐỔI TƯỚNG (chỉ đổi ở Lobby)
     local ingameCheck = Workspace:FindFirstChild("Map") and Workspace.Map:FindFirstChild("Ingame")
     if ingameCheck then return end
 
@@ -1547,10 +1678,8 @@ task.spawn(function()
                 end
                 
                 if not mapLoaded then
-                    -- [AUTO FARM LEVEL V1 LOBBY CHECK]
                     if getgenv().AutoFarm_Level_V1 then
                         local ingameCheck = Workspace:FindFirstChild("Map") and Workspace.Map:FindFirstChild("Ingame")
-                        -- Chỉ kiểm tra trang bị nếu CHẮC CHẮN ĐANG Ở LOBBY (Không tìm thấy Ingame map)
                         if not ingameCheck and tick() - lastEquipCheck >= 5 then
                             CheckAndEquipUnmaxed()
                             lastEquipCheck = tick()
@@ -1881,16 +2010,29 @@ AmethystMusic.Ended:Connect(function()
 end)
 
 getgenv().ApplyMusicSettings = function()
-    local songData = getgenv().SongList[getgenv().CurrentSongIndex]
+    local targetID = ""
+    local targetName = ""
+    
+    if getgenv().IsUsingCustomMusic and getgenv().CustomMusicID ~= "" then
+        targetID = getgenv().CustomMusicID
+        targetName = "Custom ID"
+    else
+        local songData = getgenv().SongList[getgenv().CurrentSongIndex]
+        targetID = songData.ID
+        targetName = songData.Name
+    end
+    
     AmethystMusic.Volume = (getgenv().MusicVolumePercent / 100) * 5
     
-    if AmethystMusic.SoundId ~= songData.ID then
-        AmethystMusic.SoundId = songData.ID
+    if AmethystMusic.SoundId ~= targetID then
+        AmethystMusic.SoundId = targetID
         if getgenv().MusicEnabled then
             AmethystMusic:Play()
-            pcall(function()
-                game.StarterGui:SetCore("SendNotification", {Title = "Nhạc nền", Text = "Đang phát: " .. songData.Name, Duration = 5})
-            end)
+            if not getgenv().IsUsingCustomMusic then
+                pcall(function()
+                    game.StarterGui:SetCore("SendNotification", {Title = "Nhạc nền", Text = "Đang phát: " .. targetName, Duration = 5})
+                end)
+            end
         end
     else
         if getgenv().MusicEnabled and not AmethystMusic.IsPlaying then
