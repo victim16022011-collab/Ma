@@ -411,7 +411,8 @@ local function ToggleSettings(show)
         PlaySound(PopupSound)
         SettingsFrame.Visible = true
         local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
-        local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 650, 0, 750)}) 
+        -- ĐÃ FIX: Thay đổi kích thước từ cố định thành scale (0.85) để tự khớp màn hình người chơi chống tràn viền dọc
+        local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 580, 0.85, 0)}) 
         tween:Play()
     else
         local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
