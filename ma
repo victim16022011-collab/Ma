@@ -6,10 +6,10 @@
 -- Cập nhật: FIX LAG Auto Né V2 (Bộ nhớ đệm Cache Spawns) + Fix Lỗi Không Tele
 -- Cập nhật: Thêm Mục Setting (Tự động LƯU CẤU HÌNH NO LAG + Chuyển Ngôn Ngữ VN/EN)
 -- Cập nhật: FIX LỖI DELAY TELEPORT CỦA AUTO NÉ V2 + THÊM 7 BÀI NHẠC MỚI
--- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
--- Cập nhật HOT: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
--- Cập nhật MỚI NHẤT: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt)
+-- Cập nhật: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
 -- Cập nhật VIP: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
+-- Cập nhật MỚI NHẤT: AUTO FARM KILLER V2 (Tích hợp xả toàn bộ Skill VIP từ PDF)
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -212,7 +212,7 @@ getgenv().AutoFarm_V1 = true
 getgenv().AutoFarm_V2 = false 
 getgenv().AutoEvade_V1 = true    
 getgenv().AutoEvade_V2 = false   
-getgenv().AutoFarm_Killer_V1 = false 
+getgenv().AutoFarm_Killer_V2 = false 
 getgenv().AutoFarm_Level_V1 = true
 getgenv().MusicEnabled = true
 getgenv().MusicVolumePercent = 60
@@ -253,7 +253,7 @@ local function LoadSettings()
                 if data.AutoFarm_V2 ~= nil then getgenv().AutoFarm_V2 = data.AutoFarm_V2 end
                 if data.AutoEvade_V1 ~= nil then getgenv().AutoEvade_V1 = data.AutoEvade_V1 end
                 if data.AutoEvade_V2 ~= nil then getgenv().AutoEvade_V2 = data.AutoEvade_V2 end
-                if data.AutoFarm_Killer_V1 ~= nil then getgenv().AutoFarm_Killer_V1 = data.AutoFarm_Killer_V1 end
+                if data.AutoFarm_Killer_V2 ~= nil then getgenv().AutoFarm_Killer_V2 = data.AutoFarm_Killer_V2 end
                 if data.AutoFarm_Level_V1 ~= nil then getgenv().AutoFarm_Level_V1 = data.AutoFarm_Level_V1 end
                 if data.MusicEnabled ~= nil then getgenv().MusicEnabled = data.MusicEnabled end
                 if data.MusicVolumePercent ~= nil then getgenv().MusicVolumePercent = data.MusicVolumePercent end
@@ -276,7 +276,7 @@ task.spawn(function()
                     AutoFarm_V2 = getgenv().AutoFarm_V2,
                     AutoEvade_V1 = getgenv().AutoEvade_V1,
                     AutoEvade_V2 = getgenv().AutoEvade_V2,
-                    AutoFarm_Killer_V1 = getgenv().AutoFarm_Killer_V1,
+                    AutoFarm_Killer_V2 = getgenv().AutoFarm_Killer_V2,
                     AutoFarm_Level_V1 = getgenv().AutoFarm_Level_V1,
                     MusicEnabled = getgenv().MusicEnabled,
                     MusicVolumePercent = getgenv().MusicVolumePercent,
@@ -411,7 +411,6 @@ local function ToggleSettings(show)
         PlaySound(PopupSound)
         SettingsFrame.Visible = true
         local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
-        -- ĐÃ FIX: Thay đổi kích thước từ cố định thành scale (0.85) để tự khớp màn hình người chơi chống tràn viền dọc
         local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 580, 0.85, 0)}) 
         tween:Play()
     else
@@ -926,7 +925,7 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     return TextBox
 end
 
-local SliderFarmV1, SliderFarmV2, SliderEvadeV1, SliderEvadeV2, SliderKillerV1, SliderFarmLevelV1
+local SliderFarmV1, SliderFarmV2, SliderEvadeV1, SliderEvadeV2, SliderKillerV2, SliderFarmLevelV1
 
 CreateSectionHeader("Sec1", "I: Auto Farm")
 
@@ -1000,8 +999,8 @@ end)
 
 CreateSectionHeader("Sec4", "IV: Auto Farm Killer")
 
-SliderKillerV1 = CreateCyberpunkSettingRow("9", "Auto Farm Killer V1", "Đợi 3s tàng hình, săn Survivor, quét sạch auto Hop.", getgenv().AutoFarm_Killer_V1, function(state)
-    getgenv().AutoFarm_Killer_V1 = state
+SliderKillerV2 = CreateCyberpunkSettingRow("9", "Auto Farm Killer V2", "Chờ 3s tàng hình, xả trọn bộ Skill VIP, quét sạch.", getgenv().AutoFarm_Killer_V2, function(state)
+    getgenv().AutoFarm_Killer_V2 = state
 end)
 
 CreateSectionHeader("Sec5", "V: Auto Farm Level")
@@ -1045,7 +1044,7 @@ local Translations = {
         T6 = "Âm Lượng Nhạc", D6 = "Điều chỉnh to nhỏ cho phù hợp.",
         T7 = "Chọn Bài Hát", D7 = "Đổi bài hát yêu thích của bạn.",
         T8 = "Nhạc Custom (ID)", D8 = "Dán ID nhạc và nhấn nút ▶ để phát đè lên nhạc có sẵn.",
-        T9 = "Auto Farm Killer V1", D9 = "Chờ 3s tàng hình, săn Survivor, diệt sạch tự Hop.",
+        T9 = "Auto Farm Killer V2", D9 = "Chờ 3s tàng hình, xả 100% Skill VIP, diệt sạch tự Hop.",
         T10 = "Auto Farm Level V1", D10 = "Tự đổi tướng < Lv100 khi con đang xài đã max.",
         T11 = "Lưu Cài Đặt (Save)", D11 = "Tự động lưu trạng thái bật/tắt (No Lag).",
         T12 = "Ngôn Ngữ (Language)", D12 = "Chuyển đổi Tiếng Việt / English.",
@@ -1062,7 +1061,7 @@ local Translations = {
         T6 = "Music Volume", D6 = "Adjust the volume level.",
         T7 = "Select Song", D7 = "Change your background music.",
         T8 = "Play Custom Music", D8 = "Paste Sound ID and press Play to override defaults.",
-        T9 = "Auto Farm Killer V1", D9 = "Wait 3s invis, hunt Survivors, hop when cleared.",
+        T9 = "Auto Farm Killer V2", D9 = "Wait 3s invis, spam all VIP skills, hop when cleared.",
         T10 = "Auto Farm Level V1", D10 = "Auto equip < Lv100 char when current is maxed.",
         T11 = "Save Settings", D11 = "Auto save configurations (No Lag).",
         T12 = "UI Language", D12 = "Switch UI language (VN / EN).",
@@ -1414,7 +1413,7 @@ local function StartInvisibleLoop()
             local isSurv = isSurvivorModel(char)
             local isKill = isLocalPlayerKiller(char)
             
-            if IsInMatch and (isSurv or (getgenv().AutoFarm_Killer_V1 and isKill)) then
+            if IsInMatch and (isSurv or (getgenv().AutoFarm_Killer_V2 and isKill)) then
                 pcall(function()
                     local hum = char and char:FindFirstChild("Humanoid")
                     local root = char and char:FindFirstChild("HumanoidRootPart")
@@ -1669,7 +1668,7 @@ local lastEquipCheck = 0
 
 task.spawn(function()
     while true do
-        if getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2 or getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Level_V1) then
+        if getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2 or getgenv().AutoFarm_Killer_V2 or getgenv().AutoFarm_Level_V1) then
             pcall(function()
                 local gen, mapLoaded, allFinished, targetPos
                 if getgenv().AutoFarm_V2 then
@@ -1687,7 +1686,7 @@ task.spawn(function()
                         end
                     end
                 
-                    if getgenv().AutoFarm_Killer_V1 and getgenv().KillerFinishedMatch then
+                    if getgenv().AutoFarm_Killer_V2 and getgenv().KillerFinishedMatch then
                         SetStatus("Đã về sảnh sau khi win! Hop SV...")
                         Notify("Diệt sạch phòng! Auto Server Hop...")
                         getgenv().KillerFinishedMatch = false
@@ -1704,7 +1703,7 @@ task.spawn(function()
                     end
                 else
                     if isLocalPlayerKiller(LocalPlayer.Character) then
-                        if getgenv().AutoFarm_Killer_V1 then
+                        if getgenv().AutoFarm_Killer_V2 then
                             if not IsInMatch then
                                 SetStatus("Đang chờ 3s (Killer)...")
                                 task.wait(3)
@@ -1739,24 +1738,42 @@ task.spawn(function()
                                     SetStatus("Đang săn: " .. targetName)
                                     local targetHum = targetPart.Parent:FindFirstChild("Humanoid")
                                     
-                                    while getgenv().AutoFarm_Killer_V1 and targetHum and targetHum.Health > 0 and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
+                                    while getgenv().AutoFarm_Killer_V2 and targetHum and targetHum.Health > 0 and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
                                         local currentRoot = LocalPlayer.Character.HumanoidRootPart
                                         currentRoot.Velocity = Vector3.zero
                                         
                                         local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
                                         currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
                                         
+                                        -- [BỘ QUÉT THÔNG MINH AUTO SKILL VIP V2]
                                         pcall(function()
                                             local gui = LocalPlayer:FindFirstChild("PlayerGui")
                                             if gui then
                                                 for _, v in pairs(gui:GetDescendants()) do
                                                     if v:IsA("ImageButton") or v:IsA("TextButton") then
                                                         local n = string.lower(v.Name)
-                                                        if string.find(n, "slash") or string.find(n, "punch") or string.find(n, "carving") or string.find(n, "stab") or string.find(n, "lacerate") then
-                                                            if v.Visible and v.Active and firesignal then
-                                                                firesignal(v.MouseButton1Down)
-                                                                firesignal(v.MouseButton1Click)
+                                                        local t = ""
+                                                        if v:IsA("TextButton") then t = string.lower(v.Text) end
+                                                        
+                                                        local keywords = {
+                                                            "slash", "punch", "carving", "stab", "lacerate", "attack",
+                                                            "behead", "gashing", "corrupt", "walkspeed", "digital",
+                                                            "footprint", "void", "nova", "mass", "infection",
+                                                            "entanglement", "eviscerate", "demonic", "pursuit",
+                                                            "bloodhook", "hunter", "feast", "ability", "skill"
+                                                        }
+                                                        
+                                                        local isSkill = false
+                                                        for _, kw in ipairs(keywords) do
+                                                            if string.find(n, kw) or string.find(t, kw) then
+                                                                isSkill = true
+                                                                break
                                                             end
+                                                        end
+                                                        
+                                                        if isSkill and v.Visible and v.Active and firesignal then
+                                                            firesignal(v.MouseButton1Down)
+                                                            firesignal(v.MouseButton1Click)
                                                         end
                                                     end
                                                 end
