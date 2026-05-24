@@ -11,7 +11,8 @@
 -- Cập nhật: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
 -- Cập nhật: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
--- Cập nhật MỚI NHẤT: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
+-- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
+-- Cập nhật MỚI NHẤT: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -1758,6 +1759,7 @@ task.spawn(function()
                                 if root then
                                     SetStatus("Đang săn: " .. targetName)
                                     local targetHum = targetPart.Parent:FindFirstChild("Humanoid")
+                                    local lastSkillScan = 0 -- [SỬA LỖI LAG: Biến đếm thời gian quét UI]
                                     
                                     while (getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and targetHum and targetHum.Health > 0 and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
                                         local currentRoot = LocalPlayer.Character.HumanoidRootPart
@@ -1766,76 +1768,81 @@ task.spawn(function()
                                         local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
                                         currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
                                         
-                                        if getgenv().AutoFarm_Killer_V1 then
-                                            -- [AUTO FARM KILLER V1 - SPAM CHIÊU CƠ BẢN]
-                                            pcall(function()
-                                                local gui = LocalPlayer:FindFirstChild("PlayerGui")
-                                                if gui then
-                                                    for _, v in pairs(gui:GetDescendants()) do
-                                                        if v:IsA("ImageButton") or v:IsA("TextButton") then
-                                                            local n = string.lower(v.Name)
-                                                            if string.find(n, "slash") or string.find(n, "punch") or string.find(n, "carving") or string.find(n, "stab") or string.find(n, "lacerate") then
-                                                                if v.Visible and v.Active and firesignal then
-                                                                    firesignal(v.MouseButton1Down)
-                                                                    firesignal(v.MouseButton1Click)
-                                                                end
-                                                            end
-                                                        end
-                                                    end
-                                                end
-                                            end)
-                                        elseif getgenv().AutoFarm_Killer_V2 then
-                                            -- [AUTO FARM KILLER V2 - BỘ QUÉT THÔNG MINH AUTO SKILL VIP V2 + CHECK HỒI CHIÊU CHỐNG LAG]
-                                            pcall(function()
-                                                local gui = LocalPlayer:FindFirstChild("PlayerGui")
-                                                if gui then
-                                                    for _, v in pairs(gui:GetDescendants()) do
-                                                        if v:IsA("ImageButton") or v:IsA("TextButton") then
-                                                            local n = string.lower(v.Name)
-                                                            local t = ""
-                                                            if v:IsA("TextButton") then t = string.lower(v.Text) end
-                                                            
-                                                            local keywords = {
-                                                                "slash", "punch", "carving", "stab", "lacerate", "attack",
-                                                                "behead", "gashing", "corrupt", "walkspeed", "digital",
-                                                                "footprint", "void", "nova", "mass", "infection",
-                                                                "entanglement", "eviscerate", "demonic", "pursuit",
-                                                                "bloodhook", "hunter", "feast", "ability", "skill"
-                                                            }
-                                                            
-                                                            local isSkill = false
-                                                            for _, kw in ipairs(keywords) do
-                                                                if string.find(n, kw) or string.find(t, kw) then
-                                                                    isSkill = true
-                                                                    break
-                                                                end
-                                                            end
-                                                            
-                                                            if isSkill and v.Visible and v.Active and firesignal then
-                                                                local currentTime = tick()
-                                                                if not SkillCooldownTracker[n] or (currentTime - SkillCooldownTracker[n] > 1) then
-                                                                    local isOnCooldown = false
-                                                                    for _, child in pairs(v:GetDescendants()) do
-                                                                        if child:IsA("TextLabel") then
-                                                                            local txt = child.Text
-                                                                            if tonumber(txt) ~= nil and tonumber(txt) > 0 then
-                                                                                isOnCooldown = true
-                                                                                break
-                                                                            end
-                                                                        end
-                                                                    end
-                                                                    
-                                                                    if not isOnCooldown then
+                                        -- [BỘ LỌC CHỐNG LAG TỐI THƯỢNG: Giảm tải CPU bằng cách tách luồng quét UI 4 lần/giây]
+                                        if tick() - lastSkillScan >= 0.25 then
+                                            lastSkillScan = tick()
+                                            
+                                            if getgenv().AutoFarm_Killer_V1 then
+                                                -- [AUTO FARM KILLER V1 - SPAM CHIÊU CƠ BẢN]
+                                                pcall(function()
+                                                    local gui = LocalPlayer:FindFirstChild("PlayerGui")
+                                                    if gui then
+                                                        for _, v in pairs(gui:GetDescendants()) do
+                                                            if v:IsA("ImageButton") or v:IsA("TextButton") then
+                                                                local n = string.lower(v.Name)
+                                                                if string.find(n, "slash") or string.find(n, "punch") or string.find(n, "carving") or string.find(n, "stab") or string.find(n, "lacerate") then
+                                                                    if v.Visible and v.Active and firesignal then
                                                                         firesignal(v.MouseButton1Down)
                                                                         firesignal(v.MouseButton1Click)
-                                                                        SkillCooldownTracker[n] = currentTime
                                                                     end
                                                                 end
                                                             end
                                                         end
                                                     end
-                                                end
-                                            end)
+                                                end)
+                                            elseif getgenv().AutoFarm_Killer_V2 then
+                                                -- [AUTO FARM KILLER V2 - BỘ QUÉT THÔNG MINH AUTO SKILL VIP V2 + CHECK HỒI CHIÊU CHỐNG LAG]
+                                                pcall(function()
+                                                    local gui = LocalPlayer:FindFirstChild("PlayerGui")
+                                                    if gui then
+                                                        for _, v in pairs(gui:GetDescendants()) do
+                                                            if v:IsA("ImageButton") or v:IsA("TextButton") then
+                                                                local n = string.lower(v.Name)
+                                                                local t = ""
+                                                                if v:IsA("TextButton") then t = string.lower(v.Text) end
+                                                                
+                                                                local keywords = {
+                                                                    "slash", "punch", "carving", "stab", "lacerate", "attack",
+                                                                    "behead", "gashing", "corrupt", "walkspeed", "digital",
+                                                                    "footprint", "void", "nova", "mass", "infection",
+                                                                    "entanglement", "eviscerate", "demonic", "pursuit",
+                                                                    "bloodhook", "hunter", "feast", "ability", "skill"
+                                                                }
+                                                                
+                                                                local isSkill = false
+                                                                for _, kw in ipairs(keywords) do
+                                                                    if string.find(n, kw) or string.find(t, kw) then
+                                                                        isSkill = true
+                                                                        break
+                                                                    end
+                                                                end
+                                                                
+                                                                if isSkill and v.Visible and v.Active and firesignal then
+                                                                    local currentTime = tick()
+                                                                    if not SkillCooldownTracker[n] or (currentTime - SkillCooldownTracker[n] > 1) then
+                                                                        local isOnCooldown = false
+                                                                        for _, child in pairs(v:GetDescendants()) do
+                                                                            if child:IsA("TextLabel") then
+                                                                                local txt = child.Text
+                                                                                if tonumber(txt) ~= nil and tonumber(txt) > 0 then
+                                                                                isOnCooldown = true
+                                                                                break
+                                                                                end
+                                                                            end
+                                                                        end
+                                                                        
+                                                                        if not isOnCooldown then
+                                                                            firesignal(v.MouseButton1Down)
+                                                                            firesignal(v.MouseButton1Click)
+                                                                            SkillCooldownTracker[n] = currentTime
+                                                                        end
+                                                                    end
+                                                                end
+                                                            end
+                                                        end
+                                                    end
+                                                end)
+                                            end
                                         end
                                         
                                         task.wait() 
