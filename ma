@@ -6,10 +6,11 @@
 -- Cập nhật: FIX LAG Auto Né V2 (Bộ nhớ đệm Cache Spawns) + Fix Lỗi Không Tele
 -- Cập nhật: Thêm Mục Setting (Tự động LƯU CẤU HÌNH NO LAG + Chuyển Ngôn Ngữ VN/EN)
 -- Cập nhật: FIX LỖI DELAY TELEPORT CỦA AUTO NÉ V2 + THÊM 7 BÀI NHẠC MỚI
--- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt)
+-- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
 -- Cập nhật: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
--- Cập nhật VIP: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
--- Cập nhật MỚI NHẤT: AUTO FARM KILLER V2 (Tích hợp xả toàn bộ Skill VIP từ PDF)
+-- Cập nhật: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
+-- Cập nhật MỚI NHẤT: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -1221,6 +1222,7 @@ local IsInMatch = false
 local IsHopping = false
 local SafeDistance = 20 
 getgenv().KillerFinishedMatch = false 
+local SkillCooldownTracker = {} -- [NEW] Bảng chống lag spam skill
 
 local RepairOffsets = {
     CFrame.new(0, 0, -6),
@@ -1745,7 +1747,7 @@ task.spawn(function()
                                         local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
                                         currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
                                         
-                                        -- [BỘ QUÉT THÔNG MINH AUTO SKILL VIP V2]
+                                        -- [BỘ QUÉT THÔNG MINH AUTO SKILL VIP V2 + CHECK HỒI CHIÊU CHỐNG LAG]
                                         pcall(function()
                                             local gui = LocalPlayer:FindFirstChild("PlayerGui")
                                             if gui then
@@ -1772,8 +1774,26 @@ task.spawn(function()
                                                         end
                                                         
                                                         if isSkill and v.Visible and v.Active and firesignal then
-                                                            firesignal(v.MouseButton1Down)
-                                                            firesignal(v.MouseButton1Click)
+                                                            local currentTime = tick()
+                                                            if not SkillCooldownTracker[n] or (currentTime - SkillCooldownTracker[n] > 1) then
+                                                                -- Quét chữ số hồi chiêu trên nút (thường các game để đếm ngược)
+                                                                local isOnCooldown = false
+                                                                for _, child in pairs(v:GetDescendants()) do
+                                                                    if child:IsA("TextLabel") then
+                                                                        local txt = child.Text
+                                                                        if tonumber(txt) ~= nil and tonumber(txt) > 0 then
+                                                                            isOnCooldown = true
+                                                                            break
+                                                                        end
+                                                                    end
+                                                                end
+                                                                
+                                                                if not isOnCooldown then
+                                                                    firesignal(v.MouseButton1Down)
+                                                                    firesignal(v.MouseButton1Click)
+                                                                    SkillCooldownTracker[n] = currentTime
+                                                                end
+                                                            end
                                                         end
                                                     end
                                                 end
