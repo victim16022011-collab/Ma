@@ -12,7 +12,9 @@
 -- Cập nhật: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
--- Cập nhật MỚI NHẤT: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
+-- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
+-- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
+-- Cập nhật MỚI NHẤT: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -218,6 +220,9 @@ getgenv().AutoEvade_V2 = false
 getgenv().AutoFarm_Killer_V1 = false 
 getgenv().AutoFarm_Killer_V2 = false 
 getgenv().AutoFarm_Level_V1 = true
+getgenv().AutoHop_V1 = true      
+getgenv().AutoHop_V2 = false     
+getgenv().AutoHop_TimeLimit = false -- [NEW] Hẹn giờ 10 phút Hop
 getgenv().MusicEnabled = true
 getgenv().MusicVolumePercent = 60
 getgenv().CurrentSongIndex = 1
@@ -260,6 +265,9 @@ local function LoadSettings()
                 if data.AutoFarm_Killer_V1 ~= nil then getgenv().AutoFarm_Killer_V1 = data.AutoFarm_Killer_V1 end
                 if data.AutoFarm_Killer_V2 ~= nil then getgenv().AutoFarm_Killer_V2 = data.AutoFarm_Killer_V2 end
                 if data.AutoFarm_Level_V1 ~= nil then getgenv().AutoFarm_Level_V1 = data.AutoFarm_Level_V1 end
+                if data.AutoHop_V1 ~= nil then getgenv().AutoHop_V1 = data.AutoHop_V1 end
+                if data.AutoHop_V2 ~= nil then getgenv().AutoHop_V2 = data.AutoHop_V2 end
+                if data.AutoHop_TimeLimit ~= nil then getgenv().AutoHop_TimeLimit = data.AutoHop_TimeLimit end
                 if data.MusicEnabled ~= nil then getgenv().MusicEnabled = data.MusicEnabled end
                 if data.MusicVolumePercent ~= nil then getgenv().MusicVolumePercent = data.MusicVolumePercent end
                 if data.CurrentSongIndex ~= nil then getgenv().CurrentSongIndex = data.CurrentSongIndex end
@@ -284,6 +292,9 @@ task.spawn(function()
                     AutoFarm_Killer_V1 = getgenv().AutoFarm_Killer_V1,
                     AutoFarm_Killer_V2 = getgenv().AutoFarm_Killer_V2,
                     AutoFarm_Level_V1 = getgenv().AutoFarm_Level_V1,
+                    AutoHop_V1 = getgenv().AutoHop_V1,
+                    AutoHop_V2 = getgenv().AutoHop_V2,
+                    AutoHop_TimeLimit = getgenv().AutoHop_TimeLimit,
                     MusicEnabled = getgenv().MusicEnabled,
                     MusicVolumePercent = getgenv().MusicVolumePercent,
                     CurrentSongIndex = getgenv().CurrentSongIndex,
@@ -932,6 +943,7 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
 end
 
 local SliderFarmV1, SliderFarmV2, SliderEvadeV1, SliderEvadeV2, SliderKillerV1, SliderKillerV2, SliderFarmLevelV1
+local SliderHopV1, SliderHopV2, SliderHopTime
 
 CreateSectionHeader("Sec1", "I: Auto Farm")
 
@@ -1027,13 +1039,35 @@ SliderFarmLevelV1 = CreateCyberpunkSettingRow("11", "Auto Farm Level V1", "Tự 
     getgenv().AutoFarm_Level_V1 = state
 end)
 
-CreateSectionHeader("Sec6", "VI: Setting")
+CreateSectionHeader("Sec6", "VI: Auto Server Hop")
 
-CreateCyberpunkSettingRow("12", "Lưu Cài Đặt (Save)", "Tự động lưu trạng thái bật/tắt (No Lag).", getgenv().AutoSave, function(state)
+SliderHopV1 = CreateCyberpunkSettingRow("12", "Auto Hop V1 (Mặc Định)", "Tìm server ít người, ping ổn định (<150ms).", getgenv().AutoHop_V1, function(state)
+    getgenv().AutoHop_V1 = state
+    if state then
+        getgenv().AutoHop_V2 = false
+        SliderHopV2.ForceUpdate(false)
+    end
+end)
+
+SliderHopV2 = CreateCyberpunkSettingRow("13", "Auto Hop V2 (Siêu Mượt)", "Tìm server ít người và ping thấp khắt khe (<120ms).", getgenv().AutoHop_V2, function(state)
+    getgenv().AutoHop_V2 = state
+    if state then
+        getgenv().AutoHop_V1 = false
+        SliderHopV1.ForceUpdate(false)
+    end
+end)
+
+SliderHopTime = CreateCyberpunkSettingRow("14", "Hop Sau 10 Phút", "Tự động đổi Server sau mỗi 10 phút chơi.", getgenv().AutoHop_TimeLimit, function(state)
+    getgenv().AutoHop_TimeLimit = state
+end)
+
+CreateSectionHeader("Sec7", "VII: Setting")
+
+CreateCyberpunkSettingRow("15", "Lưu Cài Đặt (Save)", "Tự động lưu trạng thái bật/tắt (No Lag).", getgenv().AutoSave, function(state)
     getgenv().AutoSave = state
 end)
 
-CreateCyberpunkCycleRow("13", "Ngôn Ngữ (Language)", "Chuyển đổi ngôn ngữ hiển thị UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
+CreateCyberpunkCycleRow("16", "Ngôn Ngữ (Language)", "Chuyển đổi ngôn ngữ hiển thị UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
     getgenv().LanguageIndex = index
     if getgenv().ApplyLanguageUI then getgenv().ApplyLanguageUI(index) end
 end)
@@ -1053,7 +1087,7 @@ NoteLabel.ZIndex = 6
 -- ================= [HỆ THỐNG TỪ ĐIỂN ĐA NGÔN NGỮ VN/EN] =================
 local Translations = {
     [1] = { 
-        Sec1 = "I: Auto Farm", Sec2 = "II: Auto Né Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Setting",
+        Sec1 = "I: Auto Farm", Sec2 = "II: Auto Né Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Auto Server Hop", Sec7 = "VII: Setting",
         T1 = "Auto Farm Gen V1", D1 = "Ôm máy tới 100%. An toàn, truyền thống.",
         T2 = "Auto Farm Gen V2", D2 = "Hit & Run: Sửa đồng loạt các máy, nhích từng vạch.",
         T3 = "Auto Né V1 (Cẩn Thận)", D3 = "Killer vào 20m -> Lết trốn 6s an toàn.",
@@ -1065,13 +1099,16 @@ local Translations = {
         T9 = "Auto Farm Killer V1", D9 = "Chờ 3s tàng hình, spam 1 chiêu cơ bản, quét sạch.",
         T10 = "Auto Farm Killer V2", D10 = "Chờ 3s tàng hình, xả 100% Skill VIP, diệt sạch tự Hop.",
         T11 = "Auto Farm Level V1", D11 = "Tự đổi tướng < Lv100 khi con đang xài đã max.",
-        T12 = "Lưu Cài Đặt (Save)", D12 = "Tự động lưu trạng thái bật/tắt (No Lag).",
-        T13 = "Ngôn Ngữ (Language)", D13 = "Chuyển đổi Tiếng Việt / English.",
+        T12 = "Auto Hop V1 (Mặc Định)", D12 = "Tìm server ít người, ping ổn định (<150ms).",
+        T13 = "Auto Hop V2 (Siêu Mượt)", D13 = "Tìm server ít người và ping thấp khắt khe (<120ms).",
+        T14 = "Hop Sau 10 Phút", D14 = "Tự động đổi Server sau mỗi 10 phút chơi.",
+        T15 = "Lưu Cài Đặt (Save)", D15 = "Tự động lưu trạng thái bật/tắt (No Lag).",
+        T16 = "Ngôn Ngữ (Language)", D16 = "Chuyển đổi Tiếng Việt / English.",
         Title = "✧ AMETHYST QUẢN LÝ TỐI THƯỢNG ✧",
         Note = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
     },
     [2] = { 
-        Sec1 = "I: Auto Farm", Sec2 = "II: Auto Evade Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Settings",
+        Sec1 = "I: Auto Farm", Sec2 = "II: Auto Evade Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Auto Server Hop", Sec7 = "VII: Settings",
         T1 = "Auto Farm Gen V1", D1 = "Repair to 100%. Safe and traditional.",
         T2 = "Auto Farm Gen V2", D2 = "Hit & Run: Repair all gens bar by bar.",
         T3 = "Auto Evade V1 (Safe)", D3 = "Killer within 20m -> Hide for 6s.",
@@ -1083,8 +1120,11 @@ local Translations = {
         T9 = "Auto Farm Killer V1", D9 = "Wait 3s invis, spam basic skill, hop when cleared.",
         T10 = "Auto Farm Killer V2", D10 = "Wait 3s invis, spam all VIP skills, hop when cleared.",
         T11 = "Auto Farm Level V1", D11 = "Auto equip < Lv100 char when current is maxed.",
-        T12 = "Save Settings", D12 = "Auto save configurations (No Lag).",
-        T13 = "UI Language", D13 = "Switch UI language (VN / EN).",
+        T12 = "Auto Hop V1 (Default)", D12 = "Find low player server, ping <150ms.",
+        T13 = "Auto Hop V2 (Ultra Smooth)", D13 = "Find low player server, strict ping <120ms.",
+        T14 = "Hop After 10 Mins", D14 = "Automatically hop server after 10 minutes.",
+        T15 = "Save Settings", D15 = "Auto save configurations (No Lag).",
+        T16 = "UI Language", D16 = "Switch UI language (VN / EN).",
         Title = "✧ AMETHYST SUPREME MANAGER ✧",
         Note = "Enabling V2 automatically disables V1 to prevent conflicts."
     }
@@ -1121,6 +1161,7 @@ getgenv().ApplyLanguageUI = function(idx)
         UpdateHeader("Sec4", t.Sec4)
         UpdateHeader("Sec5", t.Sec5)
         UpdateHeader("Sec6", t.Sec6)
+        UpdateHeader("Sec7", t.Sec7)
 
         UpdateRowText("1", t.T1, t.D1)
         UpdateRowText("2", t.T2, t.D2)
@@ -1135,6 +1176,9 @@ getgenv().ApplyLanguageUI = function(idx)
         UpdateRowText("11", t.T11, t.D11)
         UpdateRowText("12", t.T12, t.D12)
         UpdateRowText("13", t.T13, t.D13)
+        UpdateRowText("14", t.T14, t.D14)
+        UpdateRowText("15", t.T15, t.D15)
+        UpdateRowText("16", t.T16, t.D16)
     end)
 end
 
@@ -1606,7 +1650,7 @@ local function GetNextGenerator_V2()
     return target, true, false, ChosenSpot
 end
 
--- ================= [SMART SERVER HOP - QUÉT KỸ 100 SV VÀ TỰ LẬT TRANG] =================
+-- ================= [SMART SERVER HOP - LỌC PING THEO LỆNH SẾP V1/V2] =================
 local function SmartServerHop()
     if IsHopping then return end
     IsHopping = true
@@ -1643,7 +1687,13 @@ local function SmartServerHop()
                 for _, v in ipairs(response.data) do
                     if type(v) == "table" and v.playing and v.maxPlayers and v.id ~= game.JobId then
                         local isPingOK = true
-                        if v.ping and v.ping > 150 then isPingOK = false end
+                        -- Áp dụng bộ lọc Ping Khắt Khe của V2
+                        if getgenv().AutoHop_V2 then
+                            if v.ping and v.ping >= 120 then isPingOK = false end
+                        else
+                            -- AutoHop V1 Mặc định
+                            if v.ping and v.ping > 150 then isPingOK = false end
+                        end
                         
                         if v.playing < v.maxPlayers and isPingOK then
                             local freeSlots = v.maxPlayers - v.playing
@@ -1759,7 +1809,7 @@ task.spawn(function()
                                 if root then
                                     SetStatus("Đang săn: " .. targetName)
                                     local targetHum = targetPart.Parent:FindFirstChild("Humanoid")
-                                    local lastSkillScan = 0 -- [SỬA LỖI LAG: Biến đếm thời gian quét UI]
+                                    local lastSkillScan = 0 
                                     
                                     while (getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and targetHum and targetHum.Health > 0 and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
                                         local currentRoot = LocalPlayer.Character.HumanoidRootPart
@@ -2075,6 +2125,22 @@ task.spawn(function()
             end)
         end
         task.wait(0.2)
+    end
+end)
+
+-- ================= [ HỆ THỐNG AUTO HOP 10 PHÚT ] =================
+local ScriptSessionTime = tick()
+task.spawn(function()
+    while task.wait(5) do
+        if getgenv().AutoHop_TimeLimit and not IsHopping then
+            local elapsed = tick() - ScriptSessionTime
+            if elapsed >= 600 then -- 600 giây = 10 phút
+                SetStatus("Đã online 10 phút! Auto Hop...")
+                Notify("Đã đạt mốc 10 phút! Đang tìm Server mới...")
+                SmartServerHop()
+                break -- Ngừng vòng lặp này vì đang hop
+            end
+        end
     end
 end)
 
