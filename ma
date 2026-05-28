@@ -1,15 +1,21 @@
 -- ==================================================
--- Phiên bản: Amethyst Hub Tối Thượng (NEON VIP PREMIUM)
+-- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
+-- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
 -- Cập nhật: FIX LAG Auto Né V2 (Bộ nhớ đệm Cache Spawns) + Fix Lỗi Không Tele
 -- Cập nhật: Thêm Mục Setting (Tự động LƯU CẤU HÌNH NO LAG + Chuyển Ngôn Ngữ VN/EN)
--- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt)
--- Cập nhật: Auto Farm Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật: FIX LỖI DELAY TELEPORT CỦA AUTO NÉ V2 + THÊM 7 BÀI NHẠC MỚI
+-- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
+-- Cập nhật: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
+-- Cập nhật: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
+-- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
--- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120, Hop 10 Phút)
--- Cập nhật MỚI NHẤT: Chống che tầm nhìn (Chỉ để lại Text khi tắt), Ảnh nền Custom, Animation Siêu Chi Tiết
+-- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
+-- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
+-- Cập nhật MỚI NHẤT: Sửa lỗi mất ảnh, Sửa lỗi khung trắng La Mã, Animation chuẩn VIP, Ảnh nền Custom, Màu Neon
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -61,7 +67,7 @@ local function PlaySound(snd)
 end
 
 -- ======================================================================
--- BẢNG 1: HUTAO UI SYSTEM (MAIN HUB TỐI THƯỢNG - HUD TRONG SUỐT)
+-- BẢNG 1: HUTAO UI SYSTEM (MAIN HUB TỐI THƯỢNG)
 -- ======================================================================
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("ImageLabel")
@@ -119,20 +125,20 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Tạo hệ thống Scale riêng cho hiệu ứng nảy siêu chi tiết
+-- Tạo hiệu ứng Scale riêng cho MainFrame
 local MainScale = Instance.new("UIScale")
 MainScale.Parent = MainFrame
 MainScale.Scale = 1
 
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 5, 25)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
 MainFrame.BackgroundTransparency = 0.2 
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainFrame.Size = UDim2.new(0, 500, 0, 350) 
-MainFrame.Image = "rbxassetid://15264057865" -- ẢNH NỀN SẾP YÊU CẦU
-MainFrame.ImageTransparency = 0.1
+MainFrame.Image = "rbxassetid://15264057865" -- Ảnh nền sếp yêu cầu
+MainFrame.ImageTransparency = 0.3
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
 
 local GearIcon = Instance.new("ImageLabel")
@@ -173,7 +179,7 @@ StatusLabel.Font = Enum.Font.SourceSansBold
 StatusLabel.Text = "Status: Dang khoi dong..."
 StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 StatusLabel.TextSize = 24.000
-StatusLabel.TextStrokeTransparency = 0.200
+StatusLabel.TextStrokeTransparency = 0.500
 
 GeneralLabel.Name = "General"
 GeneralLabel.Parent = MainFrame
@@ -185,7 +191,7 @@ GeneralLabel.Font = Enum.Font.SourceSansBold
 GeneralLabel.Text = "General: Loading..."
 GeneralLabel.TextColor3 = Color3.fromRGB(255, 255, 127) 
 GeneralLabel.TextSize = 24.000
-GeneralLabel.TextStrokeTransparency = 0.200
+GeneralLabel.TextStrokeTransparency = 0.500
 
 MoneyLabel.Name = "Money"
 MoneyLabel.Parent = MainFrame
@@ -197,7 +203,7 @@ MoneyLabel.Font = Enum.Font.SourceSansBold
 MoneyLabel.Text = "Money: Loading..."
 MoneyLabel.TextColor3 = Color3.fromRGB(85, 255, 127) 
 MoneyLabel.TextSize = 24.000
-MoneyLabel.TextStrokeTransparency = 0.200
+MoneyLabel.TextStrokeTransparency = 0.500
 
 TimeLabel.Name = "Time"
 TimeLabel.Parent = MainFrame
@@ -209,7 +215,7 @@ TimeLabel.Font = Enum.Font.SourceSansBold
 TimeLabel.Text = "Time: 00:00:00"
 TimeLabel.TextColor3 = Color3.fromRGB(255, 170, 255)
 TimeLabel.TextSize = 24.000
-TimeLabel.TextStrokeTransparency = 0.200
+TimeLabel.TextStrokeTransparency = 0.500
 
 -- ======================================================================
 -- [VIP SYSTEM] MENU SETTINGS MAIN HUB
@@ -230,7 +236,6 @@ getgenv().CurrentSongIndex = 1
 getgenv().AutoSave = true        
 getgenv().LanguageIndex = 1      
 
--- [NEW STATE CHO CUSTOM NHẠC]
 getgenv().IsUsingCustomMusic = false
 getgenv().CustomMusicID = ""
 
@@ -351,7 +356,7 @@ task.spawn(function()
         if SettingsFrame.Visible then
             hue = hue + 0.005
             if hue > 1 then hue = 0 end
-            -- Đổi màu viền cực kỳ rực rỡ Cầu Vồng chói lóa
+            -- LED Rainbow chớp nháy siêu rực rỡ
             SettingsStroke.Color = Color3.fromHSV(hue, 1, 1) 
         end
     end
@@ -426,17 +431,16 @@ UIPadding.PaddingTop = UDim.new(0, 10)
 UIPadding.PaddingBottom = UDim.new(0, 20)
 
 -- =====================================================================
--- [HIỆU ỨNG POP-IN TỪNG HÀNG TRONG SETTING] (SIÊU CHI TIẾT)
+-- [HIỆU ỨNG POP-IN TỪNG HÀNG TRONG SETTING CHỐNG LỖI KHUNG TRẮNG]
 -- =====================================================================
 local function PlayRowPopInAnimation()
     for i, child in ipairs(ScrollingFrame:GetChildren()) do
-        if child:IsA("Frame") then
-            -- Cho tàng hình trước
+        -- Đã SỬA LỖI: Chỉ target vào các hàng chứa Setting (tên bắt đầu bằng Row_), Không chạm vào Header (chữ La Mã)
+        if child:IsA("Frame") and string.find(child.Name, "Row_") then
             child.BackgroundTransparency = 1
-            local scale = child:FindFirstChild("UIScale")
+            local scale = child:FindFirstChildOfClass("UIScale")
             if scale then scale.Scale = 0 end
             
-            -- Bật lên từng cái với độ trễ siêu nhỏ
             task.delay(i * 0.03, function()
                 TweenService:Create(child, TweenInfo.new(0.3), {BackgroundTransparency = 0.3}):Play()
                 if scale then
@@ -451,7 +455,7 @@ local function ToggleSettings(show)
     if show then
         PlaySound(PopupSound)
         SettingsFrame.Visible = true
-        SettingsFrame.Rotation = -5 -- Xoay nhẹ trước khi bung
+        SettingsFrame.Rotation = -5
         SettingsFrame.Size = UDim2.new(0, 0, 0, 0)
         
         local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
@@ -954,7 +958,7 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     PlayBtn.AnchorPoint = Vector2.new(1, 0.5)
     PlayBtn.Position = UDim2.new(1, -15, 0.5, 0)
     PlayBtn.Size = UDim2.new(0, 40, 0, 30)
-    PlayBtn.BackgroundColor3 = Color3.fromRGB(40, 30, 50)
+    PlayBtn.BackgroundColor3 = Color3.fromRGB(50, 40, 50)
     PlayBtn.Text = "▶"
     PlayBtn.Font = Enum.Font.GothamBlack
     PlayBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
@@ -1226,45 +1230,27 @@ end)
 -- ======================================================================
 local isMenuVisible = true
 
--- [CHỐNG CHE TẦM NHÌN]: Cho khung MainFrame tự động Clip các nút mờ ảo
-MainFrame.ClipsDescendants = true 
-
 local function PlayHubOpenAnimation()
     PlaySound(PopupSound)
-    GearIcon.Visible = true
+    MainFrame.Visible = true
+    MainScale.Scale = 0
     
     -- Bung khung Hub to lên với hiệu ứng Nảy cực mượt (Elastic)
-    TweenService:Create(MainScale, TweenInfo.new(0.8, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
-    
-    -- Cho nền ảnh và viền hiện rõ lại
-    TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        BackgroundTransparency = 0.2,
-        ImageTransparency = 0.1
-    }):Play()
-    
-    -- Các chữ sáng rõ rực rỡ
-    for _, label in ipairs({TitleLabel, StatusLabel, GeneralLabel, MoneyLabel, TimeLabel}) do
-        TweenService:Create(label, TweenInfo.new(0.3), {TextTransparency = 0, TextStrokeTransparency = 0}):Play()
-    end
+    TweenService:Create(MainScale, TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
 end
 
 local function PlayHubCloseAnimation()
     PlaySound(ToggleOffSound)
-    GearIcon.Visible = false
     
-    -- Thu nhỏ UI lại một chút (Scale xuống 0.85) để thành dạng HUD mini
-    TweenService:Create(MainScale, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Scale = 0.85}):Play()
+    -- Thu nhỏ UI biến mất hoàn toàn 100%
+    local tween = TweenService:Create(MainScale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Scale = 0})
+    tween:Play()
     
-    -- [GIẢI QUYẾT TRIỆT ĐỂ LỖI CHE TẦM NHÌN]: Mờ nền 100%, vứt mẹ ảnh nền đi!
-    TweenService:Create(MainFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-        BackgroundTransparency = 1,
-        ImageTransparency = 1
-    }):Play()
-    
-    -- Chữ chỉ hơi mờ nhẹ đi một chút xíu để sếp vẫn thấy rõ trạng thái Farm!
-    for _, label in ipairs({TitleLabel, StatusLabel, GeneralLabel, MoneyLabel, TimeLabel}) do
-        TweenService:Create(label, TweenInfo.new(0.5), {TextTransparency = 0.1, TextStrokeTransparency = 0.5}):Play()
-    end
+    tween.Completed:Connect(function()
+        if not isMenuVisible then
+            MainFrame.Visible = false
+        end
+    end)
 end
 
 ToggleButton.MouseButton1Click:Connect(function()
@@ -1277,9 +1263,6 @@ ToggleButton.MouseButton1Click:Connect(function()
         if SettingsFrame.Visible then ToggleSettings(false) end
     end
 end)
-
--- Khởi động vào phát là diễn Animation đẹp luôn
-PlayHubOpenAnimation()
 
 GearButton.MouseEnter:Connect(function() PlaySound(HoverSound) end)
 GearButton.MouseButton1Click:Connect(function()
@@ -1334,18 +1317,9 @@ task.spawn(function()
     while true do UpdateUI(); task.wait(1) end
 end)
 
--- Bổ sung Hiệu ứng Text Tween giật lên cực ngầu khi chữ Status thay đổi
 local function SetStatus(msg)
-    if CurrentStatus ~= msg then
-        CurrentStatus = msg
-        UpdateUI()
-        pcall(function()
-            local originalSize = 24
-            TweenService:Create(StatusLabel, TweenInfo.new(0.1, Enum.EasingStyle.Sine), {TextSize = originalSize + 5}):Play()
-            task.wait(0.1)
-            TweenService:Create(StatusLabel, TweenInfo.new(0.2, Enum.EasingStyle.Bounce), {TextSize = originalSize}):Play()
-        end)
-    end
+    CurrentStatus = msg
+    UpdateUI()
 end
 
 -- ================= [HUTAO ANTI-BAN SYSTEM] =================
@@ -1361,11 +1335,11 @@ end)
 
 local function Notify(msg)
     pcall(function()
-        game.StarterGui:SetCore("SendNotification", { Title = "Amethyst Premium", Text = msg, Duration = 3 })
+        game.StarterGui:SetCore("SendNotification", { Title = "Amethyst Hub", Text = msg, Duration = 3 })
     end)
 end
 
-Notify("Anti-Ban System (Premium) Active!")
+Notify("Anti-Ban System (Hutao) Active!")
 
 -- ================= CẤU HÌNH (AUTO RUN CORE) =================
 getgenv().AutoFarm = true 
