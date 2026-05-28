@@ -2,20 +2,17 @@
 -- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
--- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
 -- Cập nhật: FIX LAG Auto Né V2 (Bộ nhớ đệm Cache Spawns) + Fix Lỗi Không Tele
 -- Cập nhật: Thêm Mục Setting (Tự động LƯU CẤU HÌNH NO LAG + Chuyển Ngôn Ngữ VN/EN)
--- Cập nhật: FIX LỖI DELAY TELEPORT CỦA AUTO NÉ V2 + THÊM 7 BÀI NHẠC MỚI
--- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
--- Cập nhật: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
--- Cập nhật: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt)
+-- Cập nhật: Auto Farm Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
 -- Cập nhật: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
 -- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
 -- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
--- Cập nhật MỚI NHẤT: Sửa lỗi mất ảnh, Sửa lỗi khung trắng La Mã, Animation chuẩn VIP, Ảnh nền Custom, Màu Neon
+-- Cập nhật MỚI NHẤT: Sửa lỗi mất ảnh nền, Trả lại tên AMETHYST HUB, Viền VIP rực rỡ
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -125,20 +122,19 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Tạo hiệu ứng Scale riêng cho MainFrame
 local MainScale = Instance.new("UIScale")
 MainScale.Parent = MainFrame
 MainScale.Scale = 1
 
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
+MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 MainFrame.BackgroundTransparency = 0.2 
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainFrame.Size = UDim2.new(0, 500, 0, 350) 
-MainFrame.Image = "rbxassetid://15264057865" -- Ảnh nền sếp yêu cầu
-MainFrame.ImageTransparency = 0.3
+MainFrame.Image = "rbxassetid://105006398248081" 
+MainFrame.ImageTransparency = 0
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
 
 local GearIcon = Instance.new("ImageLabel")
@@ -163,11 +159,10 @@ TitleLabel.BackgroundTransparency = 1.000
 TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
-TitleLabel.Text = "AMETHYST QUẢN LÝ TỐI THƯỢNG"
-TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255) 
-TitleLabel.TextSize = 34.000 
+TitleLabel.Text = "AMETHYST HUB"
+TitleLabel.TextColor3 = Color3.fromRGB(255, 85, 255) 
+TitleLabel.TextSize = 36.000 
 TitleLabel.TextStrokeTransparency = 0.000 
-TitleLabel.TextStrokeColor3 = Color3.fromRGB(150, 0, 255)
 
 StatusLabel.Name = "Status"
 StatusLabel.Parent = MainFrame
@@ -356,7 +351,6 @@ task.spawn(function()
         if SettingsFrame.Visible then
             hue = hue + 0.005
             if hue > 1 then hue = 0 end
-            -- LED Rainbow chớp nháy siêu rực rỡ
             SettingsStroke.Color = Color3.fromHSV(hue, 1, 1) 
         end
     end
@@ -369,9 +363,9 @@ SettingsTitle.BackgroundTransparency = 1.000
 SettingsTitle.Position = UDim2.new(0, 0, 0, 15)
 SettingsTitle.Size = UDim2.new(1, 0, 0, 40)
 SettingsTitle.Font = Enum.Font.GothamBlack
-SettingsTitle.Text = "✧ AMETHYST QUẢN LÝ TỐI THƯỢNG ✧"
+SettingsTitle.Text = "AMETHYST HUB"
 SettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-SettingsTitle.TextSize = 24.000
+SettingsTitle.TextSize = 26.000
 SettingsTitle.ZIndex = 11
 
 SettingsTitleGradient.Color = ColorSequence.new{
@@ -430,12 +424,8 @@ UIPadding.Parent = ScrollingFrame
 UIPadding.PaddingTop = UDim.new(0, 10)
 UIPadding.PaddingBottom = UDim.new(0, 20)
 
--- =====================================================================
--- [HIỆU ỨNG POP-IN TỪNG HÀNG TRONG SETTING CHỐNG LỖI KHUNG TRẮNG]
--- =====================================================================
 local function PlayRowPopInAnimation()
     for i, child in ipairs(ScrollingFrame:GetChildren()) do
-        -- Đã SỬA LỖI: Chỉ target vào các hàng chứa Setting (tên bắt đầu bằng Row_), Không chạm vào Header (chữ La Mã)
         if child:IsA("Frame") and string.find(child.Name, "Row_") then
             child.BackgroundTransparency = 1
             local scale = child:FindFirstChildOfClass("UIScale")
@@ -1142,7 +1132,7 @@ local Translations = {
         T14 = "Hop Sau 10 Phút", D14 = "Tự động đổi Server sau mỗi 10 phút chơi.",
         T15 = "Lưu Cài Đặt (Save)", D15 = "Tự động lưu trạng thái bật/tắt (No Lag).",
         T16 = "Ngôn Ngữ (Language)", D16 = "Chuyển đổi Tiếng Việt / English.",
-        Title = "✧ AMETHYST QUẢN LÝ TỐI THƯỢNG ✧",
+        Title = "AMETHYST HUB",
         Note = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
     },
     [2] = { 
@@ -1163,7 +1153,7 @@ local Translations = {
         T14 = "Hop After 10 Mins", D14 = "Automatically hop server after 10 minutes.",
         T15 = "Save Settings", D15 = "Auto save configurations (No Lag).",
         T16 = "UI Language", D16 = "Switch UI language (VN / EN).",
-        Title = "✧ AMETHYST SUPREME MANAGER ✧",
+        Title = "AMETHYST HUB",
         Note = "Enabling V2 automatically disables V1 to prevent conflicts."
     }
 }
