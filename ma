@@ -2,16 +2,20 @@
 -- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
+-- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
 -- Cập nhật: FIX LAG Auto Né V2 (Bộ nhớ đệm Cache Spawns) + Fix Lỗi Không Tele
 -- Cập nhật: Thêm Mục Setting (Tự động LƯU CẤU HÌNH NO LAG + Chuyển Ngôn Ngữ VN/EN)
--- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt)
--- Cập nhật: Auto Farm Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật: FIX LỖI DELAY TELEPORT CỦA AUTO NÉ V2 + THÊM 7 BÀI NHẠC MỚI
+-- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
+-- Cập nhật: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
+-- Cập nhật: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
 -- Cập nhật: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
--- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120, Hop 10 Phút)
--- Cập nhật MỚI NHẤT: Sửa triệt để lỗi chữ trôi nổi khi đóng Setting, Đổi lại tên AMETHYST HUB, Viền VIP rực rỡ
+-- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
+-- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
+-- Cập nhật MỚI NHẤT: Sửa triệt để lỗi chữ trôi nổi (Đóng là mất 100%), Sửa ảnh nền Decal, Diệt gạch trắng La Mã
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -128,14 +132,15 @@ MainScale.Scale = 1
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
-MainFrame.BackgroundTransparency = 0.2 
+MainFrame.BackgroundTransparency = 0.3 
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainFrame.Size = UDim2.new(0, 500, 0, 350) 
-MainFrame.Image = "rbxassetid://15264057865" 
-MainFrame.ImageTransparency = 0.3
+-- ĐÃ SỬA LỖI MẤT ẢNH: Dùng rbxthumb để ép Roblox load Decal ID thành ảnh hiển thị 100%
+MainFrame.Image = "rbxthumb://type=Asset&id=15264057865&w=420&h=420" 
+MainFrame.ImageTransparency = 0.1 
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
-MainFrame.ClipsDescendants = true -- Chống rác UI
+MainFrame.ClipsDescendants = true 
 
 local GearIcon = Instance.new("ImageLabel")
 GearIcon.Name = "SettingsGear"
@@ -159,7 +164,7 @@ TitleLabel.BackgroundTransparency = 1.000
 TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
-TitleLabel.Text = "AMETHYST HUB"
+TitleLabel.Text = "AMETHYST QUẢN LÝ TỐI THƯỢNG"
 TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255) 
 TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
@@ -175,7 +180,7 @@ StatusLabel.Font = Enum.Font.SourceSansBold
 StatusLabel.Text = "Status: Dang khoi dong..."
 StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 StatusLabel.TextSize = 24.000
-StatusLabel.TextStrokeTransparency = 0.200
+StatusLabel.TextStrokeTransparency = 0.500
 
 GeneralLabel.Name = "General"
 GeneralLabel.Parent = MainFrame
@@ -187,7 +192,7 @@ GeneralLabel.Font = Enum.Font.SourceSansBold
 GeneralLabel.Text = "General: Loading..."
 GeneralLabel.TextColor3 = Color3.fromRGB(255, 255, 127) 
 GeneralLabel.TextSize = 24.000
-GeneralLabel.TextStrokeTransparency = 0.200
+GeneralLabel.TextStrokeTransparency = 0.500
 
 MoneyLabel.Name = "Money"
 MoneyLabel.Parent = MainFrame
@@ -199,7 +204,7 @@ MoneyLabel.Font = Enum.Font.SourceSansBold
 MoneyLabel.Text = "Money: Loading..."
 MoneyLabel.TextColor3 = Color3.fromRGB(85, 255, 127) 
 MoneyLabel.TextSize = 24.000
-MoneyLabel.TextStrokeTransparency = 0.200
+MoneyLabel.TextStrokeTransparency = 0.500
 
 TimeLabel.Name = "Time"
 TimeLabel.Parent = MainFrame
@@ -211,7 +216,7 @@ TimeLabel.Font = Enum.Font.SourceSansBold
 TimeLabel.Text = "Time: 00:00:00"
 TimeLabel.TextColor3 = Color3.fromRGB(255, 170, 255)
 TimeLabel.TextSize = 24.000
-TimeLabel.TextStrokeTransparency = 0.200
+TimeLabel.TextStrokeTransparency = 0.500
 
 -- ======================================================================
 -- [VIP SYSTEM] MENU SETTINGS MAIN HUB
@@ -333,7 +338,7 @@ SettingsFrame.Size = UDim2.new(0, 0, 0, 0)
 SettingsFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20) 
 SettingsFrame.BackgroundTransparency = 0.1 
 SettingsFrame.BorderSizePixel = 0
-SettingsFrame.ClipsDescendants = true -- SỬA LỖI CHỮ TRÔI NỔI
+SettingsFrame.ClipsDescendants = true 
 SettingsFrame.Visible = false 
 SettingsFrame.ZIndex = 10
 
@@ -352,7 +357,6 @@ task.spawn(function()
         if SettingsFrame.Visible then
             hue = hue + 0.005
             if hue > 1 then hue = 0 end
-            -- LED Rainbow chớp nháy siêu rực rỡ
             SettingsStroke.Color = Color3.fromHSV(hue, 1, 1) 
         end
     end
@@ -416,7 +420,7 @@ ScrollingFrame.ScrollBarThickness = 5
 ScrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 255)
 ScrollingFrame.ZIndex = 11
 ScrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-ScrollingFrame.ClipsDescendants = true -- CHỐNG LỖI CẮT CHỮ
+ScrollingFrame.ClipsDescendants = true 
 
 UIListLayout.Parent = ScrollingFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -448,7 +452,7 @@ local function ToggleSettings(show)
     if show then
         PlaySound(PopupSound)
         SettingsFrame.Visible = true
-        SettingsFrame.Size = UDim2.new(0, 0, 0, 0) -- BỎ ROTATION ĐỂ TRÁNH LỖI OVERFLOW CHỮ
+        SettingsFrame.Size = UDim2.new(0, 0, 0, 0) 
         
         local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
         local tween = TweenService:Create(SettingsFrame, tweenInfo, {
@@ -457,7 +461,7 @@ local function ToggleSettings(show)
         tween:Play()
         PlayRowPopInAnimation()
     else
-        -- [BỔ SUNG VÁ LỖI]: Ép các thành phần con thu nhỏ trước khi đóng cửa sổ để mượt mà không lòi chữ
+        -- Ẩn siêu mượt: Cho các hàng thu nhỏ về 0 trước
         for _, child in ipairs(ScrollingFrame:GetChildren()) do
             if child:IsA("Frame") and string.find(child.Name, "Row_") then
                 local scale = child:FindFirstChildOfClass("UIScale")
@@ -499,7 +503,8 @@ local function CreateSectionHeader(id, text)
 
     local Line = Instance.new("Frame")
     Line.Parent = HeaderFrame
-    Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    -- ĐÃ SỬA LỖI: Xóa bỏ nền trắng gây nhức mắt, hòa màu chuẩn với Neon
+    Line.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
     Line.BorderSizePixel = 0
     Line.Position = UDim2.new(0, 0, 1, -2)
     Line.Size = UDim2.new(1, 0, 0, 2)
@@ -1242,7 +1247,7 @@ end
 local function PlayHubCloseAnimation()
     PlaySound(ToggleOffSound)
     
-    -- Thu nhỏ UI biến mất hoàn toàn 100%
+    -- ĐÃ SỬA LỖI MỚI NHẤT: Thu nhỏ UI biến mất hoàn toàn 100%, trả lại tầm nhìn cho sếp!
     local tween = TweenService:Create(MainScale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Scale = 0})
     tween:Play()
     
