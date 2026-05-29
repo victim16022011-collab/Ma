@@ -1,5 +1,5 @@
 -- ==================================================
--- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
+-- Phiên bản: Amethyst Hub (BẢN TREO ĐÊM SIÊU GỌN)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
 -- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
@@ -15,7 +15,7 @@
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
 -- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
 -- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
--- Cập nhật MỚI NHẤT: Sửa triệt để lỗi chữ trôi nổi (Đóng là mất 100%), Sửa ảnh nền Decal, Diệt gạch trắng La Mã
+-- Cập nhật MỚI NHẤT: Sửa triệt để lỗi ảnh nền (< >), Đổi chuẩn tên AMETHYST HUB
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -136,8 +136,7 @@ MainFrame.BackgroundTransparency = 0.3
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainFrame.Size = UDim2.new(0, 500, 0, 350) 
--- ĐÃ SỬA LỖI MẤT ẢNH: Dùng rbxthumb để ép Roblox load Decal ID thành ảnh hiển thị 100%
-MainFrame.Image = "rbxthumb://type=Asset&id=15264057865&w=420&h=420" 
+MainFrame.Image = "rbxassetid://15264057865"
 MainFrame.ImageTransparency = 0.1 
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
 MainFrame.ClipsDescendants = true 
@@ -164,7 +163,7 @@ TitleLabel.BackgroundTransparency = 1.000
 TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
-TitleLabel.Text = "AMETHYST QUẢN LÝ TỐI THƯỢNG"
+TitleLabel.Text = "AMETHYST HUB"
 TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255) 
 TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
@@ -461,7 +460,6 @@ local function ToggleSettings(show)
         tween:Play()
         PlayRowPopInAnimation()
     else
-        -- Ẩn siêu mượt: Cho các hàng thu nhỏ về 0 trước
         for _, child in ipairs(ScrollingFrame:GetChildren()) do
             if child:IsA("Frame") and string.find(child.Name, "Row_") then
                 local scale = child:FindFirstChildOfClass("UIScale")
@@ -503,7 +501,6 @@ local function CreateSectionHeader(id, text)
 
     local Line = Instance.new("Frame")
     Line.Parent = HeaderFrame
-    -- ĐÃ SỬA LỖI: Xóa bỏ nền trắng gây nhức mắt, hòa màu chuẩn với Neon
     Line.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
     Line.BorderSizePixel = 0
     Line.Position = UDim2.new(0, 0, 1, -2)
