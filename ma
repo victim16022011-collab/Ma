@@ -10,9 +10,8 @@
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
--- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
--- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
--- Cập nhật MỚI NHẤT: Sửa lỗi mất ảnh nền, Trả lại tên AMETHYST HUB, Viền VIP rực rỡ
+-- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120, Hop 10 Phút)
+-- Cập nhật MỚI NHẤT: Sửa triệt để lỗi chữ trôi nổi khi đóng Setting, Đổi lại tên AMETHYST HUB, Viền VIP rực rỡ
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -128,14 +127,15 @@ MainScale.Scale = 1
 
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
 MainFrame.BackgroundTransparency = 0.2 
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainFrame.Size = UDim2.new(0, 500, 0, 350) 
-MainFrame.Image = "rbxassetid://105006398248081" 
-MainFrame.ImageTransparency = 0
+MainFrame.Image = "rbxassetid://15264057865" 
+MainFrame.ImageTransparency = 0.3
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+MainFrame.ClipsDescendants = true -- Chống rác UI
 
 local GearIcon = Instance.new("ImageLabel")
 GearIcon.Name = "SettingsGear"
@@ -160,9 +160,10 @@ TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
 TitleLabel.Text = "AMETHYST HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 85, 255) 
-TitleLabel.TextSize = 36.000 
+TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255) 
+TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
+TitleLabel.TextStrokeColor3 = Color3.fromRGB(150, 0, 255)
 
 StatusLabel.Name = "Status"
 StatusLabel.Parent = MainFrame
@@ -174,7 +175,7 @@ StatusLabel.Font = Enum.Font.SourceSansBold
 StatusLabel.Text = "Status: Dang khoi dong..."
 StatusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 StatusLabel.TextSize = 24.000
-StatusLabel.TextStrokeTransparency = 0.500
+StatusLabel.TextStrokeTransparency = 0.200
 
 GeneralLabel.Name = "General"
 GeneralLabel.Parent = MainFrame
@@ -186,7 +187,7 @@ GeneralLabel.Font = Enum.Font.SourceSansBold
 GeneralLabel.Text = "General: Loading..."
 GeneralLabel.TextColor3 = Color3.fromRGB(255, 255, 127) 
 GeneralLabel.TextSize = 24.000
-GeneralLabel.TextStrokeTransparency = 0.500
+GeneralLabel.TextStrokeTransparency = 0.200
 
 MoneyLabel.Name = "Money"
 MoneyLabel.Parent = MainFrame
@@ -198,7 +199,7 @@ MoneyLabel.Font = Enum.Font.SourceSansBold
 MoneyLabel.Text = "Money: Loading..."
 MoneyLabel.TextColor3 = Color3.fromRGB(85, 255, 127) 
 MoneyLabel.TextSize = 24.000
-MoneyLabel.TextStrokeTransparency = 0.500
+MoneyLabel.TextStrokeTransparency = 0.200
 
 TimeLabel.Name = "Time"
 TimeLabel.Parent = MainFrame
@@ -210,7 +211,7 @@ TimeLabel.Font = Enum.Font.SourceSansBold
 TimeLabel.Text = "Time: 00:00:00"
 TimeLabel.TextColor3 = Color3.fromRGB(255, 170, 255)
 TimeLabel.TextSize = 24.000
-TimeLabel.TextStrokeTransparency = 0.500
+TimeLabel.TextStrokeTransparency = 0.200
 
 -- ======================================================================
 -- [VIP SYSTEM] MENU SETTINGS MAIN HUB
@@ -332,7 +333,7 @@ SettingsFrame.Size = UDim2.new(0, 0, 0, 0)
 SettingsFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20) 
 SettingsFrame.BackgroundTransparency = 0.1 
 SettingsFrame.BorderSizePixel = 0
-SettingsFrame.ClipsDescendants = true 
+SettingsFrame.ClipsDescendants = true -- SỬA LỖI CHỮ TRÔI NỔI
 SettingsFrame.Visible = false 
 SettingsFrame.ZIndex = 10
 
@@ -351,6 +352,7 @@ task.spawn(function()
         if SettingsFrame.Visible then
             hue = hue + 0.005
             if hue > 1 then hue = 0 end
+            -- LED Rainbow chớp nháy siêu rực rỡ
             SettingsStroke.Color = Color3.fromHSV(hue, 1, 1) 
         end
     end
@@ -414,6 +416,7 @@ ScrollingFrame.ScrollBarThickness = 5
 ScrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 255)
 ScrollingFrame.ZIndex = 11
 ScrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+ScrollingFrame.ClipsDescendants = true -- CHỐNG LỖI CẮT CHỮ
 
 UIListLayout.Parent = ScrollingFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -445,21 +448,28 @@ local function ToggleSettings(show)
     if show then
         PlaySound(PopupSound)
         SettingsFrame.Visible = true
-        SettingsFrame.Rotation = -5
-        SettingsFrame.Size = UDim2.new(0, 0, 0, 0)
+        SettingsFrame.Size = UDim2.new(0, 0, 0, 0) -- BỎ ROTATION ĐỂ TRÁNH LỖI OVERFLOW CHỮ
         
         local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
         local tween = TweenService:Create(SettingsFrame, tweenInfo, {
-            Size = UDim2.new(0, 580, 0.85, 0),
-            Rotation = 0
+            Size = UDim2.new(0, 580, 0.85, 0)
         }) 
         tween:Play()
         PlayRowPopInAnimation()
     else
+        -- [BỔ SUNG VÁ LỖI]: Ép các thành phần con thu nhỏ trước khi đóng cửa sổ để mượt mà không lòi chữ
+        for _, child in ipairs(ScrollingFrame:GetChildren()) do
+            if child:IsA("Frame") and string.find(child.Name, "Row_") then
+                local scale = child:FindFirstChildOfClass("UIScale")
+                if scale then
+                    TweenService:Create(scale, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Scale = 0}):Play()
+                end
+            end
+        end
+
         local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
         local tween = TweenService:Create(SettingsFrame, tweenInfo, {
-            Size = UDim2.new(0, 0, 0, 0),
-            Rotation = 5
+            Size = UDim2.new(0, 0, 0, 0)
         })
         tween:Play()
         tween.Completed:Connect(function()
