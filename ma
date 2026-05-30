@@ -15,7 +15,7 @@
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
 -- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
 -- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
--- Cập nhật MỚI NHẤT: Đổi tên Setting thành PREMIUM AMETHYST HUB, Đổi màu Title Hub thành Hồng
+-- Cập nhật MỚI NHẤT: Trả lại cách thức Auto Né gốc (Teleport xuống đất, Né V2 loại bỏ Spawn Lobby)
 -- ==================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -174,7 +174,7 @@ TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
 TitleLabel.Text = "AMETHYST HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 105, 180) -- ĐÃ SỬA MÀU HỒNG THEO LỆNH
+TitleLabel.TextColor3 = Color3.fromRGB(255, 105, 180) 
 TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
 TitleLabel.TextStrokeColor3 = Color3.fromRGB(150, 0, 255)
@@ -378,7 +378,6 @@ SettingsTitle.BackgroundTransparency = 1.000
 SettingsTitle.Position = UDim2.new(0, 0, 0, 15)
 SettingsTitle.Size = UDim2.new(1, 0, 0, 40)
 SettingsTitle.Font = Enum.Font.GothamBlack
--- ĐÃ ĐỔI TÊN CHUẨN TRONG SETTING
 SettingsTitle.Text = "PREMIUM AMETHYST HUB"
 SettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 SettingsTitle.TextSize = 26.000
@@ -2092,15 +2091,24 @@ task.spawn(function()
                                             local safeGen = GetSafeGenerator(killer.HumanoidRootPart.Position)
                                             if safeGen then
                                                 local safePos = safeGen:GetPivot().Position
+                                                root.Anchored = false
+                                                task.wait(0.1)
+                                                
                                                 root.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
+                                                root.Velocity = Vector3.zero
                                                 root.Anchored = true
                                                 SetStatus("Dang tron Killer (6s)...")
                                                 
                                                 local isDeadWhileHiding = false
-                                                for i = 1, 6 do
+                                                for i = 1, 60 do 
                                                     local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
                                                     if curHum and curHum.Health <= 0 then isDeadWhileHiding = true; break end
-                                                    task.wait(1)
+                                                    
+                                                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                                        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
+                                                        LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.zero
+                                                    end
+                                                    task.wait(0.1)
                                                 end
 
                                                 if isDeadWhileHiding then SmartServerHop(); return end
@@ -2117,11 +2125,19 @@ task.spawn(function()
 
                                                     local kPosNew = currentKiller.HumanoidRootPart.Position
                                                     local distKillerToOldGen = (kPosNew - oldGenPos).Magnitude
-                                                    if distKillerToOldGen > (SafeDistance + 10) then break else task.wait(1) end
+                                                    
+                                                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                                        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
+                                                    end
+                                                    
+                                                    if distKillerToOldGen > (SafeDistance + 10) then break else task.wait(0.2) end
                                                 until false
                                                 
                                                 if getgenv().AutoFarm and IsInMatch then
+                                                    root.Anchored = false
+                                                    task.wait(0.1)
                                                     root.CFrame = CFrame.lookAt(dropPos, lookAt)
+                                                    root.Velocity = Vector3.zero
                                                     root.Anchored = true
                                                     SetStatus("Đã quay về máy cũ (V1)...")
                                                     task.wait(0.2)
@@ -2137,7 +2153,11 @@ task.spawn(function()
                                             
                                             local furthestSpawnPos = GetFurthestSpawnPoint(killer.HumanoidRootPart.Position)
                                             if furthestSpawnPos then
+                                                root.Anchored = false
+                                                task.wait(0.1)
+                                                
                                                 root.CFrame = CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0)) 
+                                                root.Velocity = Vector3.zero
                                                 root.Anchored = true
                                                 SetStatus("Đã ghim máy! Chờ Killer rời đi 5m...")
                                                 
@@ -2147,6 +2167,11 @@ task.spawn(function()
                                                     local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
                                                     if curHum and curHum.Health <= 0 then SmartServerHop(); return end
                                                     
+                                                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                                        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0))
+                                                        LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.zero
+                                                    end
+
                                                     local currentKiller = GetKiller()
                                                     if not currentKiller or not currentKiller:FindFirstChild("HumanoidRootPart") then break end
                                                     if not isSurvivorModel(LocalPlayer.Character) then IsInMatch = false; break end
@@ -2156,12 +2181,15 @@ task.spawn(function()
                                                     if distKillerToOldGen > 5 then 
                                                         break 
                                                     else 
-                                                        task.wait(0.1) 
+                                                        task.wait(0.2) 
                                                     end
                                                 until false
                                                 
                                                 if getgenv().AutoFarm and IsInMatch then
+                                                    root.Anchored = false
+                                                    task.wait(0.1)
                                                     root.CFrame = CFrame.lookAt(dropPos, lookAt)
+                                                    root.Velocity = Vector3.zero
                                                     root.Anchored = true
                                                     SetStatus("Killer đã đi! Về lại máy ghim...")
                                                     task.wait(0.2)
