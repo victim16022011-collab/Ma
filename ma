@@ -1,5 +1,5 @@
 -- ==================================================
--- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
+-- Phiên bản: Amethyst Hub (BẢN TREO ĐÊM SIÊU GỌN - VIP NEON)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
 -- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
@@ -13,8 +13,9 @@
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
--- Cập nhật MỚI NHẤT: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
--- Cập nhật ĐỘC QUYỀN: Sửa ảnh nền Hub thành ID 15264057865, Đổi toàn bộ tên thành AMETHYST HUB
+-- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
+-- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
+-- Cập nhật MỚI NHẤT: Khôi phục Hiệu ứng VIP (Pop-in, Thu nhỏ 100%), Trả lại ảnh gốc 105006398248081 và tên AMETHYST HUB
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -84,7 +85,7 @@ ScreenGui.Parent = CoreGui
 
 ToggleButton.Name = "ToggleUI"
 ToggleButton.Parent = ScreenGui
-ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ToggleButton.BackgroundColor3 = Color3.fromRGB(0, 255, 255) 
 ToggleButton.BackgroundTransparency = 0.0 
 ToggleButton.Position = UDim2.new(0, 20, 0.4, 0) 
 ToggleButton.Size = UDim2.new(0, 60, 0, 60) 
@@ -124,16 +125,23 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
+-- Tạo hệ thống Scale riêng cho MainFrame (Hiệu ứng Nảy / Thu nhỏ 100%)
+local MainScale = Instance.new("UIScale")
+MainScale.Parent = MainFrame
+MainScale.Scale = 1
+
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
-MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-MainFrame.BackgroundTransparency = 1.000 
+MainFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
+MainFrame.BackgroundTransparency = 0.2 
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainFrame.Size = UDim2.new(0, 500, 0, 350) 
-MainFrame.Image = "rbxassetid://15264057865" 
-MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-MainFrame.BackgroundTransparency = 0.2
+-- ĐÃ LẤY ID ẢNH CHUẨN TỪ SCRIPT.TXT
+MainFrame.Image = "rbxassetid://105006398248081" 
+MainFrame.ImageTransparency = 0.1 
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
+MainFrame.ClipsDescendants = true 
 
 local GearIcon = Instance.new("ImageLabel")
 GearIcon.Name = "SettingsGear"
@@ -157,10 +165,12 @@ TitleLabel.BackgroundTransparency = 1.000
 TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
+-- ĐÃ ĐỔI TÊN CHUẨN
 TitleLabel.Text = "AMETHYST HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 85, 255) 
-TitleLabel.TextSize = 36.000 
+TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255) 
+TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
+TitleLabel.TextStrokeColor3 = Color3.fromRGB(150, 0, 255)
 
 StatusLabel.Name = "Status"
 StatusLabel.Parent = MainFrame
@@ -220,15 +230,15 @@ getgenv().AutoEvade_V2 = false
 getgenv().AutoFarm_Killer_V1 = false 
 getgenv().AutoFarm_Killer_V2 = false 
 getgenv().AutoFarm_Level_V1 = true
-getgenv().AutoHop_V1 = true      -- [NEW] Mặc định
-getgenv().AutoHop_V2 = false     -- [NEW] Siêu mượt Ping <120
+getgenv().AutoHop_V1 = true      
+getgenv().AutoHop_V2 = false     
+getgenv().AutoHop_TimeLimit = false 
 getgenv().MusicEnabled = true
 getgenv().MusicVolumePercent = 60
 getgenv().CurrentSongIndex = 1
 getgenv().AutoSave = true        
 getgenv().LanguageIndex = 1      
 
--- [NEW STATE CHO CUSTOM NHẠC]
 getgenv().IsUsingCustomMusic = false
 getgenv().CustomMusicID = ""
 
@@ -266,6 +276,7 @@ local function LoadSettings()
                 if data.AutoFarm_Level_V1 ~= nil then getgenv().AutoFarm_Level_V1 = data.AutoFarm_Level_V1 end
                 if data.AutoHop_V1 ~= nil then getgenv().AutoHop_V1 = data.AutoHop_V1 end
                 if data.AutoHop_V2 ~= nil then getgenv().AutoHop_V2 = data.AutoHop_V2 end
+                if data.AutoHop_TimeLimit ~= nil then getgenv().AutoHop_TimeLimit = data.AutoHop_TimeLimit end
                 if data.MusicEnabled ~= nil then getgenv().MusicEnabled = data.MusicEnabled end
                 if data.MusicVolumePercent ~= nil then getgenv().MusicVolumePercent = data.MusicVolumePercent end
                 if data.CurrentSongIndex ~= nil then getgenv().CurrentSongIndex = data.CurrentSongIndex end
@@ -292,6 +303,7 @@ task.spawn(function()
                     AutoFarm_Level_V1 = getgenv().AutoFarm_Level_V1,
                     AutoHop_V1 = getgenv().AutoHop_V1,
                     AutoHop_V2 = getgenv().AutoHop_V2,
+                    AutoHop_TimeLimit = getgenv().AutoHop_TimeLimit,
                     MusicEnabled = getgenv().MusicEnabled,
                     MusicVolumePercent = getgenv().MusicVolumePercent,
                     CurrentSongIndex = getgenv().CurrentSongIndex,
@@ -318,15 +330,15 @@ local CloseStroke = Instance.new("UIStroke")
 
 local ScrollingFrame = Instance.new("ScrollingFrame")
 local UIListLayout = Instance.new("UIListLayout")
-local UIPPadding = Instance.new("UIPadding")
+local UIPadding = Instance.new("UIPadding")
 
 SettingsFrame.Name = "AmethystUltraSettingsUI"
 SettingsFrame.Parent = ScreenGui
 SettingsFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 SettingsFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 SettingsFrame.Size = UDim2.new(0, 0, 0, 0) 
-SettingsFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-SettingsFrame.BackgroundTransparency = 0.15 
+SettingsFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20) 
+SettingsFrame.BackgroundTransparency = 0.1 
 SettingsFrame.BorderSizePixel = 0
 SettingsFrame.ClipsDescendants = true 
 SettingsFrame.Visible = false 
@@ -335,10 +347,10 @@ SettingsFrame.ZIndex = 10
 SettingsCorner.CornerRadius = UDim.new(0, 16)
 SettingsCorner.Parent = SettingsFrame
 
-SettingsStroke.Color = Color3.fromRGB(150, 0, 255)
-SettingsStroke.Thickness = 2.5
+SettingsStroke.Color = Color3.fromRGB(0, 255, 255) 
+SettingsStroke.Thickness = 3
 SettingsStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-SettingsStroke.Transparency = 0.2
+SettingsStroke.Transparency = 0.1
 SettingsStroke.Parent = SettingsFrame
 
 task.spawn(function()
@@ -347,7 +359,8 @@ task.spawn(function()
         if SettingsFrame.Visible then
             hue = hue + 0.005
             if hue > 1 then hue = 0 end
-            SettingsStroke.Color = Color3.fromHSV(hue, 0.8, 1)
+            -- LED Rainbow chớp nháy siêu rực rỡ
+            SettingsStroke.Color = Color3.fromHSV(hue, 1, 1) 
         end
     end
 end)
@@ -359,15 +372,16 @@ SettingsTitle.BackgroundTransparency = 1.000
 SettingsTitle.Position = UDim2.new(0, 0, 0, 15)
 SettingsTitle.Size = UDim2.new(1, 0, 0, 40)
 SettingsTitle.Font = Enum.Font.GothamBlack
+-- ĐÃ ĐỔI TÊN CHUẨN TRONG CẢ BẢNG SETTING
 SettingsTitle.Text = "AMETHYST HUB"
 SettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-SettingsTitle.TextSize = 24.000
+SettingsTitle.TextSize = 26.000
 SettingsTitle.ZIndex = 11
 
 SettingsTitleGradient.Color = ColorSequence.new{
-    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(170, 0, 255)),
-    ColorSequenceKeypoint.new(0.50, Color3.fromRGB(0, 255, 255)),
-    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(170, 0, 255))
+    ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 255)),
+    ColorSequenceKeypoint.new(0.50, Color3.fromRGB(255, 0, 255)),
+    ColorSequenceKeypoint.new(1.00, Color3.fromRGB(0, 255, 255))
 }
 SettingsTitleGradient.Parent = SettingsTitle
 
@@ -376,20 +390,20 @@ CloseButton.Parent = SettingsFrame
 CloseButton.AnchorPoint = Vector2.new(1, 0)
 CloseButton.Position = UDim2.new(1, -15, 0, 15)
 CloseButton.Size = UDim2.new(0, 35, 0, 35)
-CloseButton.BackgroundColor3 = Color3.fromRGB(30, 20, 25) 
+CloseButton.BackgroundColor3 = Color3.fromRGB(40, 10, 30) 
 CloseButton.Font = Enum.Font.GothamBold
 CloseButton.Text = "X"
-CloseButton.TextColor3 = Color3.fromRGB(255, 100, 100)
+CloseButton.TextColor3 = Color3.fromRGB(255, 50, 100)
 CloseButton.TextSize = 20.000
 CloseButton.ZIndex = 12
 
 CloseCorner.CornerRadius = UDim.new(0, 10)
 CloseCorner.Parent = CloseButton
 
-CloseStroke.Color = Color3.fromRGB(255, 100, 100)
+CloseStroke.Color = Color3.fromRGB(255, 50, 100)
 CloseStroke.Thickness = 1.5
 CloseStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-CloseStroke.Transparency = 0.3
+CloseStroke.Transparency = 0.2
 CloseStroke.Parent = CloseButton
 
 CloseButton.MouseEnter:Connect(function()
@@ -397,7 +411,7 @@ CloseButton.MouseEnter:Connect(function()
     TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 50, 50), TextColor3 = Color3.fromRGB(255,255,255)}):Play()
 end)
 CloseButton.MouseLeave:Connect(function()
-    TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(30, 20, 25), TextColor3 = Color3.fromRGB(255, 100, 100)}):Play()
+    TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(40, 10, 30), TextColor3 = Color3.fromRGB(255, 50, 100)}):Play()
 end)
 
 ScrollingFrame.Name = "ContentScroll"
@@ -406,30 +420,64 @@ ScrollingFrame.Active = true
 ScrollingFrame.BackgroundTransparency = 1.000
 ScrollingFrame.Position = UDim2.new(0, 0, 0, 70)
 ScrollingFrame.Size = UDim2.new(1, 0, 1, -80)
-ScrollingFrame.ScrollBarThickness = 4
-ScrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(150, 0, 255)
+ScrollingFrame.ScrollBarThickness = 5
+ScrollingFrame.ScrollBarImageColor3 = Color3.fromRGB(0, 255, 255)
 ScrollingFrame.ZIndex = 11
 ScrollingFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
+ScrollingFrame.ClipsDescendants = true 
 
 UIListLayout.Parent = ScrollingFrame
 UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 UIListLayout.Padding = UDim.new(0, 12)
 UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
-UIPPadding.Parent = ScrollingFrame
-UIPPadding.PaddingTop = UDim.new(0, 10)
-UIPPadding.PaddingBottom = UDim.new(0, 20)
+UIPadding.Parent = ScrollingFrame
+UIPadding.PaddingTop = UDim.new(0, 10)
+UIPadding.PaddingBottom = UDim.new(0, 20)
+
+local function PlayRowPopInAnimation()
+    for i, child in ipairs(ScrollingFrame:GetChildren()) do
+        if child:IsA("Frame") and string.find(child.Name, "Row_") then
+            child.BackgroundTransparency = 1
+            local scale = child:FindFirstChildOfClass("UIScale")
+            if scale then scale.Scale = 0 end
+            
+            task.delay(i * 0.03, function()
+                TweenService:Create(child, TweenInfo.new(0.3), {BackgroundTransparency = 0.3}):Play()
+                if scale then
+                    TweenService:Create(scale, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {Scale = 1}):Play()
+                end
+            end)
+        end
+    end
+end
 
 local function ToggleSettings(show)
     if show then
         PlaySound(PopupSound)
         SettingsFrame.Visible = true
+        SettingsFrame.Size = UDim2.new(0, 0, 0, 0) 
+        
         local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
-        local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 580, 0.85, 0)}) 
+        local tween = TweenService:Create(SettingsFrame, tweenInfo, {
+            Size = UDim2.new(0, 580, 0.85, 0)
+        }) 
         tween:Play()
+        PlayRowPopInAnimation()
     else
+        for _, child in ipairs(ScrollingFrame:GetChildren()) do
+            if child:IsA("Frame") and string.find(child.Name, "Row_") then
+                local scale = child:FindFirstChildOfClass("UIScale")
+                if scale then
+                    TweenService:Create(scale, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Scale = 0}):Play()
+                end
+            end
+        end
+
         local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
-        local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
+        local tween = TweenService:Create(SettingsFrame, tweenInfo, {
+            Size = UDim2.new(0, 0, 0, 0)
+        })
         tween:Play()
         tween.Completed:Connect(function()
             SettingsFrame.Visible = false 
@@ -458,7 +506,8 @@ local function CreateSectionHeader(id, text)
 
     local Line = Instance.new("Frame")
     Line.Parent = HeaderFrame
-    Line.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    -- ĐÃ FIX GẠCH TRẮNG: Sử dụng đúng màu Cyan tàng hình vào Neon
+    Line.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
     Line.BorderSizePixel = 0
     Line.Position = UDim2.new(0, 0, 1, -2)
     Line.Size = UDim2.new(1, 0, 0, 2)
@@ -467,7 +516,7 @@ local function CreateSectionHeader(id, text)
     local LineGradient = Instance.new("UIGradient")
     LineGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 255)),
-        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(150, 0, 255))
+        ColorSequenceKeypoint.new(1.00, Color3.fromRGB(255, 0, 255))
     }
     LineGradient.Parent = Line
 end
@@ -491,18 +540,18 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
 
     RowFrame.Name = "Row_" .. id
     RowFrame.Parent = ScrollingFrame
-    RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 30) 
+    RowFrame.BackgroundTransparency = 0.3
     RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
     RowFrame.ZIndex = 11
 
     RowCorner.CornerRadius = UDim.new(0, 12)
     RowCorner.Parent = RowFrame
 
-    RowStroke.Color = Color3.fromRGB(80, 80, 120)
-    RowStroke.Thickness = 1
+    RowStroke.Color = Color3.fromRGB(0, 255, 255)
+    RowStroke.Thickness = 1.5
     RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    RowStroke.Transparency = 0.5
+    RowStroke.Transparency = 0.4
     RowStroke.Parent = RowFrame
 
     RowScale.Scale = 1
@@ -514,7 +563,7 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     IconLabel.Size = UDim2.new(0, 40, 0, 40)
     IconLabel.Font = Enum.Font.GothamBlack
     IconLabel.Text = id
-    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
     IconLabel.TextSize = 28
     IconLabel.ZIndex = 12
 
@@ -535,7 +584,7 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     Desc.Size = UDim2.new(0, 350, 0, 20)
     Desc.Font = Enum.Font.GothamMedium
     Desc.Text = descText
-    Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
+    Desc.TextColor3 = Color3.fromRGB(200, 200, 255)
     Desc.TextSize = 13
     Desc.TextXAlignment = Enum.TextXAlignment.Left
     Desc.ZIndex = 12
@@ -569,11 +618,11 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     local currentState = initialState
 
     local function UpdateVisuals(animate)
-        local targetBgColor = currentState and Color3.fromRGB(0, 200, 100) or Color3.fromRGB(50, 50, 60)
-        local targetGlowColor = currentState and Color3.fromRGB(50, 255, 150) or Color3.fromRGB(80, 80, 100)
-        local targetGlowTrans = currentState and 0.2 or 0.8
+        local targetBgColor = currentState and Color3.fromRGB(0, 255, 255) or Color3.fromRGB(60, 50, 80)
+        local targetGlowColor = currentState and Color3.fromRGB(255, 0, 255) or Color3.fromRGB(100, 80, 100)
+        local targetGlowTrans = currentState and 0.1 or 0.8
         local targetKnobPos = currentState and UDim2.new(1, -27, 0.5, 0) or UDim2.new(0, 3, 0.5, 0)
-        local targetTitleColor = currentState and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(150, 150, 150)
+        local targetTitleColor = currentState and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(150, 150, 180)
 
         if animate then
             TweenService:Create(SliderBg, TweenInfo.new(0.3, Enum.EasingStyle.Quad), {BackgroundColor3 = targetBgColor}):Play()
@@ -594,14 +643,14 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     ClickButton.MouseEnter:Connect(function()
         PlaySound(HoverSound)
         TweenService:Create(RowScale, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Scale = 1.02}):Play()
-        TweenService:Create(RowStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(150, 100, 255), Transparency = 0}):Play()
-        TweenService:Create(RowFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
+        TweenService:Create(RowStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(255, 0, 255), Transparency = 0}):Play()
+        TweenService:Create(RowFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(25, 30, 50)}):Play()
     end)
     
     ClickButton.MouseLeave:Connect(function()
         TweenService:Create(RowScale, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Scale = 1}):Play()
-        TweenService:Create(RowStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(80, 80, 120), Transparency = 0.5}):Play()
-        TweenService:Create(RowFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(25, 25, 35)}):Play()
+        TweenService:Create(RowStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(0, 255, 255), Transparency = 0.4}):Play()
+        TweenService:Create(RowFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(15, 20, 30)}):Play()
     end)
 
     ClickButton.MouseButton1Click:Connect(function()
@@ -625,18 +674,18 @@ local function CreateCyberpunkVolumeRow(id, titleText, descText, initialPercent,
     
     RowFrame.Name = "Row_" .. id
     RowFrame.Parent = ScrollingFrame
-    RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+    RowFrame.BackgroundTransparency = 0.3
     RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
     RowFrame.ZIndex = 11
 
     RowCorner.CornerRadius = UDim.new(0, 12)
     RowCorner.Parent = RowFrame
 
-    RowStroke.Color = Color3.fromRGB(80, 80, 120)
-    RowStroke.Thickness = 1
+    RowStroke.Color = Color3.fromRGB(0, 255, 255)
+    RowStroke.Thickness = 1.5
     RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    RowStroke.Transparency = 0.5
+    RowStroke.Transparency = 0.4
     RowStroke.Parent = RowFrame
 
     IconLabel.Parent = RowFrame
@@ -645,7 +694,7 @@ local function CreateCyberpunkVolumeRow(id, titleText, descText, initialPercent,
     IconLabel.Size = UDim2.new(0, 40, 0, 40)
     IconLabel.Font = Enum.Font.GothamBlack
     IconLabel.Text = id
-    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
     IconLabel.TextSize = 28
     IconLabel.ZIndex = 12
 
@@ -666,7 +715,7 @@ local function CreateCyberpunkVolumeRow(id, titleText, descText, initialPercent,
     Desc.Size = UDim2.new(0, 350, 0, 20)
     Desc.Font = Enum.Font.GothamMedium
     Desc.Text = descText
-    Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
+    Desc.TextColor3 = Color3.fromRGB(200, 200, 255)
     Desc.TextSize = 13
     Desc.TextXAlignment = Enum.TextXAlignment.Left
     Desc.ZIndex = 12
@@ -683,15 +732,15 @@ local function CreateCyberpunkVolumeRow(id, titleText, descText, initialPercent,
     MinusBtn.Parent = ControlBg
     MinusBtn.Size = UDim2.new(0, 30, 0, 30)
     MinusBtn.Position = UDim2.new(0, 0, 0, 0)
-    MinusBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    MinusBtn.BackgroundColor3 = Color3.fromRGB(40, 30, 50)
     MinusBtn.Text = "-"
     MinusBtn.Font = Enum.Font.GothamBlack
-    MinusBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+    MinusBtn.TextColor3 = Color3.fromRGB(255, 50, 100)
     MinusBtn.TextSize = 20
     MinusBtn.ZIndex = 13
     Instance.new("UICorner", MinusBtn).CornerRadius = UDim.new(0, 8)
     local MStroke = Instance.new("UIStroke", MinusBtn)
-    MStroke.Color = Color3.fromRGB(255, 100, 100)
+    MStroke.Color = Color3.fromRGB(255, 50, 100)
     
     local ValLabel = Instance.new("TextLabel")
     ValLabel.Parent = ControlBg
@@ -708,27 +757,27 @@ local function CreateCyberpunkVolumeRow(id, titleText, descText, initialPercent,
     PlusBtn.Parent = ControlBg
     PlusBtn.Size = UDim2.new(0, 30, 0, 30)
     PlusBtn.Position = UDim2.new(0, 80, 0, 0)
-    PlusBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    PlusBtn.BackgroundColor3 = Color3.fromRGB(40, 30, 50)
     PlusBtn.Text = "+"
     PlusBtn.Font = Enum.Font.GothamBlack
-    PlusBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
+    PlusBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
     PlusBtn.TextSize = 20
     PlusBtn.ZIndex = 13
     Instance.new("UICorner", PlusBtn).CornerRadius = UDim.new(0, 8)
     local PStroke = Instance.new("UIStroke", PlusBtn)
-    PStroke.Color = Color3.fromRGB(100, 255, 100)
+    PStroke.Color = Color3.fromRGB(0, 255, 255)
 
     local currentVal = initialPercent
 
     local function BtnAnim(btn, color)
         TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = color}):Play()
         task.wait(0.1)
-        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50)}):Play()
+        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 30, 50)}):Play()
     end
 
     MinusBtn.MouseButton1Click:Connect(function()
         PlaySound(HoverSound)
-        task.spawn(BtnAnim, MinusBtn, Color3.fromRGB(255, 100, 100))
+        task.spawn(BtnAnim, MinusBtn, Color3.fromRGB(255, 50, 100))
         currentVal = math.max(0, currentVal - 10)
         ValLabel.Text = currentVal .. "%"
         if callback then callback(currentVal) end
@@ -736,7 +785,7 @@ local function CreateCyberpunkVolumeRow(id, titleText, descText, initialPercent,
 
     PlusBtn.MouseButton1Click:Connect(function()
         PlaySound(HoverSound)
-        task.spawn(BtnAnim, PlusBtn, Color3.fromRGB(100, 255, 100))
+        task.spawn(BtnAnim, PlusBtn, Color3.fromRGB(0, 255, 255))
         currentVal = math.min(100, currentVal + 10)
         ValLabel.Text = currentVal .. "%"
         if callback then callback(currentVal) end
@@ -754,18 +803,18 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     
     RowFrame.Name = "Row_" .. id
     RowFrame.Parent = ScrollingFrame
-    RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+    RowFrame.BackgroundTransparency = 0.3
     RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
     RowFrame.ZIndex = 11
 
     RowCorner.CornerRadius = UDim.new(0, 12)
     RowCorner.Parent = RowFrame
 
-    RowStroke.Color = Color3.fromRGB(80, 80, 120)
-    RowStroke.Thickness = 1
+    RowStroke.Color = Color3.fromRGB(0, 255, 255)
+    RowStroke.Thickness = 1.5
     RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    RowStroke.Transparency = 0.5
+    RowStroke.Transparency = 0.4
     RowStroke.Parent = RowFrame
 
     IconLabel.Parent = RowFrame
@@ -774,7 +823,7 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     IconLabel.Size = UDim2.new(0, 40, 0, 40)
     IconLabel.Font = Enum.Font.GothamBlack
     IconLabel.Text = id
-    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
     IconLabel.TextSize = 28
     IconLabel.ZIndex = 12
 
@@ -795,7 +844,7 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     Desc.Size = UDim2.new(0, 350, 0, 20)
     Desc.Font = Enum.Font.GothamMedium
     Desc.Text = descText
-    Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
+    Desc.TextColor3 = Color3.fromRGB(200, 200, 255)
     Desc.TextSize = 13
     Desc.TextXAlignment = Enum.TextXAlignment.Left
     Desc.ZIndex = 12
@@ -805,7 +854,7 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     CycleBtn.AnchorPoint = Vector2.new(1, 0.5)
     CycleBtn.Position = UDim2.new(1, -15, 0.5, 0)
     CycleBtn.Size = UDim2.new(0, 150, 0, 35)
-    CycleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    CycleBtn.BackgroundColor3 = Color3.fromRGB(40, 30, 50)
     CycleBtn.Text = "▶ " .. list[initialIndex].Name
     CycleBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
     CycleBtn.Font = Enum.Font.GothamBold
@@ -813,7 +862,7 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     CycleBtn.ZIndex = 13
     Instance.new("UICorner", CycleBtn).CornerRadius = UDim.new(0, 8)
     local CStroke = Instance.new("UIStroke", CycleBtn)
-    CStroke.Color = Color3.fromRGB(150, 0, 255)
+    CStroke.Color = Color3.fromRGB(255, 0, 255)
     CStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     CStroke.Thickness = 1.5
 
@@ -821,13 +870,13 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
 
     CycleBtn.MouseButton1Click:Connect(function()
         PlaySound(HoverSound)
-        TweenService:Create(CycleBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(100, 50, 200), TextSize = 11}):Play()
+        TweenService:Create(CycleBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(0, 255, 255), TextColor3 = Color3.fromRGB(0,0,0)}):Play()
         currentIndex = currentIndex + 1
         if currentIndex > #list then currentIndex = 1 end
         CycleBtn.Text = "▶ " .. list[currentIndex].Name
         if callback then callback(currentIndex) end
         task.wait(0.1)
-        TweenService:Create(CycleBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50), TextSize = 13}):Play()
+        TweenService:Create(CycleBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 30, 50), TextColor3 = Color3.fromRGB(0, 255, 255)}):Play()
     end)
 end
 
@@ -842,18 +891,18 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     
     RowFrame.Name = "Row_" .. id
     RowFrame.Parent = ScrollingFrame
-    RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.BackgroundColor3 = Color3.fromRGB(15, 20, 30)
+    RowFrame.BackgroundTransparency = 0.3
     RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
     RowFrame.ZIndex = 11
 
     RowCorner.CornerRadius = UDim.new(0, 12)
     RowCorner.Parent = RowFrame
 
-    RowStroke.Color = Color3.fromRGB(80, 80, 120)
-    RowStroke.Thickness = 1
+    RowStroke.Color = Color3.fromRGB(0, 255, 255)
+    RowStroke.Thickness = 1.5
     RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    RowStroke.Transparency = 0.5
+    RowStroke.Transparency = 0.4
     RowStroke.Parent = RowFrame
 
     IconLabel.Parent = RowFrame
@@ -862,7 +911,7 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     IconLabel.Size = UDim2.new(0, 40, 0, 40)
     IconLabel.Font = Enum.Font.GothamBlack
     IconLabel.Text = id
-    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
     IconLabel.TextSize = 28
     IconLabel.ZIndex = 12
 
@@ -883,7 +932,7 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     Desc.Size = UDim2.new(0, 350, 0, 20)
     Desc.Font = Enum.Font.GothamMedium
     Desc.Text = descText
-    Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
+    Desc.TextColor3 = Color3.fromRGB(200, 200, 255)
     Desc.TextSize = 13
     Desc.TextXAlignment = Enum.TextXAlignment.Left
     Desc.ZIndex = 12
@@ -893,11 +942,11 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     InputBg.AnchorPoint = Vector2.new(1, 0.5)
     InputBg.Position = UDim2.new(1, -65, 0.5, 0)
     InputBg.Size = UDim2.new(0, 100, 0, 30)
-    InputBg.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    InputBg.BackgroundColor3 = Color3.fromRGB(20, 15, 25)
     InputBg.ZIndex = 12
     Instance.new("UICorner", InputBg).CornerRadius = UDim.new(0, 6)
     local IStroke = Instance.new("UIStroke", InputBg)
-    IStroke.Color = Color3.fromRGB(100, 100, 150)
+    IStroke.Color = Color3.fromRGB(255, 0, 255)
     IStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
     local TextBox = Instance.new("TextBox")
@@ -917,30 +966,30 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     PlayBtn.AnchorPoint = Vector2.new(1, 0.5)
     PlayBtn.Position = UDim2.new(1, -15, 0.5, 0)
     PlayBtn.Size = UDim2.new(0, 40, 0, 30)
-    PlayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    PlayBtn.BackgroundColor3 = Color3.fromRGB(50, 40, 50)
     PlayBtn.Text = "▶"
     PlayBtn.Font = Enum.Font.GothamBlack
-    PlayBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
+    PlayBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
     PlayBtn.TextSize = 16
     PlayBtn.ZIndex = 13
     Instance.new("UICorner", PlayBtn).CornerRadius = UDim.new(0, 6)
     local PStroke = Instance.new("UIStroke", PlayBtn)
-    PStroke.Color = Color3.fromRGB(100, 255, 100)
+    PStroke.Color = Color3.fromRGB(0, 255, 255)
     PStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 
     PlayBtn.MouseButton1Click:Connect(function()
         PlaySound(HoverSound)
-        TweenService:Create(PlayBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(100, 255, 100), TextColor3 = Color3.fromRGB(0,0,0)}):Play()
+        TweenService:Create(PlayBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(0, 255, 255), TextColor3 = Color3.fromRGB(0,0,0)}):Play()
         if callback then callback(TextBox.Text) end
         task.wait(0.1)
-        TweenService:Create(PlayBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50), TextColor3 = Color3.fromRGB(100, 255, 100)}):Play()
+        TweenService:Create(PlayBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 30, 50), TextColor3 = Color3.fromRGB(0, 255, 255)}):Play()
     end)
     
     return TextBox
 end
 
 local SliderFarmV1, SliderFarmV2, SliderEvadeV1, SliderEvadeV2, SliderKillerV1, SliderKillerV2, SliderFarmLevelV1
-local SliderHopV1, SliderHopV2
+local SliderHopV1, SliderHopV2, SliderHopTime
 
 CreateSectionHeader("Sec1", "I: Auto Farm")
 
@@ -1054,13 +1103,17 @@ SliderHopV2 = CreateCyberpunkSettingRow("13", "Auto Hop V2 (Siêu Mượt)", "T�
     end
 end)
 
+SliderHopTime = CreateCyberpunkSettingRow("14", "Hop Sau 10 Phút", "Tự động đổi Server sau mỗi 10 phút chơi.", getgenv().AutoHop_TimeLimit, function(state)
+    getgenv().AutoHop_TimeLimit = state
+end)
+
 CreateSectionHeader("Sec7", "VII: Setting")
 
-CreateCyberpunkSettingRow("14", "Lưu Cài Đặt (Save)", "Tự động lưu trạng thái bật/tắt (No Lag).", getgenv().AutoSave, function(state)
+CreateCyberpunkSettingRow("15", "Lưu Cài Đặt (Save)", "Tự động lưu trạng thái bật/tắt (No Lag).", getgenv().AutoSave, function(state)
     getgenv().AutoSave = state
 end)
 
-CreateCyberpunkCycleRow("15", "Ngôn Ngữ (Language)", "Chuyển đổi ngôn ngữ hiển thị UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
+CreateCyberpunkCycleRow("16", "Ngôn Ngữ (Language)", "Chuyển đổi ngôn ngữ hiển thị UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
     getgenv().LanguageIndex = index
     if getgenv().ApplyLanguageUI then getgenv().ApplyLanguageUI(index) end
 end)
@@ -1094,8 +1147,9 @@ local Translations = {
         T11 = "Auto Farm Level V1", D11 = "Tự đổi tướng < Lv100 khi con đang xài đã max.",
         T12 = "Auto Hop V1 (Mặc Định)", D12 = "Tìm server ít người, ping ổn định (<150ms).",
         T13 = "Auto Hop V2 (Siêu Mượt)", D13 = "Tìm server ít người và ping thấp khắt khe (<120ms).",
-        T14 = "Lưu Cài Đặt (Save)", D14 = "Tự động lưu trạng thái bật/tắt (No Lag).",
-        T15 = "Ngôn Ngữ (Language)", D15 = "Chuyển đổi Tiếng Việt / English.",
+        T14 = "Hop Sau 10 Phút", D14 = "Tự động đổi Server sau mỗi 10 phút chơi.",
+        T15 = "Lưu Cài Đặt (Save)", D15 = "Tự động lưu trạng thái bật/tắt (No Lag).",
+        T16 = "Ngôn Ngữ (Language)", D16 = "Chuyển đổi Tiếng Việt / English.",
         Title = "AMETHYST HUB",
         Note = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
     },
@@ -1114,8 +1168,9 @@ local Translations = {
         T11 = "Auto Farm Level V1", D11 = "Auto equip < Lv100 char when current is maxed.",
         T12 = "Auto Hop V1 (Default)", D12 = "Find low player server, ping <150ms.",
         T13 = "Auto Hop V2 (Ultra Smooth)", D13 = "Find low player server, strict ping <120ms.",
-        T14 = "Save Settings", D14 = "Auto save configurations (No Lag).",
-        T15 = "UI Language", D15 = "Switch UI language (VN / EN).",
+        T14 = "Hop After 10 Mins", D14 = "Automatically hop server after 10 minutes.",
+        T15 = "Save Settings", D15 = "Auto save configurations (No Lag).",
+        T16 = "UI Language", D16 = "Switch UI language (VN / EN).",
         Title = "AMETHYST HUB",
         Note = "Enabling V2 automatically disables V1 to prevent conflicts."
     }
@@ -1169,6 +1224,7 @@ getgenv().ApplyLanguageUI = function(idx)
         UpdateRowText("13", t.T13, t.D13)
         UpdateRowText("14", t.T14, t.D14)
         UpdateRowText("15", t.T15, t.D15)
+        UpdateRowText("16", t.T16, t.D16)
     end)
 end
 
@@ -1178,14 +1234,42 @@ task.spawn(function()
 end)
 
 -- ======================================================================
--- [SỰ KIỆN NÚT BẤM MENU MAIN HUB]
+-- [SỰ KIỆN NÚT BẤM MENU MAIN HUB - TRONG SUỐT HOÀN TOÀN KHI ĐÓNG]
 -- ======================================================================
 local isMenuVisible = true
+
+local function PlayHubOpenAnimation()
+    PlaySound(PopupSound)
+    MainFrame.Visible = true
+    MainScale.Scale = 0
+    
+    -- Bung khung Hub to lên với hiệu ứng Nảy cực mượt (Elastic)
+    TweenService:Create(MainScale, TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
+end
+
+local function PlayHubCloseAnimation()
+    PlaySound(ToggleOffSound)
+    
+    -- ĐÃ SỬA LỖI MỚI NHẤT: Thu nhỏ UI biến mất hoàn toàn 100%, trả lại tầm nhìn cho sếp!
+    local tween = TweenService:Create(MainScale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Scale = 0})
+    tween:Play()
+    
+    tween.Completed:Connect(function()
+        if not isMenuVisible then
+            MainFrame.Visible = false
+        end
+    end)
+end
+
 ToggleButton.MouseButton1Click:Connect(function()
     PlaySound(HoverSound)
     isMenuVisible = not isMenuVisible
-    MainFrame.Visible = isMenuVisible
-    if not isMenuVisible then ToggleSettings(false) end
+    if isMenuVisible then
+        PlayHubOpenAnimation()
+    else
+        PlayHubCloseAnimation()
+        if SettingsFrame.Visible then ToggleSettings(false) end
+    end
 end)
 
 GearButton.MouseEnter:Connect(function() PlaySound(HoverSound) end)
@@ -1677,9 +1761,11 @@ local function SmartServerHop()
                 for _, v in ipairs(response.data) do
                     if type(v) == "table" and v.playing and v.maxPlayers and v.id ~= game.JobId then
                         local isPingOK = true
+                        -- Áp dụng bộ lọc Ping Khắt Khe của V2
                         if getgenv().AutoHop_V2 then
                             if v.ping and v.ping >= 120 then isPingOK = false end
                         else
+                            -- AutoHop V1 Mặc định
                             if v.ping and v.ping > 150 then isPingOK = false end
                         end
                         
@@ -1806,10 +1892,12 @@ task.spawn(function()
                                         local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
                                         currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
                                         
+                                        -- [BỘ LỌC CHỐNG LAG TỐI THƯỢNG: Giảm tải CPU bằng cách tách luồng quét UI 4 lần/giây]
                                         if tick() - lastSkillScan >= 0.25 then
                                             lastSkillScan = tick()
                                             
                                             if getgenv().AutoFarm_Killer_V1 then
+                                                -- [AUTO FARM KILLER V1 - SPAM CHIÊU CƠ BẢN]
                                                 pcall(function()
                                                     local gui = LocalPlayer:FindFirstChild("PlayerGui")
                                                     if gui then
@@ -1827,6 +1915,7 @@ task.spawn(function()
                                                     end
                                                 end)
                                             elseif getgenv().AutoFarm_Killer_V2 then
+                                                -- [AUTO FARM KILLER V2 - BỘ QUÉT THÔNG MINH AUTO SKILL VIP V2 + CHECK HỒI CHIÊU CHỐNG LAG]
                                                 pcall(function()
                                                     local gui = LocalPlayer:FindFirstChild("PlayerGui")
                                                     if gui then
