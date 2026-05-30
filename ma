@@ -1,5 +1,5 @@
 -- ==================================================
--- Phiên bản: Amethyst Hub (BẢN TREO ĐÊM SIÊU GỌN - VIP NEON)
+-- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
 -- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
@@ -13,9 +13,9 @@
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
--- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
+-- Cập nhật MỚI NHẤT: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
 -- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
--- Cập nhật MỚI NHẤT: Khôi phục Hiệu ứng VIP (Pop-in, Thu nhỏ 100%), Trả lại ảnh gốc 105006398248081 và tên AMETHYST HUB
+-- Cập nhật ĐỘC QUYỀN: Đổi màu chữ Main Hub thành Hồng, Đổi tên Setting thành PREMIUM AMETHYST HUB
 -- ==================================================
 
 local Players = game:GetService("Players")
@@ -125,7 +125,6 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
--- Tạo hệ thống Scale riêng cho MainFrame (Hiệu ứng Nảy / Thu nhỏ 100%)
 local MainScale = Instance.new("UIScale")
 MainScale.Parent = MainFrame
 MainScale.Scale = 1
@@ -133,11 +132,10 @@ MainScale.Scale = 1
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(15, 10, 20)
-MainFrame.BackgroundTransparency = 0.2 
+MainFrame.BackgroundTransparency = 0.3 
 MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
 MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
 MainFrame.Size = UDim2.new(0, 500, 0, 350) 
--- ĐÃ LẤY ID ẢNH CHUẨN TỪ SCRIPT.TXT
 MainFrame.Image = "rbxassetid://105006398248081" 
 MainFrame.ImageTransparency = 0.1 
 Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 10)
@@ -165,9 +163,8 @@ TitleLabel.BackgroundTransparency = 1.000
 TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
--- ĐÃ ĐỔI TÊN CHUẨN
 TitleLabel.Text = "AMETHYST HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255) 
+TitleLabel.TextColor3 = Color3.fromRGB(255, 105, 180) -- ĐỔI SANG MÀU HỒNG (PINK)
 TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
 TitleLabel.TextStrokeColor3 = Color3.fromRGB(150, 0, 255)
@@ -359,7 +356,6 @@ task.spawn(function()
         if SettingsFrame.Visible then
             hue = hue + 0.005
             if hue > 1 then hue = 0 end
-            -- LED Rainbow chớp nháy siêu rực rỡ
             SettingsStroke.Color = Color3.fromHSV(hue, 1, 1) 
         end
     end
@@ -372,8 +368,7 @@ SettingsTitle.BackgroundTransparency = 1.000
 SettingsTitle.Position = UDim2.new(0, 0, 0, 15)
 SettingsTitle.Size = UDim2.new(1, 0, 0, 40)
 SettingsTitle.Font = Enum.Font.GothamBlack
--- ĐÃ ĐỔI TÊN CHUẨN TRONG CẢ BẢNG SETTING
-SettingsTitle.Text = "AMETHYST HUB"
+SettingsTitle.Text = "PREMIUM AMETHYST HUB" -- ĐỔI TÊN THÀNH PREMIUM AMETHYST HUB
 SettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 SettingsTitle.TextSize = 26.000
 SettingsTitle.ZIndex = 11
@@ -433,7 +428,7 @@ UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
 
 UIPadding.Parent = ScrollingFrame
 UIPadding.PaddingTop = UDim.new(0, 10)
-UIPadding.PaddingBottom = UDim.new(0, 20)
+UIPPadding.PaddingBottom = UDim.new(0, 20)
 
 local function PlayRowPopInAnimation()
     for i, child in ipairs(ScrollingFrame:GetChildren()) do
@@ -506,7 +501,6 @@ local function CreateSectionHeader(id, text)
 
     local Line = Instance.new("Frame")
     Line.Parent = HeaderFrame
-    -- ĐÃ FIX GẠCH TRẮNG: Sử dụng đúng màu Cyan tàng hình vào Neon
     Line.BackgroundColor3 = Color3.fromRGB(0, 255, 255)
     Line.BorderSizePixel = 0
     Line.Position = UDim2.new(0, 0, 1, -2)
@@ -1150,7 +1144,7 @@ local Translations = {
         T14 = "Hop Sau 10 Phút", D14 = "Tự động đổi Server sau mỗi 10 phút chơi.",
         T15 = "Lưu Cài Đặt (Save)", D15 = "Tự động lưu trạng thái bật/tắt (No Lag).",
         T16 = "Ngôn Ngữ (Language)", D16 = "Chuyển đổi Tiếng Việt / English.",
-        Title = "AMETHYST HUB",
+        Title = "PREMIUM AMETHYST HUB",
         Note = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
     },
     [2] = { 
@@ -1171,7 +1165,7 @@ local Translations = {
         T14 = "Hop After 10 Mins", D14 = "Automatically hop server after 10 minutes.",
         T15 = "Save Settings", D15 = "Auto save configurations (No Lag).",
         T16 = "UI Language", D16 = "Switch UI language (VN / EN).",
-        Title = "AMETHYST HUB",
+        Title = "PREMIUM AMETHYST HUB",
         Note = "Enabling V2 automatically disables V1 to prevent conflicts."
     }
 }
@@ -1224,7 +1218,6 @@ getgenv().ApplyLanguageUI = function(idx)
         UpdateRowText("13", t.T13, t.D13)
         UpdateRowText("14", t.T14, t.D14)
         UpdateRowText("15", t.T15, t.D15)
-        UpdateRowText("16", t.T16, t.D16)
     end)
 end
 
@@ -1250,7 +1243,7 @@ end
 local function PlayHubCloseAnimation()
     PlaySound(ToggleOffSound)
     
-    -- ĐÃ SỬA LỖI MỚI NHẤT: Thu nhỏ UI biến mất hoàn toàn 100%, trả lại tầm nhìn cho sếp!
+    -- Thu nhỏ UI biến mất hoàn toàn 100%
     local tween = TweenService:Create(MainScale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Scale = 0})
     tween:Play()
     
