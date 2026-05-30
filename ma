@@ -1,5 +1,5 @@
 -- ==================================================
--- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
+-- Phiên bản: Amethyst Hub (BẢN TREO ĐÊM SIÊU GỌN - VIP NEON)
 -- Bản Quyền: HUYKOGIAUVN
 -- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
 -- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
@@ -13,10 +13,20 @@
 -- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
 -- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
 -- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
--- Cập nhật MỚI NHẤT: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
+-- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
 -- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
--- Cập nhật ĐỘC QUYỀN: Đổi màu chữ Main Hub thành Hồng, Đổi tên Setting thành PREMIUM AMETHYST HUB
+-- Cập nhật MỚI NHẤT: Sửa lỗi kẹt UI, Sửa lỗi Animation thu nhỏ, Khôi phục tên AMETHYST HUB & Ảnh gốc
 -- ==================================================
+
+local CoreGui = game:GetService("CoreGui")
+
+-- [QUAN TRỌNG] Xóa UI cũ để chống kẹt nút và đè chữ
+if CoreGui:FindFirstChild("AmethystHubUI") then
+    CoreGui.AmethystHubUI:Destroy()
+end
+if CoreGui:FindFirstChild("AmethystSFX") then
+    CoreGui.AmethystSFX:Destroy()
+end
 
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -30,7 +40,6 @@ local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 -- ================= [HỆ THỐNG ÂM THANH UI] =================
-local CoreGui = game:GetService("CoreGui")
 local SFXFolder = Instance.new("Folder")
 SFXFolder.Name = "AmethystSFX"
 SFXFolder.Parent = CoreGui
@@ -90,6 +99,7 @@ ToggleButton.BackgroundTransparency = 0.0
 ToggleButton.Position = UDim2.new(0, 20, 0.4, 0) 
 ToggleButton.Size = UDim2.new(0, 60, 0, 60) 
 ToggleButton.Image = "rbxassetid://94506254187483"
+ToggleButton.ZIndex = 50
 
 ToggleCorner.CornerRadius = UDim.new(1, 0)
 ToggleCorner.Parent = ToggleButton
@@ -164,7 +174,7 @@ TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
 TitleLabel.Text = "AMETHYST HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 105, 180) -- ĐỔI SANG MÀU HỒNG (PINK)
+TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 255) 
 TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
 TitleLabel.TextStrokeColor3 = Color3.fromRGB(150, 0, 255)
@@ -356,6 +366,7 @@ task.spawn(function()
         if SettingsFrame.Visible then
             hue = hue + 0.005
             if hue > 1 then hue = 0 end
+            -- LED Rainbow chớp nháy siêu rực rỡ
             SettingsStroke.Color = Color3.fromHSV(hue, 1, 1) 
         end
     end
@@ -368,7 +379,7 @@ SettingsTitle.BackgroundTransparency = 1.000
 SettingsTitle.Position = UDim2.new(0, 0, 0, 15)
 SettingsTitle.Size = UDim2.new(1, 0, 0, 40)
 SettingsTitle.Font = Enum.Font.GothamBlack
-SettingsTitle.Text = "PREMIUM AMETHYST HUB" -- ĐỔI TÊN THÀNH PREMIUM AMETHYST HUB
+SettingsTitle.Text = "AMETHYST HUB"
 SettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 SettingsTitle.TextSize = 26.000
 SettingsTitle.ZIndex = 11
@@ -1144,7 +1155,7 @@ local Translations = {
         T14 = "Hop Sau 10 Phút", D14 = "Tự động đổi Server sau mỗi 10 phút chơi.",
         T15 = "Lưu Cài Đặt (Save)", D15 = "Tự động lưu trạng thái bật/tắt (No Lag).",
         T16 = "Ngôn Ngữ (Language)", D16 = "Chuyển đổi Tiếng Việt / English.",
-        Title = "PREMIUM AMETHYST HUB",
+        Title = "AMETHYST HUB",
         Note = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
     },
     [2] = { 
@@ -1165,7 +1176,7 @@ local Translations = {
         T14 = "Hop After 10 Mins", D14 = "Automatically hop server after 10 minutes.",
         T15 = "Save Settings", D15 = "Auto save configurations (No Lag).",
         T16 = "UI Language", D16 = "Switch UI language (VN / EN).",
-        Title = "PREMIUM AMETHYST HUB",
+        Title = "AMETHYST HUB",
         Note = "Enabling V2 automatically disables V1 to prevent conflicts."
     }
 }
@@ -1218,6 +1229,7 @@ getgenv().ApplyLanguageUI = function(idx)
         UpdateRowText("13", t.T13, t.D13)
         UpdateRowText("14", t.T14, t.D14)
         UpdateRowText("15", t.T15, t.D15)
+        UpdateRowText("16", t.T16, t.D16)
     end)
 end
 
@@ -1243,7 +1255,7 @@ end
 local function PlayHubCloseAnimation()
     PlaySound(ToggleOffSound)
     
-    -- Thu nhỏ UI biến mất hoàn toàn 100%
+    -- Thu nhỏ UI biến mất hoàn toàn 100%, trả lại tầm nhìn cho sếp!
     local tween = TweenService:Create(MainScale, TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {Scale = 0})
     tween:Play()
     
@@ -1754,11 +1766,9 @@ local function SmartServerHop()
                 for _, v in ipairs(response.data) do
                     if type(v) == "table" and v.playing and v.maxPlayers and v.id ~= game.JobId then
                         local isPingOK = true
-                        -- Áp dụng bộ lọc Ping Khắt Khe của V2
                         if getgenv().AutoHop_V2 then
                             if v.ping and v.ping >= 120 then isPingOK = false end
                         else
-                            -- AutoHop V1 Mặc định
                             if v.ping and v.ping > 150 then isPingOK = false end
                         end
                         
@@ -1885,12 +1895,10 @@ task.spawn(function()
                                         local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
                                         currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
                                         
-                                        -- [BỘ LỌC CHỐNG LAG TỐI THƯỢNG: Giảm tải CPU bằng cách tách luồng quét UI 4 lần/giây]
                                         if tick() - lastSkillScan >= 0.25 then
                                             lastSkillScan = tick()
                                             
                                             if getgenv().AutoFarm_Killer_V1 then
-                                                -- [AUTO FARM KILLER V1 - SPAM CHIÊU CƠ BẢN]
                                                 pcall(function()
                                                     local gui = LocalPlayer:FindFirstChild("PlayerGui")
                                                     if gui then
@@ -1908,7 +1916,6 @@ task.spawn(function()
                                                     end
                                                 end)
                                             elseif getgenv().AutoFarm_Killer_V2 then
-                                                -- [AUTO FARM KILLER V2 - BỘ QUÉT THÔNG MINH AUTO SKILL VIP V2 + CHECK HỒI CHIÊU CHỐNG LAG]
                                                 pcall(function()
                                                     local gui = LocalPlayer:FindFirstChild("PlayerGui")
                                                     if gui then
