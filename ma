@@ -17,7 +17,7 @@
 -- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
 -- Cập nhật: Khôi phục Hiệu ứng VIP (Pop-in, Thu nhỏ 100%), Trả lại ảnh gốc 105006398248081 và tên AMETHYST HUB
 -- Cập nhật: Thêm Fix Lag (Xóa Đồ Họa), Anti-Ban V4 (Meta Hook), Auto Né V3 (Bay cao 30 Studs)
--- Cập nhật MỚI NHẤT: AUTO FARM V2.5 (Tele delay 0.5s, Xóa đông cứng Anchored, Tốc độ sửa 0.7s)
+-- Cập nhật MỚI NHẤT: AUTO FARM V3 (Tele delay 0.25s, Xóa đông cứng Anchored, Tốc độ sửa siêu tốc 0.3s)
 -- ==================================================
 
 local CoreGui = game:GetService("CoreGui")
@@ -176,7 +176,7 @@ TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
 TitleLabel.Text = "AMETHYST HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 105, 180) 
+TitleLabel.TextColor3 = Color3.fromRGB(255, 105, 180) -- MÀU HỒNG VIP
 TitleLabel.TextSize = 34.000 
 TitleLabel.TextStrokeTransparency = 0.000 
 TitleLabel.TextStrokeColor3 = Color3.fromRGB(150, 0, 255)
@@ -1013,7 +1013,7 @@ SliderFarmV1 = CreateCyberpunkSettingRow("1", "Auto Farm Gen V1", "Ôm máy tớ
     end
 end)
 
-SliderFarmV2 = CreateCyberpunkSettingRow("2", "Auto Farm Gen V2.5", "Hit & Run: Sửa đồng loạt các máy, nhích từng vạch.", getgenv().AutoFarm_V2, function(state)
+SliderFarmV2 = CreateCyberpunkSettingRow("2", "Auto Farm Gen V3", "Hit & Run: Sửa đồng loạt các máy, nhích từng vạch.", getgenv().AutoFarm_V2, function(state)
     getgenv().AutoFarm_V2 = state
     if state then
         getgenv().AutoFarm_V1 = false
@@ -1180,7 +1180,7 @@ local Translations = {
     [1] = { 
         Sec1 = "I: Auto Farm", Sec2 = "II: Auto Né Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Auto Server Hop", Sec7 = "VII: Setting",
         T1 = "Auto Farm Gen V1", D1 = "Ôm máy tới 100%. An toàn, truyền thống.",
-        T2 = "Auto Farm Gen V2.5", D2 = "Hit & Run: Sửa đồng loạt các máy, nhích từng vạch.",
+        T2 = "Auto Farm Gen V3", D2 = "Hit & Run: Sửa đồng loạt các máy, nhích từng vạch.",
         T3 = "Auto Né V1 (Cẩn Thận)", D3 = "Killer vào 20m -> Lết trốn 6s an toàn.",
         T4 = "Auto Né V2 (Ghim Máy)", D4 = "Áp sát 10m -> Tele Spawn xa nhất -> Đợi ra 5m về sửa.",
         T5 = "Auto Né V3 (Bay Lên Trời)", D5 = "Killer tới -> Bay lên máy cao 30m trốn.",
@@ -1203,7 +1203,7 @@ local Translations = {
     [2] = { 
         Sec1 = "I: Auto Farm", Sec2 = "II: Auto Evade Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Auto Server Hop", Sec7 = "VII: Settings",
         T1 = "Auto Farm Gen V1", D1 = "Repair to 100%. Safe and traditional.",
-        T2 = "Auto Farm Gen V2.5", D2 = "Hit & Run: Repair all gens bar by bar.",
+        T2 = "Auto Farm Gen V3", D2 = "Hit & Run: Repair all gens bar by bar.",
         T3 = "Auto Evade V1 (Safe)", D3 = "Killer within 20m -> Hide for 6s.",
         T4 = "Auto Evade V2 (Pin)", D4 = "Killer 10m -> Teleport away -> Wait 5m to return.",
         T5 = "Auto Evade V3 (Fly Up)", D5 = "Killer comes -> Teleport 30m above gen.",
@@ -1213,10 +1213,10 @@ local Translations = {
         T9 = "Play Custom Music", D9 = "Paste Sound ID and press Play to override defaults.",
         T10 = "Auto Farm Killer V1", D10 = "Wait 3s invis, spam basic skill, hop when cleared.",
         T11 = "Auto Farm Killer V2", D11 = "Wait 3s invis, spam all VIP skills, hop when cleared.",
-        T12 = "Auto Farm Level V1", D12 = "Auto equip < Lv100 char when current is maxed.",
-        T13 = "Auto Hop V1 (Default)", D13 = "Find low player server, ping <150ms.",
-        T14 = "Auto Hop V2 (Ultra Smooth)", D14 = "Find low player server, strict ping <120ms.",
-        T15 = "Hop After 10 Mins", D15 = "Automatically hop server after 10 minutes.",
+        T12 = "Auto Farm Level V1", D11 = "Auto equip < Lv100 char when current is maxed.",
+        T13 = "Auto Hop V1 (Default)", D12 = "Find low player server, ping <150ms.",
+        T14 = "Auto Hop V2 (Ultra Smooth)", D13 = "Find low player server, strict ping <120ms.",
+        T15 = "Hop After 10 Mins", D14 = "Automatically hop server after 10 minutes.",
         T16 = "Fix Lag (Delete Textures)", D16 = "Delete all materials/textures to boost FPS.",
         T17 = "Save Settings", D17 = "Auto save configurations (No Lag).",
         T18 = "UI Language", D18 = "Switch UI language (VN / EN).",
@@ -2087,7 +2087,7 @@ task.spawn(function()
                         local lookAt = Vector3.new(pivot.Position.X, dropPos.Y, pivot.Position.Z)
                         
                         while getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2) and (root.Position - dropPos).Magnitude > 3 do
-                            SetStatus(getgenv().AutoFarm_V2 and "V2.5: Đang xoay tua máy🎯" or "V1: Đang tới máy🎯")
+                            SetStatus(getgenv().AutoFarm_V2 and "V3: Đang xoay tua máy🎯" or "V1: Đang tới máy🎯")
                             local killer = GetKiller()
                             if killer and killer:FindFirstChild("HumanoidRootPart") then
                                 if (root.Position - killer.HumanoidRootPart.Position).Magnitude < SafeDistance then
@@ -2105,7 +2105,7 @@ task.spawn(function()
                         
                         if getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2) then
                             root.Anchored = false
-                            task.wait(0.5) -- ĐÃ SỬA THÀNH 0.5s RƠI XUỐNG RỒI MỚI SỬA MÁY
+                            task.wait(0.25) -- ĐÃ SỬA THÀNH 0.25s RƠI XUỐNG RỒI MỚI SỬA MÁY
                             
                             local prompt = gen:FindFirstChild("Main") and gen.Main:FindFirstChild("Prompt")
                             if prompt then fireproximityprompt(prompt) end
@@ -2140,7 +2140,6 @@ task.spawn(function()
 
                                 SetStatus("Đã sửa được " .. math.floor(GetProgress(gen)) .. "%")
                                 if LocalPlayer.Character.Humanoid.Jump then break end
-                                -- ĐÃ XÓA ĐÔNG CỨNG NGƯỜI (BỎ ANCHORED KHI SỬA MÁY)
                                 
                                 local killer = GetKiller()
                                 if killer and killer:FindFirstChild("HumanoidRootPart") then
@@ -2322,8 +2321,8 @@ task.spawn(function()
                                     end
                                 end
                                 
-                                -- ĐÃ CHỈNH THỜI GIAN SỬA THÀNH 0.7S
-                                if tick() - lastInteract >= 0.7 then
+                                -- ĐÃ CHỈNH THỜI GIAN SỬA THÀNH 0.3S (V3)
+                                if tick() - lastInteract >= 0.3 then
                                     if prompt then pcall(function() prompt:InputHoldBegin() end) end
                                     if gen:FindFirstChild("Remotes") and gen.Remotes:FindFirstChild("RE") then gen.Remotes.RE:FireServer() end
                                     lastInteract = tick()
