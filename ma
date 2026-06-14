@@ -1,24 +1,24 @@
 -- ==================================================
--- Phien ban: Amethyst Hub Toi Thuong (BAN TREO DEM SIEU GON)
--- Ban Quyen: HUYKOGIAUVN
--- Cap nhat: Server Hop quet cuc ky, Tu lat trang neu server day.
--- Cap nhat: Bang Settings Sieu VIP (Glassmorphism, Am thanh, Tween Hover)
--- Cap nhat: FIX LAG Auto Ne V2 (Bo nho dem Cache Spawns) + Fix Loi Khong Tele
--- Cap nhat: Them Muc Setting (Tu dong LUU CAU HINH NO LAG + Chuyen Ngon Ngu VN/EN)
--- Cap nhat: FIX LOI DELAY TELEPORT CUA AUTO NE V2 + THEM 7 BAI NHAC MOI
--- Cap nhat: GHIM MUOT KILLER V1 (Bam dinh lung deo ca giut) + Bo Tu Dien UI Skill Sat Nhan
--- Cap nhat: Auto Farm Level V1 (Tu dong doi tuong chua max khi con dang xai da lv100)
--- Cap nhat: Bat san Auto Level V1, Xoa UI Collection, CHI CHO PHEP DOI O LOBBY
--- Cap nhat: Them dan ID Nhac Custom (Tu de nhac mac dinh khi phat)
--- Cap nhat: BO LOC CHONG LAG SMART COOLDOWN V2 (Theo doi hoi chieu)
--- Cap nhat: Tra lai AUTO FARM KILLER V1 (Dung 1 chieu co ban) nam chung voi V2
--- Cap nhat: SUA LOI LAG V1 & V2 (Tach luong quet UI 4Hz giam 95% tai CPU)
--- Cap nhat: Them muc AUTO SERVER HOP (V1 Mac Dinh / V2 Sieu muot Ping <120)
--- Cap nhat: Bo sung "Hop Sau 10 Phut" vao he thong Auto Hop
--- Cap nhat BAN FREE: Them Fix Lag (Xoa do hoa) va Anti-Ban V4
--- Cap nhat MOI NHAT: AUTO FARM V2.5 (Delay roi 0.75s, Sua vach 0.75s, Xoa dong cung)
--- Cap nhat FIX TELEPORT: Su dung PivotTo va xoa sach van toc de chong server ket noi nguoc (rubberbanding).
+-- Phiên bản: Amethyst Hub Tối Thượng (BẢN TREO ĐÊM SIÊU GỌN)
+-- Bản Quyền: HUYKOGIAUVN
+-- Cập nhật: Server Hop quét cực kỹ, Tự lật trang nếu server đầy.
+-- Cập nhật: Bảng Settings Siêu VIP (Glassmorphism, Âm thanh, Tween Hover)
+-- Cập nhật: FIX LAG Auto Né V2 (Bộ nhớ đệm Cache Spawns) + Fix Lỗi Không Tele
+-- Cập nhật: Thêm Mục Setting (Tự động LƯU CẤU HÌNH NO LAG + Chuyển Ngôn Ngữ VN/EN)
+-- Cập nhật: FIX LỖI DELAY TELEPORT CỦA AUTO NÉ V2 + THÊM 7 BÀI NHẠC MỚI
+-- Cập nhật: GHIM MƯỢT KILLER V1 (Bám dính lưng đéo cà giựt) + Bộ Từ Điển UI Skill Sát Nhân
+-- Cập nhật: Auto Farm Level V1 (Tự động đổi tướng chưa max khi con đang xài đã lv100)
+-- Cập nhật: Bật sẵn Auto Level V1, Xóa UI Collection, CHỈ CHO PHÉP ĐỔI Ở LOBBY
+-- Cập nhật: Thêm dán ID Nhạc Custom (Tự đè nhạc mặc định khi phát)
+-- Cập nhật: BỘ LỌC CHỐNG LAG SMART COOLDOWN V2 (Theo dõi hồi chiêu)
+-- Cập nhật: Trả lại AUTO FARM KILLER V1 (Dùng 1 chiêu cơ bản) nằm chung với V2
+-- Cập nhật: SỬA LỖI LAG V1 & V2 (Tách luồng quét UI 4Hz giảm 95% tải CPU)
+-- Cập nhật: Thêm mục AUTO SERVER HOP (V1 Mặc định / V2 Siêu mượt Ping <120)
+-- Cập nhật: Bổ sung "Hop Sau 10 Phút" vào hệ thống Auto Hop
+-- Cập nhật BẢN FREE: Thêm Fix Lag (Xóa đồ họa) và Anti-Ban V4
+-- Cập nhật MỚI NHẤT: AUTO FARM V2.5 (Delay rơi 0.75s, Sửa vạch 0.75s, Xóa đông cứng)
 -- ==================================================
+
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
@@ -26,34 +26,35 @@ local TeleportService = game:GetService("TeleportService")
 local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local VirtualUser = game:GetService("VirtualUser")
-local UserInputService = game:GetService("UserInputService")
+local UserInputService = game:GetService("UserInputService") 
 local TweenService = game:GetService("TweenService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
--- ================= [HE THONG AM THANH UI] =================
+-- ================= [HỆ THỐNG ÂM THANH UI] =================
 local CoreGui = game:GetService("CoreGui")
 local SFXFolder = Instance.new("Folder")
 SFXFolder.Name = "AmethystSFX"
 SFXFolder.Parent = CoreGui
 
 local HoverSound = Instance.new("Sound")
-HoverSound.SoundId = "rbxassetid://876939830"
+HoverSound.SoundId = "rbxassetid://876939830" 
 HoverSound.Volume = 0.5
 HoverSound.Parent = SFXFolder
 
 local ToggleOnSound = Instance.new("Sound")
-ToggleOnSound.SoundId = "rbxassetid://6042053626"
+ToggleOnSound.SoundId = "rbxassetid://6042053626" 
 ToggleOnSound.Volume = 1
 ToggleOnSound.PlaybackSpeed = 1
 ToggleOnSound.Parent = SFXFolder
 
-local ToggleOffSound = Instance.new("Sound")ToggleOffSound.SoundId = "rbxassetid://6042053626"
+local ToggleOffSound = Instance.new("Sound")
+ToggleOffSound.SoundId = "rbxassetid://6042053626" 
 ToggleOffSound.Volume = 1
-ToggleOffSound.PlaybackSpeed = 0.8
+ToggleOffSound.PlaybackSpeed = 0.8 
 ToggleOffSound.Parent = SFXFolder
 
 local PopupSound = Instance.new("Sound")
-PopupSound.SoundId = "rbxassetid://6895079853"
+PopupSound.SoundId = "rbxassetid://6895079853" 
 PopupSound.Volume = 0.8
 PopupSound.Parent = SFXFolder
 
@@ -67,7 +68,7 @@ local function PlaySound(snd)
 end
 
 -- ======================================================================
--- BANG 1: HUTAO UI SYSTEM (MAIN HUB TOI THUONG)
+-- BẢNG 1: HUTAO UI SYSTEM (MAIN HUB TỐI THƯỢNG)
 -- ======================================================================
 local ScreenGui = Instance.new("ScreenGui")
 local MainFrame = Instance.new("ImageLabel")
@@ -76,7 +77,8 @@ local GeneralLabel = Instance.new("TextLabel")
 local MoneyLabel = Instance.new("TextLabel")
 local TimeLabel = Instance.new("TextLabel")
 local TitleLabel = Instance.new("TextLabel")
-local ToggleButton = Instance.new("ImageButton")
+
+local ToggleButton = Instance.new("ImageButton") 
 local ToggleCorner = Instance.new("UICorner")
 
 ScreenGui.Name = "AmethystHubUI"
@@ -85,10 +87,11 @@ ScreenGui.Parent = CoreGui
 ToggleButton.Name = "ToggleUI"
 ToggleButton.Parent = ScreenGui
 ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-ToggleButton.BackgroundTransparency = 0.0
-ToggleButton.Position = UDim2.new(0, 20, 0.4, 0)
-ToggleButton.Size = UDim2.new(0, 60, 0, 60)
+ToggleButton.BackgroundTransparency = 0.0 
+ToggleButton.Position = UDim2.new(0, 20, 0.4, 0) 
+ToggleButton.Size = UDim2.new(0, 60, 0, 60) 
 ToggleButton.Image = "rbxassetid://94506254187483"
+
 ToggleCorner.CornerRadius = UDim.new(1, 0)
 ToggleCorner.Parent = ToggleButton
 
@@ -97,6 +100,7 @@ local function update(input)
     local delta = input.Position - dragStart
     ToggleButton.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
 end
+
 ToggleButton.InputBegan:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
         dragging = true
@@ -125,11 +129,11 @@ end)
 MainFrame.Name = "MainFrame"
 MainFrame.Parent = ScreenGui
 MainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-MainFrame.BackgroundTransparency = 1.000
-MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-MainFrame.Size = UDim2.new(0, 500, 0, 350)
-MainFrame.Image = "rbxassetid://105006398248081"
+MainFrame.BackgroundTransparency = 1.000 
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5) 
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
+MainFrame.Size = UDim2.new(0, 500, 0, 350) 
+MainFrame.Image = "rbxassetid://105006398248081" 
 MainFrame.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 MainFrame.BackgroundTransparency = 0.2
 
@@ -137,15 +141,16 @@ local GearIcon = Instance.new("ImageLabel")
 GearIcon.Name = "SettingsGear"
 GearIcon.Parent = MainFrame
 GearIcon.BackgroundTransparency = 1.0
-GearIcon.Position = UDim2.new(1, -90, 0, 0)
-GearIcon.Size = UDim2.new(0, 90, 0, 90)
+GearIcon.Position = UDim2.new(1, -90, 0, 0) 
+GearIcon.Size = UDim2.new(0, 90, 0, 90) 
 GearIcon.Image = "rbxassetid://112198540696715"
 
 local GearButton = Instance.new("ImageButton")
 GearButton.Name = "GearActButton"
 GearButton.Parent = GearIcon
 GearButton.BackgroundTransparency = 1.0
-GearButton.Size = UDim2.new(1, 0, 1, 0)GearButton.ZIndex = 2
+GearButton.Size = UDim2.new(1, 0, 1, 0)
+GearButton.ZIndex = 2 
 
 TitleLabel.Name = "Title"
 TitleLabel.Parent = MainFrame
@@ -155,9 +160,9 @@ TitleLabel.Position = UDim2.new(0, 0, 0.05, 0)
 TitleLabel.Size = UDim2.new(1, 0, 0, 40)
 TitleLabel.Font = Enum.Font.FredokaOne
 TitleLabel.Text = "AMETHYST HUB"
-TitleLabel.TextColor3 = Color3.fromRGB(255, 85, 255)
-TitleLabel.TextSize = 36.000
-TitleLabel.TextStrokeTransparency = 0.000
+TitleLabel.TextColor3 = Color3.fromRGB(255, 85, 255) 
+TitleLabel.TextSize = 36.000 
+TitleLabel.TextStrokeTransparency = 0.000 
 
 StatusLabel.Name = "Status"
 StatusLabel.Parent = MainFrame
@@ -175,11 +180,11 @@ GeneralLabel.Name = "General"
 GeneralLabel.Parent = MainFrame
 GeneralLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 GeneralLabel.BackgroundTransparency = 1.000
-GeneralLabel.Position = UDim2.new(0, 0, 0.45, 0)
+GeneralLabel.Position = UDim2.new(0, 0, 0.45, 0) 
 GeneralLabel.Size = UDim2.new(1, 0, 0, 30)
 GeneralLabel.Font = Enum.Font.SourceSansBold
 GeneralLabel.Text = "General: Loading..."
-GeneralLabel.TextColor3 = Color3.fromRGB(255, 255, 127)
+GeneralLabel.TextColor3 = Color3.fromRGB(255, 255, 127) 
 GeneralLabel.TextSize = 24.000
 GeneralLabel.TextStrokeTransparency = 0.500
 
@@ -191,9 +196,10 @@ MoneyLabel.Position = UDim2.new(0, 0, 0.55, 0)
 MoneyLabel.Size = UDim2.new(1, 0, 0, 30)
 MoneyLabel.Font = Enum.Font.SourceSansBold
 MoneyLabel.Text = "Money: Loading..."
-MoneyLabel.TextColor3 = Color3.fromRGB(85, 255, 127)
+MoneyLabel.TextColor3 = Color3.fromRGB(85, 255, 127) 
 MoneyLabel.TextSize = 24.000
 MoneyLabel.TextStrokeTransparency = 0.500
+
 TimeLabel.Name = "Time"
 TimeLabel.Parent = MainFrame
 TimeLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
@@ -209,46 +215,47 @@ TimeLabel.TextStrokeTransparency = 0.500
 -- ======================================================================
 -- [VIP SYSTEM] MENU SETTINGS MAIN HUB
 -- ======================================================================
-getgenv().AutoFarm_V1 = true
-getgenv().AutoFarm_V2 = false
-getgenv().AutoEvade_V1 = true
-getgenv().AutoEvade_V2 = false
-getgenv().AutoFarm_Killer_V1 = false
-getgenv().AutoFarm_Killer_V2 = false
+getgenv().AutoFarm_V1 = true  
+getgenv().AutoFarm_V2 = false 
+getgenv().AutoEvade_V1 = true    
+getgenv().AutoEvade_V2 = false   
+getgenv().AutoFarm_Killer_V1 = false 
+getgenv().AutoFarm_Killer_V2 = false 
 getgenv().AutoFarm_Level_V1 = true
-getgenv().AutoHop_V1 = true
-getgenv().AutoHop_V2 = false
+getgenv().AutoHop_V1 = true      
+getgenv().AutoHop_V2 = false     
 getgenv().AutoHop_TimeLimit = false
-getgenv().FixLagEnabled = false
+getgenv().FixLagEnabled = false  
 getgenv().MusicEnabled = true
 getgenv().MusicVolumePercent = 60
 getgenv().CurrentSongIndex = 1
-getgenv().AutoSave = true
-getgenv().LanguageIndex = 1
+getgenv().AutoSave = true        
+getgenv().LanguageIndex = 1      
 
--- [NEW STATE CHO CUSTOM NHAC]
+-- [NEW STATE CHO CUSTOM NHẠC]
 getgenv().IsUsingCustomMusic = false
 getgenv().CustomMusicID = ""
+
 getgenv().SongList = {
-    {Name = "Cau ca van can", ID = "rbxassetid://124384558101360"},
-    {Name = "Ai dua em ve", ID = "rbxassetid://110919391228823"},
-    {Name = "Kho ga", ID = "rbxassetid://99152674992699"},
+    {Name = "Câu cá vạn cân", ID = "rbxassetid://124384558101360"},
+    {Name = "Ai đưa em về", ID = "rbxassetid://110919391228823"},
+    {Name = "Khô gà", ID = "rbxassetid://99152674992699"},
     {Name = "Bad Ending Funk", ID = "rbxassetid://135526249310486"},
     {Name = "KMI O KOTO M2", ID = "rbxassetid://131532883177579"},
     {Name = "MTGUAG DAN5", ID = "rbxassetid://80197259053353"},
-    {Name = "Mot bai hat rat hay", ID = "rbxassetid://80442979651569"},
+    {Name = "Một bài hát rất hay", ID = "rbxassetid://80442979651569"},
     {Name = "EMAPLAY NES5", ID = "rbxassetid://137973644565139"},
     {Name = "Rose love Siluo", ID = "rbxassetid://134140709844049"},
     {Name = "Rock that body", ID = "rbxassetid://75918642768991"},
     {Name = "BDOWYOU", ID = "rbxassetid://117061993775129"}
 }
 
-getgenv().LangList = {    {Name = "Tieng Viet (VN)", ID = "VN"},
+getgenv().LangList = {
+    {Name = "Tiếng Việt (VN)", ID = "VN"},
     {Name = "English (EN)", ID = "EN"}
 }
 
 local SaveFileName = "AmethystHub_SavedSettings.json"
-
 local function LoadSettings()
     if readfile and isfile and isfile(SaveFileName) then
         pcall(function()
@@ -274,7 +281,6 @@ local function LoadSettings()
         end)
     end
 end
-
 LoadSettings()
 
 task.spawn(function()
@@ -292,7 +298,8 @@ task.spawn(function()
                     AutoFarm_Level_V1 = getgenv().AutoFarm_Level_V1,
                     AutoHop_V1 = getgenv().AutoHop_V1,
                     AutoHop_V2 = getgenv().AutoHop_V2,
-                    AutoHop_TimeLimit = getgenv().AutoHop_TimeLimit,                    FixLagEnabled = getgenv().FixLagEnabled,
+                    AutoHop_TimeLimit = getgenv().AutoHop_TimeLimit,
+                    FixLagEnabled = getgenv().FixLagEnabled,
                     MusicEnabled = getgenv().MusicEnabled,
                     MusicVolumePercent = getgenv().MusicVolumePercent,
                     CurrentSongIndex = getgenv().CurrentSongIndex,
@@ -316,6 +323,7 @@ local SettingsTitleGradient = Instance.new("UIGradient")
 local CloseButton = Instance.new("TextButton")
 local CloseCorner = Instance.new("UICorner")
 local CloseStroke = Instance.new("UIStroke")
+
 local ScrollingFrame = Instance.new("ScrollingFrame")
 local UIListLayout = Instance.new("UIListLayout")
 local UIPadding = Instance.new("UIPadding")
@@ -323,13 +331,13 @@ local UIPadding = Instance.new("UIPadding")
 SettingsFrame.Name = "AmethystUltraSettingsUI"
 SettingsFrame.Parent = ScreenGui
 SettingsFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-SettingsFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-SettingsFrame.Size = UDim2.new(0, 0, 0, 0)
+SettingsFrame.Position = UDim2.new(0.5, 0, 0.5, 0) 
+SettingsFrame.Size = UDim2.new(0, 0, 0, 0) 
 SettingsFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
-SettingsFrame.BackgroundTransparency = 0.15
+SettingsFrame.BackgroundTransparency = 0.15 
 SettingsFrame.BorderSizePixel = 0
-SettingsFrame.ClipsDescendants = true
-SettingsFrame.Visible = false
+SettingsFrame.ClipsDescendants = true 
+SettingsFrame.Visible = false 
 SettingsFrame.ZIndex = 10
 
 SettingsCorner.CornerRadius = UDim.new(0, 16)
@@ -341,7 +349,8 @@ SettingsStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 SettingsStroke.Transparency = 0.2
 SettingsStroke.Parent = SettingsFrame
 
-task.spawn(function()    local hue = 0
+task.spawn(function()
+    local hue = 0
     while task.wait(0.02) do
         if SettingsFrame.Visible then
             hue = hue + 0.005
@@ -358,7 +367,7 @@ SettingsTitle.BackgroundTransparency = 1.000
 SettingsTitle.Position = UDim2.new(0, 0, 0, 15)
 SettingsTitle.Size = UDim2.new(1, 0, 0, 40)
 SettingsTitle.Font = Enum.Font.GothamBlack
-SettingsTitle.Text = "AMETHYST QUAN LY TOI THUONG"
+SettingsTitle.Text = "✧ AMETHYST QUẢN LÝ TỐI THƯỢNG ✧"
 SettingsTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 SettingsTitle.TextSize = 24.000
 SettingsTitle.ZIndex = 11
@@ -375,7 +384,7 @@ CloseButton.Parent = SettingsFrame
 CloseButton.AnchorPoint = Vector2.new(1, 0)
 CloseButton.Position = UDim2.new(1, -15, 0, 15)
 CloseButton.Size = UDim2.new(0, 35, 0, 35)
-CloseButton.BackgroundColor3 = Color3.fromRGB(30, 20, 25)
+CloseButton.BackgroundColor3 = Color3.fromRGB(30, 20, 25) 
 CloseButton.Font = Enum.Font.GothamBold
 CloseButton.Text = "X"
 CloseButton.TextColor3 = Color3.fromRGB(255, 100, 100)
@@ -390,11 +399,11 @@ CloseStroke.Thickness = 1.5
 CloseStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 CloseStroke.Transparency = 0.3
 CloseStroke.Parent = CloseButton
+
 CloseButton.MouseEnter:Connect(function()
     PlaySound(HoverSound)
     TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(255, 50, 50), TextColor3 = Color3.fromRGB(255,255,255)}):Play()
 end)
-
 CloseButton.MouseLeave:Connect(function()
     TweenService:Create(CloseButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(30, 20, 25), TextColor3 = Color3.fromRGB(255, 100, 100)}):Play()
 end)
@@ -424,14 +433,14 @@ local function ToggleSettings(show)
         PlaySound(PopupSound)
         SettingsFrame.Visible = true
         local tweenInfo = TweenInfo.new(0.6, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out)
-        local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 580, 0.85, 0)})
+        local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 580, 0.85, 0)}) 
         tween:Play()
     else
         local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.In)
         local tween = TweenService:Create(SettingsFrame, tweenInfo, {Size = UDim2.new(0, 0, 0, 0)})
         tween:Play()
         tween.Completed:Connect(function()
-            SettingsFrame.Visible = false
+            SettingsFrame.Visible = false 
         end)
     end
 end
@@ -439,7 +448,8 @@ end
 local function CreateSectionHeader(id, text)
     local HeaderFrame = Instance.new("Frame")
     HeaderFrame.Name = "Header_" .. id
-    HeaderFrame.Parent = ScrollingFrame    HeaderFrame.BackgroundTransparency = 1
+    HeaderFrame.Parent = ScrollingFrame
+    HeaderFrame.BackgroundTransparency = 1
     HeaderFrame.Size = UDim2.new(0.92, 0, 0, 35)
     HeaderFrame.ZIndex = 11
 
@@ -461,7 +471,7 @@ local function CreateSectionHeader(id, text)
     Line.Position = UDim2.new(0, 0, 1, -2)
     Line.Size = UDim2.new(1, 0, 0, 2)
     Line.ZIndex = 12
-
+    
     local LineGradient = Instance.new("UIGradient")
     LineGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0.00, Color3.fromRGB(0, 255, 255)),
@@ -475,10 +485,12 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     local RowCorner = Instance.new("UICorner")
     local RowStroke = Instance.new("UIStroke")
     local RowScale = Instance.new("UIScale")
+    
     local IconLabel = Instance.new("TextLabel")
     local Title = Instance.new("TextLabel")
     local Desc = Instance.new("TextLabel")
     local ClickButton = Instance.new("TextButton")
+    
     local SliderBg = Instance.new("Frame")
     local SliderCorner = Instance.new("UICorner")
     local SliderGlow = Instance.new("UIStroke")
@@ -488,7 +500,8 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     RowFrame.Name = "Row_" .. id
     RowFrame.Parent = ScrollingFrame
     RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    RowFrame.BackgroundTransparency = 0.4    RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
+    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
     RowFrame.ZIndex = 11
 
     RowCorner.CornerRadius = UDim.new(0, 12)
@@ -537,9 +550,9 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
 
     SliderBg.Parent = RowFrame
     SliderBg.AnchorPoint = Vector2.new(1, 0.5)
-    SliderBg.Position = UDim2.new(1, -20, 0.5, 0)    SliderBg.Size = UDim2.new(0, 60, 0, 30)
+    SliderBg.Position = UDim2.new(1, -20, 0.5, 0)
+    SliderBg.Size = UDim2.new(0, 60, 0, 30)
     SliderBg.ZIndex = 12
-
     SliderCorner.CornerRadius = UDim.new(1, 0)
     SliderCorner.Parent = SliderBg
 
@@ -552,7 +565,6 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     Knob.Size = UDim2.new(0, 24, 0, 24)
     Knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     Knob.ZIndex = 13
-
     KnobCorner.CornerRadius = UDim.new(1, 0)
     KnobCorner.Parent = Knob
 
@@ -586,13 +598,14 @@ local function CreateCyberpunkSettingRow(id, titleText, descText, initialState, 
     end
 
     UpdateVisuals(false)
+
     ClickButton.MouseEnter:Connect(function()
         PlaySound(HoverSound)
         TweenService:Create(RowScale, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Scale = 1.02}):Play()
         TweenService:Create(RowStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(150, 100, 255), Transparency = 0}):Play()
         TweenService:Create(RowFrame, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(35, 35, 45)}):Play()
     end)
-
+    
     ClickButton.MouseLeave:Connect(function()
         TweenService:Create(RowScale, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Scale = 1}):Play()
         TweenService:Create(RowStroke, TweenInfo.new(0.2), {Color = Color3.fromRGB(80, 80, 120), Transparency = 0.5}):Play()
@@ -613,135 +626,11 @@ local function CreateCyberpunkVolumeRow(id, titleText, descText, initialPercent,
     local RowFrame = Instance.new("Frame")
     local RowCorner = Instance.new("UICorner")
     local RowStroke = Instance.new("UIStroke")
+    
     local IconLabel = Instance.new("TextLabel")
     local Title = Instance.new("TextLabel")
     local Desc = Instance.new("TextLabel")
-
-    RowFrame.Name = "Row_" .. id
-    RowFrame.Parent = ScrollingFrame
-    RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    RowFrame.BackgroundTransparency = 0.4
-    RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
-    RowFrame.ZIndex = 11
-
-    RowCorner.CornerRadius = UDim.new(0, 12)
-    RowCorner.Parent = RowFrame
-
-    RowStroke.Color = Color3.fromRGB(80, 80, 120)
-    RowStroke.Thickness = 1
-    RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-    RowStroke.Transparency = 0.5
-    RowStroke.Parent = RowFrame
-
-    IconLabel.Parent = RowFrame
-    IconLabel.BackgroundTransparency = 1
-    IconLabel.Position = UDim2.new(0, 15, 0.5, -20)    IconLabel.Size = UDim2.new(0, 40, 0, 40)
-    IconLabel.Font = Enum.Font.GothamBlack
-    IconLabel.Text = id
-    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
-    IconLabel.TextSize = 28
-    IconLabel.ZIndex = 12
-
-    Title.Parent = RowFrame
-    Title.BackgroundTransparency = 1
-    Title.Position = UDim2.new(0, 65, 0, 15)
-    Title.Size = UDim2.new(0, 300, 0, 25)
-    Title.Font = Enum.Font.GothamBold
-    Title.Text = titleText
-    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-    Title.TextSize = 20
-    Title.TextXAlignment = Enum.TextXAlignment.Left
-    Title.ZIndex = 12
-
-    Desc.Parent = RowFrame
-    Desc.BackgroundTransparency = 1
-    Desc.Position = UDim2.new(0, 65, 0, 40)
-    Desc.Size = UDim2.new(0, 350, 0, 20)
-    Desc.Font = Enum.Font.GothamMedium
-    Desc.Text = descText
-    Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
-    Desc.TextSize = 13
-    Desc.TextXAlignment = Enum.TextXAlignment.Left
-    Desc.ZIndex = 12
-
-    local ControlBg = Instance.new("Frame")
-    ControlBg.Parent = RowFrame
-    ControlBg.AnchorPoint = Vector2.new(1, 0.5)
-    ControlBg.Position = UDim2.new(1, -15, 0.5, 0)
-    ControlBg.Size = UDim2.new(0, 110, 0, 30)
-    ControlBg.BackgroundTransparency = 1
-    ControlBg.ZIndex = 12
-
-    local MinusBtn = Instance.new("TextButton")
-    MinusBtn.Parent = ControlBg
-    MinusBtn.Size = UDim2.new(0, 30, 0, 30)
-    MinusBtn.Position = UDim2.new(0, 0, 0, 0)
-    MinusBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    MinusBtn.Text = "-"
-    MinusBtn.Font = Enum.Font.GothamBlack
-    MinusBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
-    MinusBtn.TextSize = 20
-    MinusBtn.ZIndex = 13
-    Instance.new("UICorner", MinusBtn).CornerRadius = UDim.new(0, 8)
-    local MStroke = Instance.new("UIStroke", MinusBtn)
-    MStroke.Color = Color3.fromRGB(255, 100, 100)
-    local ValLabel = Instance.new("TextLabel")
-    ValLabel.Parent = ControlBg
-    ValLabel.Size = UDim2.new(0, 50, 0, 30)
-    ValLabel.Position = UDim2.new(0, 30, 0, 0)
-    ValLabel.BackgroundTransparency = 1
-    ValLabel.Text = initialPercent .. "%"
-    ValLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
-    ValLabel.Font = Enum.Font.GothamBold
-    ValLabel.TextSize = 14
-    ValLabel.ZIndex = 13
-
-    local PlusBtn = Instance.new("TextButton")
-    PlusBtn.Parent = ControlBg
-    PlusBtn.Size = UDim2.new(0, 30, 0, 30)
-    PlusBtn.Position = UDim2.new(0, 80, 0, 0)
-    PlusBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    PlusBtn.Text = "+"
-    PlusBtn.Font = Enum.Font.GothamBlack
-    PlusBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
-    PlusBtn.TextSize = 20
-    PlusBtn.ZIndex = 13
-    Instance.new("UICorner", PlusBtn).CornerRadius = UDim.new(0, 8)
-    local PStroke = Instance.new("UIStroke", PlusBtn)
-    PStroke.Color = Color3.fromRGB(100, 255, 100)
-
-    local currentVal = initialPercent
-
-    local function BtnAnim(btn, color)
-        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = color}):Play()
-        task.wait(0.1)
-        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50)}):Play()
-    end
-
-    MinusBtn.MouseButton1Click:Connect(function()
-        PlaySound(HoverSound)
-        task.spawn(BtnAnim, MinusBtn, Color3.fromRGB(255, 100, 100))
-        currentVal = math.max(0, currentVal - 10)
-        ValLabel.Text = currentVal .. "%"
-        if callback then callback(currentVal) end
-    end)
-
-    PlusBtn.MouseButton1Click:Connect(function()
-        PlaySound(HoverSound)
-        task.spawn(BtnAnim, PlusBtn, Color3.fromRGB(100, 255, 100))
-        currentVal = math.min(100, currentVal + 10)
-        ValLabel.Text = currentVal .. "%"
-        if callback then callback(currentVal) end
-    end)
-end
-local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialIndex, callback)
-    local RowFrame = Instance.new("Frame")
-    local RowCorner = Instance.new("UICorner")
-    local RowStroke = Instance.new("UIStroke")
-    local IconLabel = Instance.new("TextLabel")
-    local Title = Instance.new("TextLabel")
-    local Desc = Instance.new("TextLabel")
-
+    
     RowFrame.Name = "Row_" .. id
     RowFrame.Parent = ScrollingFrame
     RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
@@ -782,7 +671,137 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     Desc.Parent = RowFrame
     Desc.BackgroundTransparency = 1
     Desc.Position = UDim2.new(0, 65, 0, 40)
-    Desc.Size = UDim2.new(0, 350, 0, 20)    Desc.Font = Enum.Font.GothamMedium
+    Desc.Size = UDim2.new(0, 350, 0, 20)
+    Desc.Font = Enum.Font.GothamMedium
+    Desc.Text = descText
+    Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
+    Desc.TextSize = 13
+    Desc.TextXAlignment = Enum.TextXAlignment.Left
+    Desc.ZIndex = 12
+
+    local ControlBg = Instance.new("Frame")
+    ControlBg.Parent = RowFrame
+    ControlBg.AnchorPoint = Vector2.new(1, 0.5)
+    ControlBg.Position = UDim2.new(1, -15, 0.5, 0)
+    ControlBg.Size = UDim2.new(0, 110, 0, 30)
+    ControlBg.BackgroundTransparency = 1
+    ControlBg.ZIndex = 12
+    
+    local MinusBtn = Instance.new("TextButton")
+    MinusBtn.Parent = ControlBg
+    MinusBtn.Size = UDim2.new(0, 30, 0, 30)
+    MinusBtn.Position = UDim2.new(0, 0, 0, 0)
+    MinusBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    MinusBtn.Text = "-"
+    MinusBtn.Font = Enum.Font.GothamBlack
+    MinusBtn.TextColor3 = Color3.fromRGB(255, 100, 100)
+    MinusBtn.TextSize = 20
+    MinusBtn.ZIndex = 13
+    Instance.new("UICorner", MinusBtn).CornerRadius = UDim.new(0, 8)
+    local MStroke = Instance.new("UIStroke", MinusBtn)
+    MStroke.Color = Color3.fromRGB(255, 100, 100)
+    
+    local ValLabel = Instance.new("TextLabel")
+    ValLabel.Parent = ControlBg
+    ValLabel.Size = UDim2.new(0, 50, 0, 30)
+    ValLabel.Position = UDim2.new(0, 30, 0, 0)
+    ValLabel.BackgroundTransparency = 1
+    ValLabel.Text = initialPercent .. "%"
+    ValLabel.TextColor3 = Color3.fromRGB(0, 255, 255)
+    ValLabel.Font = Enum.Font.GothamBold
+    ValLabel.TextSize = 14
+    ValLabel.ZIndex = 13
+    
+    local PlusBtn = Instance.new("TextButton")
+    PlusBtn.Parent = ControlBg
+    PlusBtn.Size = UDim2.new(0, 30, 0, 30)
+    PlusBtn.Position = UDim2.new(0, 80, 0, 0)
+    PlusBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
+    PlusBtn.Text = "+"
+    PlusBtn.Font = Enum.Font.GothamBlack
+    PlusBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
+    PlusBtn.TextSize = 20
+    PlusBtn.ZIndex = 13
+    Instance.new("UICorner", PlusBtn).CornerRadius = UDim.new(0, 8)
+    local PStroke = Instance.new("UIStroke", PlusBtn)
+    PStroke.Color = Color3.fromRGB(100, 255, 100)
+
+    local currentVal = initialPercent
+
+    local function BtnAnim(btn, color)
+        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = color}):Play()
+        task.wait(0.1)
+        TweenService:Create(btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50)}):Play()
+    end
+
+    MinusBtn.MouseButton1Click:Connect(function()
+        PlaySound(HoverSound)
+        task.spawn(BtnAnim, MinusBtn, Color3.fromRGB(255, 100, 100))
+        currentVal = math.max(0, currentVal - 10)
+        ValLabel.Text = currentVal .. "%"
+        if callback then callback(currentVal) end
+    end)
+
+    PlusBtn.MouseButton1Click:Connect(function()
+        PlaySound(HoverSound)
+        task.spawn(BtnAnim, PlusBtn, Color3.fromRGB(100, 255, 100))
+        currentVal = math.min(100, currentVal + 10)
+        ValLabel.Text = currentVal .. "%"
+        if callback then callback(currentVal) end
+    end)
+end
+
+local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialIndex, callback)
+    local RowFrame = Instance.new("Frame")
+    local RowCorner = Instance.new("UICorner")
+    local RowStroke = Instance.new("UIStroke")
+    
+    local IconLabel = Instance.new("TextLabel")
+    local Title = Instance.new("TextLabel")
+    local Desc = Instance.new("TextLabel")
+    
+    RowFrame.Name = "Row_" .. id
+    RowFrame.Parent = ScrollingFrame
+    RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
+    RowFrame.ZIndex = 11
+
+    RowCorner.CornerRadius = UDim.new(0, 12)
+    RowCorner.Parent = RowFrame
+
+    RowStroke.Color = Color3.fromRGB(80, 80, 120)
+    RowStroke.Thickness = 1
+    RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+    RowStroke.Transparency = 0.5
+    RowStroke.Parent = RowFrame
+
+    IconLabel.Parent = RowFrame
+    IconLabel.BackgroundTransparency = 1
+    IconLabel.Position = UDim2.new(0, 15, 0.5, -20)
+    IconLabel.Size = UDim2.new(0, 40, 0, 40)
+    IconLabel.Font = Enum.Font.GothamBlack
+    IconLabel.Text = id
+    IconLabel.TextColor3 = Color3.fromRGB(0, 255, 200)
+    IconLabel.TextSize = 28
+    IconLabel.ZIndex = 12
+
+    Title.Parent = RowFrame
+    Title.BackgroundTransparency = 1
+    Title.Position = UDim2.new(0, 65, 0, 15)
+    Title.Size = UDim2.new(0, 300, 0, 25)
+    Title.Font = Enum.Font.GothamBold
+    Title.Text = titleText
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.TextSize = 20
+    Title.TextXAlignment = Enum.TextXAlignment.Left
+    Title.ZIndex = 12
+
+    Desc.Parent = RowFrame
+    Desc.BackgroundTransparency = 1
+    Desc.Position = UDim2.new(0, 65, 0, 40)
+    Desc.Size = UDim2.new(0, 350, 0, 20)
+    Desc.Font = Enum.Font.GothamMedium
     Desc.Text = descText
     Desc.TextColor3 = Color3.fromRGB(180, 180, 200)
     Desc.TextSize = 13
@@ -795,7 +814,7 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
     CycleBtn.Position = UDim2.new(1, -15, 0.5, 0)
     CycleBtn.Size = UDim2.new(0, 150, 0, 35)
     CycleBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    CycleBtn.Text = " " .. list[initialIndex].Name
+    CycleBtn.Text = "▶ " .. list[initialIndex].Name
     CycleBtn.TextColor3 = Color3.fromRGB(0, 255, 255)
     CycleBtn.Font = Enum.Font.GothamBold
     CycleBtn.TextSize = 13
@@ -813,7 +832,7 @@ local function CreateCyberpunkCycleRow(id, titleText, descText, list, initialInd
         TweenService:Create(CycleBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(100, 50, 200), TextSize = 11}):Play()
         currentIndex = currentIndex + 1
         if currentIndex > #list then currentIndex = 1 end
-        CycleBtn.Text = " " .. list[currentIndex].Name
+        CycleBtn.Text = "▶ " .. list[currentIndex].Name
         if callback then callback(currentIndex) end
         task.wait(0.1)
         TweenService:Create(CycleBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50), TextSize = 13}):Play()
@@ -824,14 +843,16 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     local RowFrame = Instance.new("Frame")
     local RowCorner = Instance.new("UICorner")
     local RowStroke = Instance.new("UIStroke")
+    
     local IconLabel = Instance.new("TextLabel")
     local Title = Instance.new("TextLabel")
     local Desc = Instance.new("TextLabel")
-
+    
     RowFrame.Name = "Row_" .. id
     RowFrame.Parent = ScrollingFrame
     RowFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
-    RowFrame.BackgroundTransparency = 0.4    RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
+    RowFrame.BackgroundTransparency = 0.4
+    RowFrame.Size = UDim2.new(0.92, 0, 0, 75)
     RowFrame.ZIndex = 11
 
     RowCorner.CornerRadius = UDim.new(0, 12)
@@ -880,7 +901,8 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     InputBg.AnchorPoint = Vector2.new(1, 0.5)
     InputBg.Position = UDim2.new(1, -65, 0.5, 0)
     InputBg.Size = UDim2.new(0, 100, 0, 30)
-    InputBg.BackgroundColor3 = Color3.fromRGB(15, 15, 20)    InputBg.ZIndex = 12
+    InputBg.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+    InputBg.ZIndex = 12
     Instance.new("UICorner", InputBg).CornerRadius = UDim.new(0, 6)
     local IStroke = Instance.new("UIStroke", InputBg)
     IStroke.Color = Color3.fromRGB(100, 100, 150)
@@ -904,7 +926,7 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
     PlayBtn.Position = UDim2.new(1, -15, 0.5, 0)
     PlayBtn.Size = UDim2.new(0, 40, 0, 30)
     PlayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 50)
-    PlayBtn.Text = ">"
+    PlayBtn.Text = "▶"
     PlayBtn.Font = Enum.Font.GothamBlack
     PlayBtn.TextColor3 = Color3.fromRGB(100, 255, 100)
     PlayBtn.TextSize = 16
@@ -921,7 +943,7 @@ local function CreateCyberpunkInputRow(id, titleText, descText, placeholder, cal
         task.wait(0.1)
         TweenService:Create(PlayBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 50), TextColor3 = Color3.fromRGB(100, 255, 100)}):Play()
     end)
-
+    
     return TextBox
 end
 
@@ -929,23 +951,26 @@ local SliderFarmV1, SliderFarmV2, SliderEvadeV1, SliderEvadeV2, SliderKillerV1, 
 local SliderHopV1, SliderHopV2, SliderHopTime, SliderFixLag
 
 CreateSectionHeader("Sec1", "I: Auto Farm")
-SliderFarmV1 = CreateCyberpunkSettingRow("1", "Auto Farm Gen V1", "Om may toi 100%. An toan, truyen thong.", getgenv().AutoFarm_V1, function(state)    getgenv().AutoFarm_V1 = state
+
+SliderFarmV1 = CreateCyberpunkSettingRow("1", "Auto Farm Gen V1", "Ôm máy tới 100%. An toàn, truyền thống.", getgenv().AutoFarm_V1, function(state)
+    getgenv().AutoFarm_V1 = state
     if state then
         getgenv().AutoFarm_V2 = false
-        SliderFarmV2.ForceUpdate(false)
+        SliderFarmV2.ForceUpdate(false) 
     end
 end)
 
-SliderFarmV2 = CreateCyberpunkSettingRow("2", "Auto Farm Gen V2.5", "Hit & Run: Sua dong loat cac may, nich tung vach.", getgenv().AutoFarm_V2, function(state)
+SliderFarmV2 = CreateCyberpunkSettingRow("2", "Auto Farm Gen V2.5", "Hit & Run: Sửa đồng loạt các máy, nhích từng vạch.", getgenv().AutoFarm_V2, function(state)
     getgenv().AutoFarm_V2 = state
     if state then
         getgenv().AutoFarm_V1 = false
-        SliderFarmV1.ForceUpdate(false)
+        SliderFarmV1.ForceUpdate(false) 
     end
 end)
 
-CreateSectionHeader("Sec2", "II: Auto Ne Killer")
-SliderEvadeV1 = CreateCyberpunkSettingRow("3", "Auto Ne V1 (Can Than)", "Killer vao 20m -> Let tron 6s an toan.", getgenv().AutoEvade_V1, function(state)
+CreateSectionHeader("Sec2", "II: Auto Né Killer")
+
+SliderEvadeV1 = CreateCyberpunkSettingRow("3", "Auto Né V1 (Cẩn Thận)", "Killer vào 20m -> Lết trốn 6s an toàn.", getgenv().AutoEvade_V1, function(state)
     getgenv().AutoEvade_V1 = state
     if state then
         getgenv().AutoEvade_V2 = false
@@ -953,7 +978,7 @@ SliderEvadeV1 = CreateCyberpunkSettingRow("3", "Auto Ne V1 (Can Than)", "Killer 
     end
 end)
 
-SliderEvadeV2 = CreateCyberpunkSettingRow("4", "Auto Ne V2 (Ghim May)", "Ap sat 10m -> Tele Spawn xa nhat -> Doi ra 5m ve sua.", getgenv().AutoEvade_V2, function(state)
+SliderEvadeV2 = CreateCyberpunkSettingRow("4", "Auto Né V2 (Ghim Máy)", "Áp sát 10m -> Tele Spawn xa nhất -> Đợi ra 5m về sửa.", getgenv().AutoEvade_V2, function(state)
     getgenv().AutoEvade_V2 = state
     if state then
         getgenv().AutoEvade_V1 = false
@@ -962,39 +987,42 @@ SliderEvadeV2 = CreateCyberpunkSettingRow("4", "Auto Ne V2 (Ghim May)", "Ap sat 
 end)
 
 CreateSectionHeader("Sec3", "III: Music")
-CreateCyberpunkSettingRow("5", "Bat/Tat Nhac Nen", "Nghe nhac cuc chill.", getgenv().MusicEnabled, function(state)
+
+CreateCyberpunkSettingRow("5", "Bật/Tắt Nhạc Nền", "Nghe nhạc cực chill.", getgenv().MusicEnabled, function(state)
     getgenv().MusicEnabled = state
     if getgenv().ApplyMusicSettings then getgenv().ApplyMusicSettings() end
 end)
 
-CreateCyberpunkVolumeRow("6", "Am Luong Nhac", "Dieu chinh to nho cho phu hop.", getgenv().MusicVolumePercent, function(val)
+CreateCyberpunkVolumeRow("6", "Âm Lượng Nhạc", "Điều chỉnh to nhỏ cho phù hợp.", getgenv().MusicVolumePercent, function(val)
     getgenv().MusicVolumePercent = val
     if getgenv().ApplyMusicSettings then getgenv().ApplyMusicSettings() end
 end)
 
-CreateCyberpunkCycleRow("7", "Chon Bai Hat", "Doi bai hat yeu thich cua ban.", getgenv().SongList, getgenv().CurrentSongIndex, function(index)
+CreateCyberpunkCycleRow("7", "Chọn Bài Hát", "Đổi bài hát yêu thích của bạn.", getgenv().SongList, getgenv().CurrentSongIndex, function(index)
     getgenv().CurrentSongIndex = index
     getgenv().IsUsingCustomMusic = false
     if getgenv().ApplyMusicSettings then getgenv().ApplyMusicSettings() end
 end)
 
-CreateCyberpunkInputRow("8", "Nhac Custom (ID)", "Dan ID nhac va nhan nut > de phat de len nhac co san.", "Nhap ID...", function(text)    local id = text:gsub("%D", "")
+CreateCyberpunkInputRow("8", "Nhạc Custom (ID)", "Dán ID nhạc và nhấn nút ▶ để phát đè lên nhạc có sẵn.", "Nhập ID...", function(text)
+    local id = text:gsub("%D", "") 
     if id ~= "" then
         getgenv().IsUsingCustomMusic = true
         getgenv().CustomMusicID = "rbxassetid://" .. id
         if getgenv().ApplyMusicSettings then getgenv().ApplyMusicSettings() end
         pcall(function()
-            game.StarterGui:SetCore("SendNotification", {Title = "Nhac Custom", Text = "Dang phat ID: " .. id, Duration = 5})
+            game.StarterGui:SetCore("SendNotification", {Title = "Nhạc Custom", Text = "Đang phát ID: " .. id, Duration = 5})
         end)
     else
         pcall(function()
-            game.StarterGui:SetCore("SendNotification", {Title = "Loi", Text = "Vui long nhap ID hop le!", Duration = 3})
+            game.StarterGui:SetCore("SendNotification", {Title = "Lỗi", Text = "Vui lòng nhập ID hợp lệ!", Duration = 3})
         end)
     end
 end)
 
 CreateSectionHeader("Sec4", "IV: Auto Farm Killer")
-SliderKillerV1 = CreateCyberpunkSettingRow("9", "Auto Farm Killer V1", "Doi 3s tang hinh, spam chieu co ban, quet sach.", getgenv().AutoFarm_Killer_V1, function(state)
+
+SliderKillerV1 = CreateCyberpunkSettingRow("9", "Auto Farm Killer V1", "Đợi 3s tàng hình, spam chiêu cơ bản, quét sạch.", getgenv().AutoFarm_Killer_V1, function(state)
     getgenv().AutoFarm_Killer_V1 = state
     if state then
         getgenv().AutoFarm_Killer_V2 = false
@@ -1002,7 +1030,7 @@ SliderKillerV1 = CreateCyberpunkSettingRow("9", "Auto Farm Killer V1", "Doi 3s t
     end
 end)
 
-SliderKillerV2 = CreateCyberpunkSettingRow("10", "Auto Farm Killer V2", "Cho 3s tang hinh, xa tron bo Skill VIP, quet sach.", getgenv().AutoFarm_Killer_V2, function(state)
+SliderKillerV2 = CreateCyberpunkSettingRow("10", "Auto Farm Killer V2", "Chờ 3s tàng hình, xả trọn bộ Skill VIP, quét sạch.", getgenv().AutoFarm_Killer_V2, function(state)
     getgenv().AutoFarm_Killer_V2 = state
     if state then
         getgenv().AutoFarm_Killer_V1 = false
@@ -1011,12 +1039,14 @@ SliderKillerV2 = CreateCyberpunkSettingRow("10", "Auto Farm Killer V2", "Cho 3s 
 end)
 
 CreateSectionHeader("Sec5", "V: Auto Farm Level")
-SliderFarmLevelV1 = CreateCyberpunkSettingRow("11", "Auto Farm Level V1", "Tu doi tuong < Lv100 khi con dang xai da max.", getgenv().AutoFarm_Level_V1, function(state)
+
+SliderFarmLevelV1 = CreateCyberpunkSettingRow("11", "Auto Farm Level V1", "Tự đổi tướng < Lv100 khi con đang xài đã max.", getgenv().AutoFarm_Level_V1, function(state)
     getgenv().AutoFarm_Level_V1 = state
 end)
 
 CreateSectionHeader("Sec6", "VI: Auto Server Hop")
-SliderHopV1 = CreateCyberpunkSettingRow("12", "Auto Hop V1 (Mac Dinh)", "Tim server it nguoi, ping on dinh (<150ms).", getgenv().AutoHop_V1, function(state)
+
+SliderHopV1 = CreateCyberpunkSettingRow("12", "Auto Hop V1 (Mặc Định)", "Tìm server ít người, ping ổn định (<150ms).", getgenv().AutoHop_V1, function(state)
     getgenv().AutoHop_V1 = state
     if state then
         getgenv().AutoHop_V2 = false
@@ -1024,19 +1054,22 @@ SliderHopV1 = CreateCyberpunkSettingRow("12", "Auto Hop V1 (Mac Dinh)", "Tim ser
     end
 end)
 
-SliderHopV2 = CreateCyberpunkSettingRow("13", "Auto Hop V2 (Sieu Muot)", "Tim server it nguoi va ping thap khat khe (<120ms).", getgenv().AutoHop_V2, function(state)
+SliderHopV2 = CreateCyberpunkSettingRow("13", "Auto Hop V2 (Siêu Mượt)", "Tìm server ít người và ping thấp khắt khe (<120ms).", getgenv().AutoHop_V2, function(state)
     getgenv().AutoHop_V2 = state
     if state then
-        getgenv().AutoHop_V1 = false        SliderHopV1.ForceUpdate(false)
+        getgenv().AutoHop_V1 = false
+        SliderHopV1.ForceUpdate(false)
     end
 end)
 
-SliderHopTime = CreateCyberpunkSettingRow("14", "Hop Sau 10 Phut", "Tu dong doi Server sau moi 10 phut choi.", getgenv().AutoHop_TimeLimit, function(state)
+SliderHopTime = CreateCyberpunkSettingRow("14", "Hop Sau 10 Phút", "Tự động đổi Server sau mỗi 10 phút chơi.", getgenv().AutoHop_TimeLimit, function(state)
     getgenv().AutoHop_TimeLimit = state
 end)
 
 CreateSectionHeader("Sec7", "VII: Setting")
-SliderFixLag = CreateCyberpunkSettingRow("15", "Fix Lag (Xoa Do Hoa)", "Xoa toan bo texture, vat lieu giam lag toi da.", getgenv().FixLagEnabled, function(state)
+
+-- [NEW] Thêm nút Fix Lag (Xóa Đồ Họa) cho bản Free
+SliderFixLag = CreateCyberpunkSettingRow("15", "Fix Lag (Xóa Đồ Họa)", "Xóa toàn bộ texture, vật liệu giảm lag tối đa.", getgenv().FixLagEnabled, function(state)
     getgenv().FixLagEnabled = state
     if state then
         pcall(function()
@@ -1051,15 +1084,15 @@ SliderFixLag = CreateCyberpunkSettingRow("15", "Fix Lag (Xoa Do Hoa)", "Xoa toan
                 end
             end
         end)
-        Notify("Da don dep do hoa thanh cong!")
+        Notify("Đã dọn dẹp đồ họa thành công!")
     end
 end)
 
-CreateCyberpunkSettingRow("16", "Luu Cai Dat (Save)", "Tu dong luu trang thai bat/tat (No Lag).", getgenv().AutoSave, function(state)
+CreateCyberpunkSettingRow("16", "Lưu Cài Đặt (Save)", "Tự động lưu trạng thái bật/tắt (No Lag).", getgenv().AutoSave, function(state)
     getgenv().AutoSave = state
 end)
 
-CreateCyberpunkCycleRow("17", "Ngon Ngu (Language)", "Chuyen doi ngon ngu hien thi UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
+CreateCyberpunkCycleRow("17", "Ngôn Ngữ (Language)", "Chuyển đổi ngôn ngữ hiển thị UI.", getgenv().LangList, getgenv().LanguageIndex, function(index)
     getgenv().LanguageIndex = index
     if getgenv().ApplyLanguageUI then getgenv().ApplyLanguageUI(index) end
 end)
@@ -1071,35 +1104,36 @@ NoteLabel.AnchorPoint = Vector2.new(0.5, 1)
 NoteLabel.Position = UDim2.new(0.5, 0, 0.98, 0)
 NoteLabel.Size = UDim2.new(0.8, 0, 0, 30)
 NoteLabel.Font = Enum.Font.SourceSansItalic
-NoteLabel.Text = "Bat V2 se tu dong tat V1 de chong xung dot he thong."
+NoteLabel.Text = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
 NoteLabel.TextColor3 = Color3.fromRGB(150, 150, 150)
 NoteLabel.TextSize = 16
 NoteLabel.ZIndex = 6
 
--- ================= [HE THONG TU DIEN DA NGON NGU VN/EN] =================local Translations = {
-    [1] = {
-        Sec1 = "I: Auto Farm", Sec2 = "II: Auto Ne Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Auto Server Hop", Sec7 = "VII: Setting",
-        T1 = "Auto Farm Gen V1", D1 = "Om may toi 100%. An toan, truyen thong.",
-        T2 = "Auto Farm Gen V2.5", D2 = "Hit & Run: Sua dong loat cac may, nich tung vach.",
-        T3 = "Auto Ne V1 (Can Than)", D3 = "Killer vao 20m -> Let tron 6s an toan.",
-        T4 = "Auto Ne V2 (Ghim May)", D4 = "Ap sat 10m -> Tele Spawn xa nhat -> Doi ra 5m ve sua.",
-        T5 = "Bat/Tat Nhac Nen", D5 = "Nghe nhac cuc chill.",
-        T6 = "Am Luong Nhac", D6 = "Dieu chinh to nho cho phu hop.",
-        T7 = "Chon Bai Hat", D7 = "Doi bai hat yeu thich cua ban.",
-        T8 = "Nhac Custom (ID)", D8 = "Dan ID nhac va nhan nut > de phat de len nhac co san.",
-        T9 = "Auto Farm Killer V1", D9 = "Cho 3s tang hinh, spam 1 chieu co ban, quet sach.",
-        T10 = "Auto Farm Killer V2", D10 = "Cho 3s tang hinh, xa 100% Skill VIP, diet sach tu Hop.",
-        T11 = "Auto Farm Level V1", D11 = "Tu doi tuong < Lv100 khi con dang xai da max.",
-        T12 = "Auto Hop V1 (Mac Dinh)", D12 = "Tim server it nguoi, ping on dinh (<150ms).",
-        T13 = "Auto Hop V2 (Sieu Muot)", D13 = "Tim server it nguoi va ping thap khat khe (<120ms).",
-        T14 = "Hop Sau 10 Phut", D14 = "Tu dong doi Server sau moi 10 phut choi.",
-        T15 = "Fix Lag (Xoa Do Hoa)", D15 = "Xoa toan bo texture, vat lieu giam lag toi da.",
-        T16 = "Luu Cai Dat (Save)", D16 = "Tu dong luu trang thai bat/tat (No Lag).",
-        T17 = "Ngon Ngu (Language)", D17 = "Chuyen doi Tieng Viet / English.",
-        Title = "AMETHYST QUAN LY TOI THUONG",
-        Note = "Bat V2 se tu dong tat V1 de chong xung dot he thong."
+-- ================= [HỆ THỐNG TỪ ĐIỂN ĐA NGÔN NGỮ VN/EN] =================
+local Translations = {
+    [1] = { 
+        Sec1 = "I: Auto Farm", Sec2 = "II: Auto Né Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Auto Server Hop", Sec7 = "VII: Setting",
+        T1 = "Auto Farm Gen V1", D1 = "Ôm máy tới 100%. An toàn, truyền thống.",
+        T2 = "Auto Farm Gen V2.5", D2 = "Hit & Run: Sửa đồng loạt các máy, nhích từng vạch.",
+        T3 = "Auto Né V1 (Cẩn Thận)", D3 = "Killer vào 20m -> Lết trốn 6s an toàn.",
+        T4 = "Auto Né V2 (Ghim Máy)", D4 = "Áp sát 10m -> Tele Spawn xa nhất -> Đợi ra 5m về sửa.",
+        T5 = "Bật/Tắt Nhạc Nền", D5 = "Nghe nhạc cực chill.",
+        T6 = "Âm Lượng Nhạc", D6 = "Điều chỉnh to nhỏ cho phù hợp.",
+        T7 = "Chọn Bài Hát", D7 = "Đổi bài hát yêu thích của bạn.",
+        T8 = "Nhạc Custom (ID)", D8 = "Dán ID nhạc và nhấn nút ▶ để phát đè lên nhạc có sẵn.",
+        T9 = "Auto Farm Killer V1", D9 = "Chờ 3s tàng hình, spam 1 chiêu cơ bản, quét sạch.",
+        T10 = "Auto Farm Killer V2", D10 = "Chờ 3s tàng hình, xả 100% Skill VIP, diệt sạch tự Hop.",
+        T11 = "Auto Farm Level V1", D11 = "Tự đổi tướng < Lv100 khi con đang xài đã max.",
+        T12 = "Auto Hop V1 (Mặc Định)", D12 = "Tìm server ít người, ping ổn định (<150ms).",
+        T13 = "Auto Hop V2 (Siêu Mượt)", D13 = "Tìm server ít người và ping thấp khắt khe (<120ms).",
+        T14 = "Hop Sau 10 Phút", D14 = "Tự động đổi Server sau mỗi 10 phút chơi.",
+        T15 = "Fix Lag (Xóa Đồ Họa)", D15 = "Xóa toàn bộ texture, vật liệu giảm lag tối đa.",
+        T16 = "Lưu Cài Đặt (Save)", D16 = "Tự động lưu trạng thái bật/tắt (No Lag).",
+        T17 = "Ngôn Ngữ (Language)", D17 = "Chuyển đổi Tiếng Việt / English.",
+        Title = "✧ AMETHYST QUẢN LÝ TỐI THƯỢNG ✧",
+        Note = "Bật V2 sẽ tự động tắt V1 để chống xung đột hệ thống."
     },
-    [2] = {
+    [2] = { 
         Sec1 = "I: Auto Farm", Sec2 = "II: Auto Evade Killer", Sec3 = "III: Music", Sec4 = "IV: Auto Farm Killer", Sec5 = "V: Auto Farm Level", Sec6 = "VI: Auto Server Hop", Sec7 = "VII: Settings",
         T1 = "Auto Farm Gen V1", D1 = "Repair to 100%. Safe and traditional.",
         T2 = "Auto Farm Gen V2.5", D2 = "Hit & Run: Repair all gens bar by bar.",
@@ -1118,15 +1152,17 @@ NoteLabel.ZIndex = 6
         T15 = "Fix Lag (Delete Textures)", D15 = "Delete all materials/textures to boost FPS.",
         T16 = "Save Settings", D16 = "Auto save configurations (No Lag).",
         T17 = "UI Language", D17 = "Switch UI language (VN / EN).",
-        Title = "AMETHYST SUPREME MANAGER",
+        Title = "✧ AMETHYST SUPREME MANAGER ✧",
         Note = "Enabling V2 automatically disables V1 to prevent conflicts."
     }
 }
 
 getgenv().ApplyLanguageUI = function(idx)
     local t = Translations[idx] or Translations[1]
-    pcall(function()        SettingsTitle.Text = t.Title
+    pcall(function()
+        SettingsTitle.Text = t.Title
         if NoteLabel then NoteLabel.Text = t.Note end
+        
         local function UpdateRowText(id, newTitle, newDesc)
             local r = ScrollingFrame:FindFirstChild("Row_" .. id)
             if r then
@@ -1136,6 +1172,7 @@ getgenv().ApplyLanguageUI = function(idx)
                 end
             end
         end
+
         local function UpdateHeader(name, newText)
             local h = ScrollingFrame:FindFirstChild("Header_" .. name)
             if h then
@@ -1144,6 +1181,7 @@ getgenv().ApplyLanguageUI = function(idx)
                 end
             end
         end
+
         UpdateHeader("Sec1", t.Sec1)
         UpdateHeader("Sec2", t.Sec2)
         UpdateHeader("Sec3", t.Sec3)
@@ -1151,6 +1189,7 @@ getgenv().ApplyLanguageUI = function(idx)
         UpdateHeader("Sec5", t.Sec5)
         UpdateHeader("Sec6", t.Sec6)
         UpdateHeader("Sec7", t.Sec7)
+
         UpdateRowText("1", t.T1, t.D1)
         UpdateRowText("2", t.T2, t.D2)
         UpdateRowText("3", t.T3, t.D3)
@@ -1175,11 +1214,11 @@ task.spawn(function()
     task.wait(1)
     if getgenv().ApplyLanguageUI then getgenv().ApplyLanguageUI(getgenv().LanguageIndex) end
 end)
+
 -- ======================================================================
--- [SU KIEN NUT BAM MENU MAIN HUB]
+-- [SỰ KIỆN NÚT BẤM MENU MAIN HUB]
 -- ======================================================================
 local isMenuVisible = true
-
 ToggleButton.MouseButton1Click:Connect(function()
     PlaySound(HoverSound)
     isMenuVisible = not isMenuVisible
@@ -1188,9 +1227,8 @@ ToggleButton.MouseButton1Click:Connect(function()
 end)
 
 GearButton.MouseEnter:Connect(function() PlaySound(HoverSound) end)
-
 GearButton.MouseButton1Click:Connect(function()
-    if isMenuVisible then
+    if isMenuVisible then 
         if SettingsFrame.Visible then ToggleSettings(false) else ToggleSettings(true) end
     end
 end)
@@ -1210,7 +1248,7 @@ local function UpdateUI()
     local Seconds = Diff % 60
     TimeLabel.Text = string.format("Time: %02d Hours %02d Minutes %02d Second", Hours, Minutes, Seconds)
     StatusLabel.Text = "Status: " .. CurrentStatus
-
+    
     pcall(function()
         local timeData = LocalPlayer:FindFirstChild("PlayerData") and LocalPlayer.PlayerData:FindFirstChild("Stats") and LocalPlayer.PlayerData.Stats:FindFirstChild("General") and LocalPlayer.PlayerData.Stats.General:FindFirstChild("TimePlayed")
         if timeData then
@@ -1224,6 +1262,7 @@ local function UpdateUI()
             GeneralLabel.Text = "General: Not Found"
         end
     end)
+    
     pcall(function()
         local leaderstats = LocalPlayer:FindFirstChild("leaderstats")
         if leaderstats then
@@ -1231,16 +1270,13 @@ local function UpdateUI()
             if money then MoneyLabel.Text = "Money: " .. tostring(money.Value) else MoneyLabel.Text = "Money: Not Found" end
         else
             local guiMoney = LocalPlayer.PlayerGui:FindFirstChild("MainGui") and LocalPlayer.PlayerGui.MainGui:FindFirstChild("Money")
-            if guiMoney and guiMoney:IsA("TextLabel") then MoneyLabel.Text = "Money: " .. guiMoney.Text else MoneyLabel.Text = "Money: ???" end
+             if guiMoney and guiMoney:IsA("TextLabel") then MoneyLabel.Text = "Money: " .. guiMoney.Text else MoneyLabel.Text = "Money: ???" end
         end
     end)
 end
 
 task.spawn(function()
-    while true do 
-        UpdateUI()
-        task.wait(1) 
-    end
+    while true do UpdateUI(); task.wait(1) end
 end)
 
 local function SetStatus(msg)
@@ -1259,20 +1295,21 @@ pcall(function()
     ScriptContext.Error:Connect(function(msg, stack, script) end)
 end)
 
--- [NEW: ANTI-BAN V4 CHO BAN FREE - Chan lenh Kick tu may chu]
+-- [NEW: ANTI-BAN V4 CHO BẢN FREE - Chặn lệnh Kick từ máy chủ]
 pcall(function()
     local mt = getrawmetatable(game)
     local oldNamecall = mt.__namecall
     setreadonly(mt, false)
     mt.__namecall = newcclosure(function(self, ...)
         local method = getnamecallmethod()
-        if self == LocalPlayer and (method == "Kick" or method == "kick") then
-            return
+        if self == LocalPlayer and (method == "Kick" or method == "kick") then 
+            return 
         end
         return oldNamecall(self, ...)
     end)
     setreadonly(mt, true)
 end)
+
 local function Notify(msg)
     pcall(function()
         game.StarterGui:SetCore("SendNotification", { Title = "Amethyst Hub", Text = msg, Duration = 3 })
@@ -1281,18 +1318,18 @@ end
 
 Notify("Anti-Ban System V4 Active!")
 
--- ================= CAU HINH (AUTO RUN CORE) =================
-getgenv().AutoFarm = true
-getgenv().Invisible = true
+-- ================= CẤU HÌNH (AUTO RUN CORE) =================
+getgenv().AutoFarm = true 
+getgenv().Invisible = true       
 local MaxSearchDistance = 3000
 local IgnoreList = {}
-local HitCycle = {}
-local LastGenerator = nil
+local HitCycle = {} 
+local LastGenerator = nil 
 local IsInMatch = false
 local IsHopping = false
-local SafeDistance = 20
-getgenv().KillerFinishedMatch = false
-local SkillCooldownTracker = {}
+local SafeDistance = 20 
+getgenv().KillerFinishedMatch = false 
+local SkillCooldownTracker = {} 
 
 local RepairOffsets = {
     CFrame.new(0, 0, -6),
@@ -1300,28 +1337,30 @@ local RepairOffsets = {
     CFrame.new(-6, 0, 0)
 }
 
-SetStatus("Dang khoi dong vui long cho")
+SetStatus("Đang khởi động vui lòng chờ⌚")
 Notify("Dang khoi dong... (Doi 5s)")
-task.wait(5)
-SetStatus("Dang cho vao tran")
+task.wait(5) 
+SetStatus("Đang chờ vào trận⏳")
 Notify("Script Da Bat! Dang cho Survivor...")
 
--- ================= [ HAM AUTO QUAN LY CAP DO V1 ] =================
+-- ================= [ HÀM AUTO QUẢN LÝ CẤP ĐỘ V1 ] =================
 local function CheckAndEquipUnmaxed()
     local ingameCheck = Workspace:FindFirstChild("Map") and Workspace.Map:FindFirstChild("Ingame")
     if ingameCheck then return end
 
     local pd = LocalPlayer:FindFirstChild("PlayerData")
     if not pd then return end
-
+    
     local curKiller = pd:FindFirstChild("EquippedKiller") and pd.EquippedKiller.Value or ""
     local curSurvivor = pd:FindFirstChild("EquippedSurvivor") and pd.EquippedSurvivor.Value or ""
+    
     local achievements = pd:FindFirstChild("Achievements")
     if not achievements then return end
-
+    
     local function ProcessRole(roleName, curEquipped, folderName)
         local folder = achievements:FindFirstChild(folderName)
-        if folder and curEquipped ~= "" then            local curVal = folder:FindFirstChild(curEquipped .. "Milestone")
+        if folder and curEquipped ~= "" then
+            local curVal = folder:FindFirstChild(curEquipped .. "Milestone")
             if curVal and curVal.Value >= 100 then
                 local available = {}
                 for _, v in pairs(folder:GetChildren()) do
@@ -1330,6 +1369,7 @@ local function CheckAndEquipUnmaxed()
                         table.insert(available, string.gsub(v.Name, "Milestone", ""))
                     end
                 end
+                
                 if #available > 0 then
                     local randomChar = available[math.random(1, #available)]
                     local rs = game:GetService("ReplicatedStorage")
@@ -1339,40 +1379,41 @@ local function CheckAndEquipUnmaxed()
                         if roleFolder then
                             local charModel = roleFolder:FindFirstChild(randomChar)
                             if charModel then
-                                local remote = rs:FindFirstChild("Modules")
-                                and rs.Modules:FindFirstChild("Network")
-                                and rs.Modules.Network:FindFirstChild("Network")
-                                and rs.Modules.Network.Network:FindFirstChild("RemoteEvent")
+                                local remote = rs:FindFirstChild("Modules") 
+                                    and rs.Modules:FindFirstChild("Network") 
+                                    and rs.Modules.Network:FindFirstChild("Network") 
+                                    and rs.Modules.Network.Network:FindFirstChild("RemoteEvent")
                                 if remote then
                                     pcall(function()
                                         local args = { "EquipState", { charModel, buffer.fromstring("\001\001") } }
                                         remote:FireServer(unpack(args))
                                     end)
                                     pcall(function()
-                                        game.StarterGui:SetCore("SendNotification", {Title = "Auto Level V1", Text = roleName .. " da MAX! Tu doi sang: " .. randomChar, Duration = 5})
+                                        game.StarterGui:SetCore("SendNotification", {Title = "Auto Level V1", Text = roleName .. " đã MAX! Tự đổi sang: " .. randomChar, Duration = 5})
                                     end)
                                 end
                             end
                         end
                     end
+                else
+                    pcall(function()
+                        game.StarterGui:SetCore("SendNotification", {Title = "Auto Level V1", Text = "Cảnh báo: Toàn bộ " .. roleName .. " đã Max Lv100!", Duration = 5})
+                    end)
                 end
-            else
-                pcall(function()
-                    game.StarterGui:SetCore("SendNotification", {Title = "Auto Level V1", Text = "Canh bao: Toan bo " .. roleName .. " da Max Lv100!", Duration = 5})
-                end)
             end
         end
     end
-
+    
     ProcessRole("Killer", curKiller, "KillersMilestones")
     ProcessRole("Survivor", curSurvivor, "SurvivorsMilestones")
 end
 
--- ================= [CORE] KIEM TRA =================
+-- ================= [CORE] KIỂM TRA =================
 local function isSurvivorModel(char)
-    if not char then return false end    local survivorsFolder = Workspace:FindFirstChild("Players") and Workspace.Players:FindFirstChild("Survivors")
+    if not char then return false end
+    local survivorsFolder = Workspace:FindFirstChild("Players") and Workspace.Players:FindFirstChild("Survivors")
     if survivorsFolder and survivorsFolder:FindFirstChild(char.Name) then return true end
-    return false
+    return false 
 end
 
 local function isLocalPlayerKiller(char)
@@ -1406,7 +1447,7 @@ local function GetSafeGenerator(killerPos)
         if obj.Name == "Generator" and obj:IsA("Model") then
             local main = obj.PrimaryPart or obj:FindFirstChild("Main")
             if main then
-                if main.Position.Magnitude < 20 then continue end
+                if main.Position.Magnitude < 20 then continue end 
                 local dist = (main.Position - killerPos).Magnitude
                 if dist > maxDist then
                     maxDist = dist
@@ -1418,8 +1459,9 @@ local function GetSafeGenerator(killerPos)
     return bestGen
 end
 
--- ================= [TIM DIEM SPAWN XA NHAT CHO NE V2 + CHONG LAG] =================
-local CachedSpawns = {}local CachedMap = nil
+-- ================= [TÌM ĐIỂM SPAWN XA NHẤT CHO NÉ V2 + CHỐNG LAG] =================
+local CachedSpawns = {}
+local CachedMap = nil
 
 local function GetFurthestSpawnPoint(killerPos)
     if not Workspace:FindFirstChild("Map") then return nil end
@@ -1459,7 +1501,7 @@ local function GetFurthestSpawnPoint(killerPos)
     return bestSpot
 end
 
--- ================= 1. LOGIC TANG HINH & CAM =================
+-- ================= 1. LOGIC TÀNG HÌNH & CAM =================
 local InvisAnimID = "rbxassetid://75804462760596"
 local InvisTrack = nil
 local InvisLoop = nil
@@ -1468,17 +1510,18 @@ local function StartInvisibleLoop()
     if InvisLoop then return end
     InvisLoop = task.spawn(function()
         while true do
-            if not getgenv().Invisible then                if InvisTrack then InvisTrack:Stop(); InvisTrack = nil end
+            if not getgenv().Invisible then 
+                if InvisTrack then InvisTrack:Stop(); InvisTrack = nil end
                 if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
                     Workspace.CurrentCamera.CameraSubject = LocalPlayer.Character.Humanoid
                 end
-                break
+                break 
             end
-
+            
             local char = LocalPlayer.Character
             local isSurv = isSurvivorModel(char)
             local isKill = isLocalPlayerKiller(char)
-
+            
             if IsInMatch and (isSurv or ((getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and isKill)) then
                 pcall(function()
                     local hum = char and char:FindFirstChild("Humanoid")
@@ -1508,7 +1551,6 @@ local function StartInvisibleLoop()
         end
     end)
 end
-
 StartInvisibleLoop()
 
 local function GetProgress(gen)
@@ -1517,7 +1559,8 @@ local function GetProgress(gen)
     return nil
 end
 
-local function IsSpotBlocked(position)    for _, plr in pairs(Players:GetPlayers()) do
+local function IsSpotBlocked(position)
+    for _, plr in pairs(Players:GetPlayers()) do
         if plr ~= LocalPlayer and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
             if (plr.Character.HumanoidRootPart.Position - position).Magnitude < 3.5 then return true end
         end
@@ -1534,7 +1577,7 @@ local function GetBestRepairSpot(gen)
     return nil
 end
 
--- ================= [LOGIC TIM MAY V1 (CO DIEN)] =================
+-- ================= [LOGIC TÌM MÁY V1 (CỔ ĐIỂN)] =================
 local function GetNextGenerator_V1()
     if not Workspace:FindFirstChild("Map") then return nil, false, false end
     local ingame = Workspace.Map:FindFirstChild("Ingame")
@@ -1558,7 +1601,7 @@ local function GetNextGenerator_V1()
                     Unfinished = Unfinished + 1
                     local main = obj.PrimaryPart or obj:FindFirstChild("Main")
                     if main then
-                        if main.Position.Magnitude < 20 then
+                        if main.Position.Magnitude < 20 then 
                         else
                             local dist = (root.Position - main.Position).Magnitude
                             if dist <= MaxSearchDistance and not IgnoreList[obj] then
@@ -1566,7 +1609,8 @@ local function GetNextGenerator_V1()
                                 if spot and dist < closest then
                                     closest = dist
                                     target = obj
-                                    ChosenSpot = spot                                end
+                                    ChosenSpot = spot
+                                end
                             end
                         end
                     end
@@ -1577,7 +1621,7 @@ local function GetNextGenerator_V1()
     return target, true, (TotalGens > 0 and Unfinished == 0), ChosenSpot
 end
 
--- ================= [LOGIC TIM MAY V2 (DONG LOAT VACH)] =================
+-- ================= [LOGIC TÌM MÁY V2 (ĐỒNG LOẠT VẠCH)] =================
 local function GetNextGenerator_V2()
     if not Workspace:FindFirstChild("Map") then return nil, false, false end
     local ingame = Workspace.Map:FindFirstChild("Ingame")
@@ -1615,6 +1659,7 @@ local function GetNextGenerator_V2()
         local bar = math.floor(data.progress / 25)
         if bar < minBar then minBar = bar end
     end
+
     local closest = 99999
     local target = nil
     local ChosenSpot = nil
@@ -1623,7 +1668,7 @@ local function GetNextGenerator_V2()
 
     for _, data in ipairs(ValidGens) do
         local bar = math.floor(data.progress / 25)
-        if bar == minBar then
+        if bar == minBar then 
             CountInMinBar = CountInMinBar + 1
             if not HitCycle[data.obj] then
                 ValidForCycle = ValidForCycle + 1
@@ -1642,38 +1687,40 @@ local function GetNextGenerator_V2()
     if CountInMinBar > 0 and ValidForCycle == 0 then
         table.clear(HitCycle)
         if CountInMinBar > 1 and LastGenerator then HitCycle[LastGenerator] = true end
-        return GetNextGenerator_V2()
+        return GetNextGenerator_V2() 
     end
 
     return target, true, false, ChosenSpot
 end
 
--- ================= [SMART SERVER HOP - LOC PING THEO LENH SEP V1/V2] =================
+-- ================= [SMART SERVER HOP - LỌC PING THEO LỆNH SẾP V1/V2] =================
 local function SmartServerHop()
     if IsHopping then return end
     IsHopping = true
-
     local PlaceId = game.PlaceId
+    
     local TeleportConnection
     TeleportConnection = TeleportService.TeleportInitFailed:Connect(function()
         if TeleportConnection then TeleportConnection:Disconnect() end
         IsHopping = false
-        Notify("Loi mang Roblox! Thu lai ngay...")
+        Notify("Lỗi mạng Roblox! Thử lại ngay...")
         task.wait(1)
         SmartServerHop()
     end)
 
     task.spawn(function()
-        local targetServer = nil        local cursor = ""
-
+        local targetServer = nil
+        local cursor = "" 
+        
         while not targetServer do
-            SetStatus("Hop sv sieu toc")
-            Notify("Dang soi Server cuc ky...")
+            SetStatus("Hop sv siêu tốc⚡")
+            Notify("Đang soi Server cực kỹ...")
+            
             local url = string.format("https://games.roblox.com/v1/games/%d/servers/Public?sortOrder=Asc&limit=100", PlaceId)
             if cursor and cursor ~= "" then
                 url = url .. "&cursor=" .. cursor
             end
-
+            
             local success, response = pcall(function() return HttpService:JSONDecode(request({Url = url, Method = "GET"}).Body) end)
 
             if success and response and response.data then
@@ -1688,47 +1735,48 @@ local function SmartServerHop()
                         else
                             if v.ping and v.ping > 150 then isPingOK = false end
                         end
-
+                        
                         if v.playing < v.maxPlayers and isPingOK then
                             local freeSlots = v.maxPlayers - v.playing
-                            if v.playing >= 1 and v.playing <= 3 then
-                                table.insert(bestServers, v)
+                            if v.playing >= 1 and v.playing <= 3 then 
+                                table.insert(bestServers, v) 
                             elseif freeSlots >= 2 then
-                                table.insert(backupServers, v)
+                                table.insert(backupServers, v) 
                             end
                         end
                     end
                 end
 
-                if #bestServers > 0 then
+                if #bestServers > 0 then 
                     targetServer = bestServers[math.random(1, #bestServers)]
-                elseif #backupServers > 0 then
-                    targetServer = backupServers[math.random(1, #backupServers)]
+                elseif #backupServers > 0 then 
+                    targetServer = backupServers[math.random(1, #backupServers)] 
                 end
-
+                
                 if not targetServer and response.nextPageCursor then
                     cursor = response.nextPageCursor
-                    SetStatus("Trang nay day! Lat trang...")
-                    task.wait(0.5)
+                    SetStatus("Trang này đầy! Lật trang...")
+                    task.wait(0.5) 
                 elseif not targetServer and not response.nextPageCursor then
                     cursor = ""
-                    SetStatus("Quet lai tu dau...")
-                    task.wait(2)                end
+                    SetStatus("Quét lại từ đầu...")
+                    task.wait(2)
+                end
             else
-                SetStatus("Loi API! Cho 2s...")
+                SetStatus("Lỗi API! Chờ 2s...")
                 task.wait(2)
             end
-
+            
             if targetServer then
-                Notify("Vao SV (" .. targetServer.playing .. "/" .. targetServer.maxPlayers .. " nguoi)!")
+                Notify("Vào SV (" .. targetServer.playing .. "/" .. targetServer.maxPlayers .. " người)!")
                 TeleportService:TeleportToPlaceInstance(PlaceId, targetServer.id, LocalPlayer)
-                return
+                return 
             end
         end
     end)
 end
 
--- ================= 3. VONG LAP CHINH (AUTO FARM + RESET LOBBY) =================
+-- ================= 3. VÒNG LẶP CHÍNH (AUTO FARM + RESET LOBBY) =================
 local lastEquipCheck = 0
 
 task.spawn(function()
@@ -1741,7 +1789,7 @@ task.spawn(function()
                 else
                     gen, mapLoaded, allFinished, targetPos = GetNextGenerator_V1()
                 end
-
+                
                 if not mapLoaded then
                     if getgenv().AutoFarm_Level_V1 then
                         local ingameCheck = Workspace:FindFirstChild("Map") and Workspace.Map:FindFirstChild("Ingame")
@@ -1750,36 +1798,37 @@ task.spawn(function()
                             lastEquipCheck = tick()
                         end
                     end
-
+                
                     if (getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and getgenv().KillerFinishedMatch then
-                        SetStatus("Da ve sanh sau khi win! Hop SV...")
-                        Notify("Diet sach phong! Auto Server Hop...")
+                        SetStatus("Đã về sảnh sau khi win! Hop SV...")
+                        Notify("Diệt sạch phòng! Auto Server Hop...")
                         getgenv().KillerFinishedMatch = false
                         SmartServerHop()
                         return
                     end
-
-                    if IsInMatch then
-                        IsInMatch = false
-                        SetStatus("Da ve lobby vui long cho")
-                        Notify("Ve Sanh -> Cho tran moi")                        table.clear(IgnoreList)
+                
+                    if IsInMatch then 
+                        IsInMatch = false 
+                        SetStatus("Đã về lobby vui lòng chờ⏳")
+                        Notify("Ve Sanh -> Cho tran moi")
+                        table.clear(IgnoreList)
                         table.clear(HitCycle)
                     end
                 else
                     if isLocalPlayerKiller(LocalPlayer.Character) then
                         if getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2 then
                             if not IsInMatch then
-                                SetStatus("Dang cho 3s (Killer)...")
+                                SetStatus("Đang chờ 3s (Killer)...")
                                 task.wait(3)
                                 IsInMatch = true
-                                Notify("Bat dau tang hinh & San Survivor!")
+                                Notify("Bắt đầu tàng hình & Săn Survivor!")
                             end
-
+                            
                             local survivorsFolder = Workspace:FindFirstChild("Players") and Workspace.Players:FindFirstChild("Survivors")
                             local targetPart = nil
                             local targetName = ""
                             local aliveCount = 0
-
+                            
                             if survivorsFolder then
                                 for _, surv in ipairs(survivorsFolder:GetChildren()) do
                                     if surv:IsA("Model") then
@@ -1795,23 +1844,38 @@ task.spawn(function()
                                     end
                                 end
                             end
-
+                            
                             if aliveCount > 0 and targetPart then
                                 local root = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                                 if root then
-                                    SetStatus("Dang san: " .. targetName)
+                                    SetStatus("Đang săn: " .. targetName)
                                     local targetHum = targetPart.Parent:FindFirstChild("Humanoid")
-                                    local lastSkillScan = 0
+                                    local lastSkillScan = 0 
+                                    while (getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
+    -- 1. Kiểm tra xác thực lại mục tiêu để tránh freeze do tham chiếu cũ/bị hủy
+    if not targetPart or not targetPart.Parent or not targetHum or targetHum.Health <= 0 then
+        break
+    end
 
-                                    while (getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and targetHum and targetHum.Health > 0 and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
-                                        local currentRoot = LocalPlayer.Character.HumanoidRootPart
-                                        currentRoot.Velocity = Vector3.zero
-                                        local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
-                                        currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
+    local currentRoot = LocalPlayer.Character.HumanoidRootPart
+    
+    -- 2. Kiểm tra khoảng cách hợp lý: nếu survivor thoát quá xa, thoát vòng lặp và tìm lại mục tiêu mới
+    if (currentRoot.Position - targetPart.Position).Magnitude > 150 then
+        break
+    end
 
-                                        if tick() - lastSkillScan >= 0.25 then
-                                            lastSkillScan = tick()
-                                            if getgenv().AutoFarm_Killer_V1 then                                                pcall(function()
+    -- 3. Thao tác CFrame an toàn để tránh lỗi treo luồng âm thầm
+    pcall(function()
+        currentRoot.Velocity = Vector3.zero
+        local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
+        currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
+    end)
+    
+    if tick() - lastSkillScan >= 0.25 then
+        lastSkillScan = tick()
+                                            
+                                            if getgenv().AutoFarm_Killer_V1 then
+                                                pcall(function()
                                                     local gui = LocalPlayer:FindFirstChild("PlayerGui")
                                                     if gui then
                                                         for _, v in pairs(gui:GetDescendants()) do
@@ -1836,6 +1900,7 @@ task.spawn(function()
                                                                 local n = string.lower(v.Name)
                                                                 local t = ""
                                                                 if v:IsA("TextButton") then t = string.lower(v.Text) end
+                                                                
                                                                 local keywords = {
                                                                     "slash", "punch", "carving", "stab", "lacerate", "attack",
                                                                     "behead", "gashing", "corrupt", "walkspeed", "digital",
@@ -1843,6 +1908,7 @@ task.spawn(function()
                                                                     "entanglement", "eviscerate", "demonic", "pursuit",
                                                                     "bloodhook", "hunter", "feast", "ability", "skill"
                                                                 }
+                                                                
                                                                 local isSkill = false
                                                                 for _, kw in ipairs(keywords) do
                                                                     if string.find(n, kw) or string.find(t, kw) then
@@ -1850,7 +1916,7 @@ task.spawn(function()
                                                                         break
                                                                     end
                                                                 end
-
+                                                                
                                                                 if isSkill and v.Visible and v.Active and firesignal then
                                                                     local currentTime = tick()
                                                                     if not SkillCooldownTracker[n] or (currentTime - SkillCooldownTracker[n] > 1) then
@@ -1859,11 +1925,12 @@ task.spawn(function()
                                                                             if child:IsA("TextLabel") then
                                                                                 local txt = child.Text
                                                                                 if tonumber(txt) ~= nil and tonumber(txt) > 0 then
-                                                                                    isOnCooldown = true
-                                                                                    break                                                                                end
+                                                                                isOnCooldown = true
+                                                                                break
+                                                                                end
                                                                             end
                                                                         end
-
+                                                                        
                                                                         if not isOnCooldown then
                                                                             firesignal(v.MouseButton1Down)
                                                                             firesignal(v.MouseButton1Click)
@@ -1877,24 +1944,26 @@ task.spawn(function()
                                                 end)
                                             end
                                         end
-                                        task.wait()
+                                        
+                                        task.wait() 
                                     end
                                 end
                             else
                                 if Workspace:FindFirstChild("Map") and Workspace.Map:FindFirstChild("Ingame") then
-                                    SetStatus("Da giet sach! Cho ve Lobby...")
+                                    SetStatus("Đã giết sạch! Chờ về Lobby...")
                                     getgenv().KillerFinishedMatch = true
                                 end
                             end
+                            
                             task.wait(0.1)
-                            return
+                            return 
                         else
-                            SetStatus("Ban la killer! Tu dong reset")
+                            SetStatus("Bạn là killer! Tự động reset 💬")
                             Notify("BAN LA KILLER! Reset de Farm tiep...")
                             if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
                                 LocalPlayer.Character.Humanoid.Health = 0
                             end
-                            task.wait(3); return
+                            task.wait(3); return 
                         end
                     end
 
@@ -1902,289 +1971,258 @@ task.spawn(function()
                         local char = LocalPlayer.Character
                         local hum = char and char:FindFirstChild("Humanoid")
                         if hum and hum.Health <= 0 then
-                            SetStatus("Bi giet! Hop sv ngay")
+                            SetStatus("Bị giết! Hop sv ngay⏳") 
                             Notify("Ban da chet! Dang tim server khac...")
-                            SmartServerHop(); return
+                            SmartServerHop(); return 
                         end
                     end
 
                     if not isSurvivorModel(LocalPlayer.Character) then return end
+                    
                     if not IsInMatch then
-                        SetStatus("Da vao tran, vui long doi 3.5s")
+                        SetStatus("Đã vào trận, vui lòng đợi 3.5s⏳")
                         Notify("Survivor Detected -> Doi 3.5s...")
-                        task.wait(3.5)
+                        task.wait(3.5) 
                         IsInMatch = true
-                        SetStatus("Starting")
+                        SetStatus("Starting‼️")
                     end
-
+                    
                     if allFinished then
-                        SetStatus("Complete")
+                        SetStatus("Complete✅✅✅")
                         Notify("Xong Map -> Reset ve Lobby...")
                         if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid") then
-                            LocalPlayer.Character.Humanoid.Health = 0
+                            LocalPlayer.Character.Humanoid.Health = 0 
                         end
                         task.wait(3); SmartServerHop()
                     end
-
+                    
                     if gen and targetPos then
                         local root = LocalPlayer.Character.HumanoidRootPart
                         local pivot = gen:GetPivot()
-                        local dropHeight = 2.0
+                        
+                        local dropHeight = 2.0 
                         local dropPos = targetPos + Vector3.new(0, dropHeight, 0)
                         local lookAt = Vector3.new(pivot.Position.X, dropPos.Y, pivot.Position.Z)
-
+                        
                         while getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2) and (root.Position - dropPos).Magnitude > 3 do
-                            SetStatus(getgenv().AutoFarm_V2 and "V2.5: Dang xoay tua may" or "V1: Dang toi may")
+                            SetStatus(getgenv().AutoFarm_V2 and "V2.5: Đang xoay tua máy🎯" or "V1: Đang tới máy🎯")
                             local killer = GetKiller()
                             if killer and killer:FindFirstChild("HumanoidRootPart") then
                                 if (root.Position - killer.HumanoidRootPart.Position).Magnitude < SafeDistance then
-                                    SetStatus("killer van dang o gan")
+                                    SetStatus("killer vẫn đang ở gần😨")
                                     Notify("Killer chan duong! Doi muc tieu...")
-                                    break
+                                    break 
                                 end
                             end
+                            
                             if IsSpotBlocked(targetPos) then break end
                             root.CFrame = CFrame.lookAt(dropPos, lookAt)
                             root.Velocity = Vector3.zero
                             task.wait()
                         end
-
+                        
                         if getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2) then
                             root.Anchored = false
                             if getgenv().AutoFarm_V2 then
-                                task.wait(0.75)
+                                task.wait(0.75) -- [AUTO FARM V2.5 FREE]: Rơi xuống 0.75s rồi sửa máy
                             else
                                 task.wait(1)
-                                root.Anchored = true
+                                root.Anchored = true 
                             end
-
-                            local prompt = gen:FindFirstChild("Main") and gen.Main:FindFirstChild("Prompt")                            if prompt then fireproximityprompt(prompt) end
+                            
+                            local prompt = gen:FindFirstChild("Main") and gen.Main:FindFirstChild("Prompt")
+                            if prompt then fireproximityprompt(prompt) end
+                            
                             if getgenv().AutoFarm_V2 then task.wait(1.2) end
-
+                            
                             local startProgress = GetProgress(gen)
-                            local checkProgress = 100
+                            local checkProgress = 100 
+                            
                             if getgenv().AutoFarm_V2 then
-                                local currentBar = math.floor(startProgress / 25)
-                                local targetProgress = (currentBar + 1) * 25
+                                local currentBar = math.floor(startProgress / 25) 
+                                local targetProgress = (currentBar + 1) * 25      
                                 if targetProgress > 100 then targetProgress = 100 end
-                                checkProgress = targetProgress - 1
+                                checkProgress = targetProgress - 1 
                             end
-
+                            
                             local lastInteract = 0
+                            local lastEvadeTime = 0
+                            
                             while getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2) and GetProgress(gen) < 100 do
                                 if (root.Position - dropPos).Magnitude > 4 then
-                                    SetStatus("Bi danh bay! Quay lai...")
-                                    root.Anchored = false; break
+                                     SetStatus("Bị đánh bay! Quay lại...🏃")
+                                     root.Anchored = false; break 
                                 end
 
                                 local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
                                 if hum and (hum.PlatformStand or hum.Sit) then
-                                    SetStatus("Bi Te! Dang tu dung day")
+                                    SetStatus("Bị Té! Đang tự đứng dậy🧍")
                                     root.Anchored = false; hum.PlatformStand = false; hum.Sit = false
                                     hum:ChangeState(Enum.HumanoidStateType.GettingUp)
-                                    task.wait(1.5); break
+                                    task.wait(1.5); break 
                                 end
 
-                                SetStatus("Da sua duoc " .. math.floor(GetProgress(gen)) .. "%")
-
+                                SetStatus("Đã sửa được " .. math.floor(GetProgress(gen)) .. "%")
+                                
                                 if getgenv().AutoFarm_V1 then
                                     if LocalPlayer.Character.Humanoid.Jump then root.Anchored = false; task.wait(1); break end
                                     if not root.Anchored then root.Anchored = true end
                                 else
-                                    if LocalPlayer.Character.Humanoid.Jump then break end
+                                    if LocalPlayer.Character.Humanoid.Jump then break end -- [AUTO FARM V2.5 FREE]: Xóa đông cứng người khi sửa máy
                                 end
-
+                                
                                 local killer = GetKiller()
                                 if killer and killer:FindFirstChild("HumanoidRootPart") then
-                                    local distToKiller = (root.Position - killer.HumanoidRootPart.Position).Magnitude
+local distToKiller = (root.Position - killer.HumanoidRootPart.Position).Magnitude
 
-                                    if getgenv().AutoEvade_V1 then
-                                        if distToKiller < SafeDistance then
-                                            if prompt then pcall(function() prompt:InputHoldEnd() end) end
-                                            SetStatus("Killer dang o gan (V1)")
-                                            Notify("KILLER DEN (<20m)! Chay tron...")
-                                            
-                                            local safeGen = GetSafeGenerator(killer.HumanoidRootPart.Position)
-                                            if safeGen then
-                                                local safePos = safeGen:GetPivot().Position
-                                                                                                local char = LocalPlayer.Character
-                                                if char then
-                                                    local evadeRoot = char:FindFirstChild("HumanoidRootPart")
-                                                    if evadeRoot then
-                                                        evadeRoot.Anchored = false
-                                                        task.wait()
-                                                        char:PivotTo(CFrame.new(safePos + Vector3.new(0, 5, 0)))
-                                                        evadeRoot.Velocity = Vector3.zero
-                                                        evadeRoot.AssemblyLinearVelocity = Vector3.zero
-                                                        evadeRoot.AssemblyAngularVelocity = Vector3.zero
-                                                        task.wait(0.1)
-                                                        evadeRoot.Anchored = true
-                                                    end
-                                                end
+if getgenv().AutoEvade_V1 then
+    if distToKiller < SafeDistance and (tick() - lastEvadeTime > 4) then
+        lastEvadeTime = tick()
+        
+        if prompt then pcall(function() prompt:InputHoldEnd() end) end
+        SetStatus("Killer đang ở gần (V1)😱")
+        Notify("KILLER DEN (<20m)! Chạy trốn 6s...")
+        
+        -- Lưu vị trí an toàn để ẩn (vị trí hiện tại sau khi quay về)
+        local safeHidingPos = dropPos + Vector3.new(0, 2, 0)
+        root.Anchored = false
+        
+        local isDeadWhileHiding = false
+        for i = 1, 60 do
+            local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+            if curHum and curHum.Health <= 0 then
+                isDeadWhileHiding = true
+                break
+            end
+            
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(safeHidingPos)
+                LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.zero
+            end
+            task.wait(0.1)
+        end
+        
+        if isDeadWhileHiding then
+            SmartServerHop()
+            return
+        end
+        
+        -- Quay lại máy sau khi né xong
+        if getgenv().AutoFarm and IsInMatch then
+            root.Anchored = false
+            task.wait(0.5)
+            
+            pcall(function()
+                root.CFrame = CFrame.new(dropPos.X, dropPos.Y + 2, dropPos.Z)
+            end)
+            
+            root.Velocity = Vector3.zero
+            task.wait(0.5)
+            
+            if getgenv().AutoFarm_V1 then
+                root.Anchored = true
+            end
+            
+            SetStatus("Đã quay về máy an toàn...")
+            task.wait(0.3)
+        end
+    end
+end
 
-                                                SetStatus("Dang tron Killer (6s)...")
-                                                local isDeadWhileHiding = false
-                                                for i = 1, 60 do
-                                                    local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-                                                    if curHum and curHum.Health <= 0 then isDeadWhileHiding = true; break end
-                                                    
-                                                    local curChar = LocalPlayer.Character
-                                                    if curChar then
-                                                        local curRoot = curChar:FindFirstChild("HumanoidRootPart")
-                                                        if curRoot then
-                                                            curRoot.Anchored = true
-                                                            curRoot.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
-                                                            curRoot.Velocity = Vector3.zero
-                                                            curRoot.AssemblyLinearVelocity = Vector3.zero
-                                                            curRoot.AssemblyAngularVelocity = Vector3.zero
-                                                        end
-                                                    end
-                                                    task.wait(0.1)
-                                                end
-
-                                                if isDeadWhileHiding then SmartServerHop(); return end
-
-                                                local oldGenPos = targetPos
-                                                repeat
-                                                    if not getgenv().AutoFarm then break end
-                                                    local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-                                                    if curHum and curHum.Health <= 0 then SmartServerHop(); return end
-
-                                                    local currentKiller = GetKiller()
-                                                    if not currentKiller or not currentKiller:FindFirstChild("HumanoidRootPart") then break end
-                                                    if not isSurvivorModel(LocalPlayer.Character) then IsInMatch = false; break end
-
-                                                    local kPosNew = currentKiller.HumanoidRootPart.Position
-                                                    local distKillerToOldGen = (kPosNew - oldGenPos).Magnitude
-                                                    local waitChar = LocalPlayer.Character
-                                                    if waitChar then
-                                                        local waitRoot = waitChar:FindFirstChild("HumanoidRootPart")
-                                                        if waitRoot then
-                                                            waitRoot.Anchored = true
-                                                            waitRoot.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
-                                                            waitRoot.Velocity = Vector3.zero
-                                                            waitRoot.AssemblyLinearVelocity = Vector3.zero
-                                                            waitRoot.AssemblyAngularVelocity = Vector3.zero
-                                                        end
-                                                    end
-
-                                                    if distKillerToOldGen > (SafeDistance + 10) then break else task.wait(0.2) end
-                                                until false
-
-                                                if getgenv().AutoFarm and IsInMatch then
-                                                    local retChar = LocalPlayer.Character
-                                                    if retChar then
-                                                        local retRoot = retChar:FindFirstChild("HumanoidRootPart")
-                                                        if retRoot then
-                                                            retRoot.Anchored = false
-                                                            task.wait()
-                                                            retChar:PivotTo(CFrame.lookAt(dropPos, lookAt))
-                                                            retRoot.Velocity = Vector3.zero
-                                                            retRoot.AssemblyLinearVelocity = Vector3.zero
-                                                            retRoot.AssemblyAngularVelocity = Vector3.zero
-                                                            task.wait(0.1)
-                                                            if getgenv().AutoFarm_V1 then retRoot.Anchored = true end
-                                                        end
-                                                    end
-                                                    SetStatus("Da quay ve may cu (V1)...")
-                                                    task.wait(0.2)
-                                                end
-                                            end
-                                        end
-                                    elseif getgenv().AutoEvade_V2 then
-                                        if distToKiller <= 10 then
-                                            if prompt then pcall(function() prompt:InputHoldEnd() end) end
-                                            SetStatus("Killer ap sat 10m! Toc bien (V2)")
-                                            Notify("KILLER DEN GAN! TOC BIEN!")
-                                            
-                                            local furthestSpawnPos = GetFurthestSpawnPoint(killer.HumanoidRootPart.Position)
-                                            if furthestSpawnPos then
-                                                local char = LocalPlayer.Character
-                                                if char then
-                                                    local evadeRoot = char:FindFirstChild("HumanoidRootPart")
-                                                    if evadeRoot then
-                                                        evadeRoot.Anchored = false
-                                                        task.wait()
-                                                        char:PivotTo(CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0)))                                                        evadeRoot.Velocity = Vector3.zero
-                                                        evadeRoot.AssemblyLinearVelocity = Vector3.zero
-                                                        evadeRoot.AssemblyAngularVelocity = Vector3.zero
-                                                        task.wait(0.1)
-                                                        evadeRoot.Anchored = true
-                                                    end
-                                                end
-
-                                                SetStatus("Da ghim may! Cho Killer roi di 5m...")
-                                                local oldGenPos = targetPos
-                                                repeat
-                                                    if not getgenv().AutoFarm then break end
-                                                    local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-                                                    if curHum and curHum.Health <= 0 then SmartServerHop(); return end
-
-                                                    local waitChar = LocalPlayer.Character
-                                                    if waitChar then
-                                                        local waitRoot = waitChar:FindFirstChild("HumanoidRootPart")
-                                                        if waitRoot then
-                                                            waitRoot.Anchored = true
-                                                            waitRoot.CFrame = CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0))
-                                                            waitRoot.Velocity = Vector3.zero
-                                                            waitRoot.AssemblyLinearVelocity = Vector3.zero
-                                                            waitRoot.AssemblyAngularVelocity = Vector3.zero
-                                                        end
-                                                    end
-
-                                                    local currentKiller = GetKiller()
-                                                    if not currentKiller or not currentKiller:FindFirstChild("HumanoidRootPart") then break end
-                                                    if not isSurvivorModel(LocalPlayer.Character) then IsInMatch = false; break end
-
-                                                    local kPosNew = currentKiller.HumanoidRootPart.Position
-                                                    local distKillerToOldGen = (kPosNew - oldGenPos).Magnitude
-
-                                                    if distKillerToOldGen > 5 then
-                                                        break
-                                                    else
-                                                        task.wait(0.1)
-                                                    end
-                                                until false
-
-                                                if getgenv().AutoFarm and IsInMatch then
-                                                    local retChar = LocalPlayer.Character
-                                                    if retChar then
-                                                        local retRoot = retChar:FindFirstChild("HumanoidRootPart")
-                                                        if retRoot then
-                                                            retRoot.Anchored = false
-                                                            task.wait()
-                                                            retChar:PivotTo(CFrame.lookAt(dropPos, lookAt))
-                                                            retRoot.Velocity = Vector3.zero                                                            retRoot.AssemblyLinearVelocity = Vector3.zero
-                                                            retRoot.AssemblyAngularVelocity = Vector3.zero
-                                                            task.wait(0.1)
-                                                            if getgenv().AutoFarm_V1 then retRoot.Anchored = true end
-                                                        end
-                                                    end
-                                                    SetStatus("Killer da di! Ve lai may ghim...")
-                                                    task.wait(0.2)
-                                                end
-                                            end
+                                        
+elseif getgenv().AutoEvade_V2 then
+    if distToKiller <= 10 and (tick() - lastEvadeTime > 4) then
+        lastEvadeTime = tick()
+        
+        if prompt then pcall(function() prompt:InputHoldEnd() end) end
+        SetStatus("Killer áp sát 10m! Tốc biến (V2)😱")
+        Notify("KILLER ĐẾN GẦN! TỐC BIẾN!")
+        
+        local furthestSpawnPos = GetFurthestSpawnPoint(killer.HumanoidRootPart.Position)
+        if furthestSpawnPos then
+            -- SỬA: từ 0.1s thành 0.5s để tránh desync
+            root.Anchored = false
+            task.wait(0.5)
+            
+            pcall(function()
+                root.CFrame = CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0))
+            end)
+            root.Velocity = Vector3.zero
+            task.wait(0.5)
+            
+            if getgenv().AutoFarm_V1 then
+                root.Anchored = true
+            end
+            SetStatus("Đã ghim máy! Chờ Killer rời đi...")
+            
+            -- Chờ killer rời xa 5m
+            local oldGenPos = targetPos
+            repeat
+                if not getgenv().AutoFarm then break end
+                local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+                if curHum and curHum.Health <= 0 then
+                    SmartServerHop()
+                    return
+                end
+                
+                local currentKiller = GetKiller()
+                if not currentKiller or not currentKiller:FindFirstChild("HumanoidRootPart") then break end
+                if not isSurvivorModel(LocalPlayer.Character) then
+                    IsInMatch = false
+                    break
+                end
+                
+                local kPosNew = currentKiller.HumanoidRootPart.Position
+                local distKillerToOldGen = (kPosNew - oldGenPos).Magnitude
+                if distKillerToOldGen > 5 then
+                    break
+                else
+                    task.wait(0.2)
+                end
+            until false
+            
+            -- Quay về máy
+            if getgenv().AutoFarm and IsInMatch then
+                root.Anchored = false
+                task.wait(0.5)
+                pcall(function()
+                    root.CFrame = CFrame.lookAt(dropPos, lookAt)
+                end)
+                root.Velocity = Vector3.zero
+                task.wait(0.5)
+                if getgenv().AutoFarm_V1 then
+                    root.Anchored = true
+                end
+                SetStatus("Killer đã đi! Về lại máy...")
+                task.wait(0.3)
+            end
+        end
+    end
+end
                                         end
                                     end
                                 end
-
-                                local interactDelay = getgenv().AutoFarm_V2 and 0.75 or 1.1
-                                if tick() - lastInteract >= interactDelay then
-                                    if prompt then pcall(function() prompt:InputHoldBegin() end) end
-                                    if gen:FindFirstChild("Remotes") and gen.Remotes:FindFirstChild("RE") then gen.Remotes.RE:FireServer() end
-                                    lastInteract = tick()
-                                end
-
-                                task.wait(0.1)
-
+                                
+                                local interactDelay = getgenv().AutoFarm_V2 and 0.75 or 1.1 -- [AUTO FARM V2.5 FREE]: Sửa một vạch 0.75s
+                                 if tick() - lastInteract >= interactDelay then
+    pcall(function()
+        if prompt then 
+            prompt:InputHoldBegin() 
+        elseif gen:FindFirstChild("Remotes") and gen.Remotes:FindFirstChild("RE") then 
+            gen.Remotes.RE:FireServer() 
+        end
+    end)
+    lastInteract = tick()
+end
+                               
                                 if getgenv().AutoFarm_V2 and GetProgress(gen) >= checkProgress then
-                                    if prompt then pcall(function() prompt:InputHoldEnd() end) end
+                                    if prompt then pcall(function() prompt:InputHoldEnd() end) end 
                                     HitCycle[gen] = true
-                                    LastGenerator = gen
-                                    break
+                                    LastGenerator = gen 
+                                    break 
                                 end
                             end
-
+                            
                             if prompt then pcall(function() prompt:InputHoldEnd() end) end
                             root.Anchored = false
                             if GetProgress(gen) >= 100 then IgnoreList[gen] = true end
@@ -2197,23 +2235,23 @@ task.spawn(function()
     end
 end)
 
--- ================= [ HE THONG AUTO HOP 10 PHUT ] =================
+-- ================= [ HỆ THỐNG AUTO HOP 10 PHÚT ] =================
 local ScriptSessionTime = tick()
-
 task.spawn(function()
     while task.wait(5) do
         if getgenv().AutoHop_TimeLimit and not IsHopping then
-            local elapsed = tick() - ScriptSessionTime            if elapsed >= 600 then
-                SetStatus("Da online 10 phut! Auto Hop...")
-                Notify("Da dat moc 10 phut! Dang tim Server moi...")
+            local elapsed = tick() - ScriptSessionTime
+            if elapsed >= 600 then -- 600 giây = 10 phút
+                SetStatus("Đã online 10 phút! Auto Hop...")
+                Notify("Đã đạt mốc 10 phút! Đang tìm Server mới...")
                 SmartServerHop()
-                break
+                break -- Ngừng vòng lặp này vì đang hop
             end
         end
     end
 end)
 
--- ================= [HUTAO MUSIC SYSTEM V4 - TICH HOP UI VIP] =================
+-- ================= [HUTAO MUSIC SYSTEM V4 - TÍCH HỢP UI VIP] =================
 local SoundService = game:GetService("SoundService")
 local AmethystMusic = SoundService:FindFirstChild("AmethystHubMusic_V4") or Instance.new("Sound")
 AmethystMusic.Name = "AmethystHubMusic_V4"
@@ -2230,7 +2268,7 @@ end)
 getgenv().ApplyMusicSettings = function()
     local targetID = ""
     local targetName = ""
-
+    
     if getgenv().IsUsingCustomMusic and getgenv().CustomMusicID ~= "" then
         targetID = getgenv().CustomMusicID
         targetName = "Custom ID"
@@ -2239,20 +2277,21 @@ getgenv().ApplyMusicSettings = function()
         targetID = songData.ID
         targetName = songData.Name
     end
-
+    
     AmethystMusic.Volume = (getgenv().MusicVolumePercent / 100) * 5
-
+    
     if AmethystMusic.SoundId ~= targetID then
         AmethystMusic.SoundId = targetID
         if getgenv().MusicEnabled then
             AmethystMusic:Play()
             if not getgenv().IsUsingCustomMusic then
                 pcall(function()
-                    game.StarterGui:SetCore("SendNotification", {Title = "Nhac nen", Text = "Dang phat: " .. targetName, Duration = 5})
+                    game.StarterGui:SetCore("SendNotification", {Title = "Nhạc nền", Text = "Đang phát: " .. targetName, Duration = 5})
                 end)
             end
         end
-    else        if getgenv().MusicEnabled and not AmethystMusic.IsPlaying then
+    else
+        if getgenv().MusicEnabled and not AmethystMusic.IsPlaying then
             AmethystMusic:Play()
         elseif not getgenv().MusicEnabled and AmethystMusic.IsPlaying then
             AmethystMusic:Stop()
