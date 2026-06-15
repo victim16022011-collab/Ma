@@ -1846,33 +1846,71 @@ task.spawn(function()
                             end
                             
                             if aliveCount > 0 and targetPart then
-                                local root = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                                if root then
-                                    SetStatus("Đang săn: " .. targetName)
-                                    local targetHum = targetPart.Parent:FindFirstChild("Humanoid")
-                                    local lastSkillScan = 0 
-                                    while (getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
-    -- 1. Kiểm tra xác thực lại mục tiêu để tránh freeze do tham chiếu cũ/bị hủy
-    if not targetPart or not targetPart.Parent or not targetHum or targetHum.Health <= 0 then
-        break
-    end
+    local root = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+    if root then
+        SetStatus("Đang săn: " .. targetName)
+        local targetHum = targetPart.Parent:FindFirstChild("Humanoid")
+        local lastSkillScan = 0
+        
+        -- Removed targetHum constraints from header to prevent loop termination on target death/disconnection
+        while (getgenv().AutoFarm_Killer_V1 or getgenv().AutoFarm_Killer_V2) and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") do
+            
+            -- Print log execution status before processing
+            print("[Auto-Kill System] Checking survivor target validation status...")
+            
+            -- Verify validation parameters of current tracked entity
+            local isTargetValid = false
+            if targetPart and targetPart.Parent and targetHum and targetHum.Parent and targetHum.Health > 0 then
+                isTargetValid = true
+            end
+            
+            -- Failover switch to alternate random target if validation requirements fail
+            if not isTargetValid then
+                print("[Auto-Kill System] Target disconnected or dead. Scanning session for next survivor...")
+                local availableSurvivors = {}
+                
+                if survivorsFolder then
+                    for _, surv in ipairs(survivorsFolder:GetChildren()) do
+                        if surv:IsA("Model") then
+                            local hrp = surv:FindFirstChild("HumanoidRootPart")
+                            local hum = surv:FindFirstChild("Humanoid")
+                            if hrp and hum and hum.Health > 0 then
+                                table.insert(availableSurvivors, {hrp = hrp, hum = hum, name = surv.Name})
+                            end
+                        end
+                    end
+                end
+                
+                if #availableSurvivors > 0 then
+                    local newTarget = availableSurvivors[math.random(1, #availableSurvivors)]
+                    targetPart = newTarget.hrp
+                    targetHum = newTarget.hum
+                    targetName = newTarget.name
+                    SetStatus("Đang săn: " .. targetName)
+                    print("[Auto-Kill System] Successfully assigned new target entity: " .. targetName)
+                else
+                    print("[Auto-Kill System] No active survivors available in workspace. Breaking hunt thread.")
+                    break
+                end
+            end
+            
+            -- Positional matrix computation utilizing validated data variables
+            if targetPart and targetPart.Parent then
+                local currentRoot = LocalPlayer.Character.HumanoidRootPart
+                currentRoot.Velocity = Vector3.zero
+                local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
+                currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
+            else
+                task.wait(0.1)
+            end
+            
+            task.wait()
+        end
 
-    local currentRoot = LocalPlayer.Character.HumanoidRootPart
-    
-    -- 2. Kiểm tra khoảng cách hợp lý: nếu survivor thoát quá xa, thoát vòng lặp và tìm lại mục tiêu mới
-    if (currentRoot.Position - targetPart.Position).Magnitude > 150 then
-        break
-    end
 
-    -- 3. Thao tác CFrame an toàn để tránh lỗi treo luồng âm thầm
-    pcall(function()
-        currentRoot.Velocity = Vector3.zero
-        local behindPos = (targetPart.CFrame * CFrame.new(0, 0, 2)).Position
-        currentRoot.CFrame = CFrame.lookAt(behindPos, targetPart.Position)
-    end)
-    
-    if tick() - lastSkillScan >= 0.25 then
-        lastSkillScan = tick()
+                                        
+                                        if tick() - lastSkillScan >= 0.25 then
+                                            lastSkillScan = tick()
                                             
                                             if getgenv().AutoFarm_Killer_V1 then
                                                 pcall(function()
@@ -2046,175 +2084,192 @@ task.spawn(function()
                             end
                             
                             local lastInteract = 0
-                            local lastEvadeTime = 0
                             
-                            while getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2) and GetProgress(gen) < 100 do
-                                if (root.Position - dropPos).Magnitude > 4 then
-                                     SetStatus("Bị đánh bay! Quay lại...🏃")
-                                     root.Anchored = false; break 
-                                end
-
-                                local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-                                if hum and (hum.PlatformStand or hum.Sit) then
-                                    SetStatus("Bị Té! Đang tự đứng dậy🧍")
-                                    root.Anchored = false; hum.PlatformStand = false; hum.Sit = false
-                                    hum:ChangeState(Enum.HumanoidStateType.GettingUp)
-                                    task.wait(1.5); break 
-                                end
-
-                                SetStatus("Đã sửa được " .. math.floor(GetProgress(gen)) .. "%")
-                                
-                                if getgenv().AutoFarm_V1 then
-                                    if LocalPlayer.Character.Humanoid.Jump then root.Anchored = false; task.wait(1); break end
-                                    if not root.Anchored then root.Anchored = true end
-                                else
-                                    if LocalPlayer.Character.Humanoid.Jump then break end -- [AUTO FARM V2.5 FREE]: Xóa đông cứng người khi sửa máy
-                                end
-                                
-                                local killer = GetKiller()
-                                if killer and killer:FindFirstChild("HumanoidRootPart") then
-local distToKiller = (root.Position - killer.HumanoidRootPart.Position).Magnitude
-
-if getgenv().AutoEvade_V1 then
-    if distToKiller < SafeDistance and (tick() - lastEvadeTime > 4) then
-        lastEvadeTime = tick()
-        
-        if prompt then pcall(function() prompt:InputHoldEnd() end) end
-        SetStatus("Killer đang ở gần (V1)😱")
-        Notify("KILLER DEN (<20m)! Chạy trốn 6s...")
-        
-        -- Lưu vị trí an toàn để ẩn (vị trí hiện tại sau khi quay về)
-        local safeHidingPos = dropPos + Vector3.new(0, 2, 0)
+                            -- Main generator farming loop
+while getgenv().AutoFarm and (getgenv().AutoFarm_V1 or getgenv().AutoFarm_V2) and GetProgress(gen) < 100 do
+    -- Check distance from generator position
+    if (root.Position - dropPos).Magnitude > 4 then
+        SetStatus("Bị đánh bay! Quay lại...🏃")
         root.Anchored = false
-        
-        local isDeadWhileHiding = false
-        for i = 1, 60 do
-            local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-            if curHum and curHum.Health <= 0 then
-                isDeadWhileHiding = true
-                break
-            end
-            
-            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(safeHidingPos)
-                LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.zero
-            end
-            task.wait(0.1)
-        end
-        
-        if isDeadWhileHiding then
-            SmartServerHop()
-            return
-        end
-        
-        -- Quay lại máy sau khi né xong
-        if getgenv().AutoFarm and IsInMatch then
+        break
+    end
+    
+    -- Check humanoid anomalies (stumble or sit state)
+    local hum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+    if hum and (hum.PlatformStand or hum.Sit) then
+        SetStatus("Bị Té! Đang tự đứng dậy🧍")
+        root.Anchored = false
+        hum.PlatformStand = false
+        hum.Sit = false
+        hum:ChangeState(Enum.HumanoidStateType.GettingUp)
+        task.wait(1.5)
+        break
+    end
+    
+    -- Update farm status percentage
+    SetStatus("Đã sửa được " .. math.floor(GetProgress(gen)) .. "%")
+    
+    -- Teleport and anchoring configurations based on version
+    if getgenv().AutoFarm_V1 then
+        if LocalPlayer.Character.Humanoid.Jump then 
             root.Anchored = false
-            task.wait(0.5)
-            
-            pcall(function()
-                root.CFrame = CFrame.new(dropPos.X, dropPos.Y + 2, dropPos.Z)
-            end)
-            
-            root.Velocity = Vector3.zero
-            task.wait(0.5)
-            
-            if getgenv().AutoFarm_V1 then
-                root.Anchored = true
-            end
-            
-            SetStatus("Đã quay về máy an toàn...")
-            task.wait(0.3)
+            task.wait(1)
+            break 
+        end
+        if not root.Anchored then 
+            root.Anchored = true 
+        end
+    else
+        if LocalPlayer.Character.Humanoid.Jump then 
+            break 
         end
     end
+   
+     task.wait(0.2)
+    -- Killer tracking and avoidance system
+    local killer = GetKiller()
+    if killer and killer:FindFirstChild("HumanoidRootPart") then
+        local distToKiller = (root.Position - killer.HumanoidRootPart.Position).Magnitude
+        if getgenv().AutoEvade_V1 then
+            if distToKiller < SafeDistance then
+                if prompt then 
+                    pcall(function() prompt:InputHoldEnd() end) 
+                end
+                
+                SetStatus("Killer đang ở gần (V1)😱")
+                Notify("KILLER DEN (<20m)! Chạy trốn...")
+                
+                local safeGen = GetSafeGenerator(killer.HumanoidRootPart.Position)
+                if safeGen then
+                    local safePos = safeGen:GetPivot().Position
+                    root.Anchored = false
+                    task.wait(0.1)
+                    root.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
+                    root.Velocity = Vector3.zero
+                    root.Anchored = true
+                    SetStatus("Dang tron Killer (6s)...")
+                    
+                    for i = 1, 60 do 
+                        task.wait(0.1)
+                    end
+                end
+            end
+        end
+    end
+    
+    -- Safe cooldown interval to stabilize network and prevent client kicks
+    task.wait(0.2)
 end
 
+                                                local isDeadWhileHiding = false
+                                                for i = 1, 60 do 
+                                                    local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+                                                    if curHum and curHum.Health <= 0 then isDeadWhileHiding = true; break end
+                                                    
+                                                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                                        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
+                                                        LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.zero
+                                                    end
+                                                    task.wait(0.1)
+                                                end
+
+                                                if isDeadWhileHiding then SmartServerHop(); return end
+                                                
+                                                local oldGenPos = targetPos
+                                                repeat
+                                                    if not getgenv().AutoFarm then break end
+                                                    local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+                                                    if curHum and curHum.Health <= 0 then SmartServerHop(); return end
+                                                    
+                                                    local currentKiller = GetKiller()
+                                                    if not currentKiller or not currentKiller:FindFirstChild("HumanoidRootPart") then break end
+                                                    if not isSurvivorModel(LocalPlayer.Character) then IsInMatch = false; break end
+
+                                                    local kPosNew = currentKiller.HumanoidRootPart.Position
+                                                    local distKillerToOldGen = (kPosNew - oldGenPos).Magnitude
+                                                    
+                                                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                                        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(safePos + Vector3.new(0, 5, 0))
+                                                    end
+                                                    
+                                                    if distKillerToOldGen > (SafeDistance + 10) then break else task.wait(0.2) end
+                                                until false
+                                                
+                                                if getgenv().AutoFarm and IsInMatch then
+                                                    root.Anchored = false
+                                                    task.wait(0.1)
+                                                    root.CFrame = CFrame.lookAt(dropPos, lookAt)
+                                                    root.Velocity = Vector3.zero
+                                                    if getgenv().AutoFarm_V1 then root.Anchored = true end
+                                                    SetStatus("Đã quay về máy cũ (V1)...")
+                                                    task.wait(0.2)
+                                                end
+                                            end
+                                        end
                                         
-elseif getgenv().AutoEvade_V2 then
-    if distToKiller <= 10 and (tick() - lastEvadeTime > 4) then
-        lastEvadeTime = tick()
-        
-        if prompt then pcall(function() prompt:InputHoldEnd() end) end
-        SetStatus("Killer áp sát 10m! Tốc biến (V2)😱")
-        Notify("KILLER ĐẾN GẦN! TỐC BIẾN!")
-        
-        local furthestSpawnPos = GetFurthestSpawnPoint(killer.HumanoidRootPart.Position)
-        if furthestSpawnPos then
-            -- SỬA: từ 0.1s thành 0.5s để tránh desync
-            root.Anchored = false
-            task.wait(0.5)
-            
-            pcall(function()
-                root.CFrame = CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0))
-            end)
-            root.Velocity = Vector3.zero
-            task.wait(0.5)
-            
-            if getgenv().AutoFarm_V1 then
-                root.Anchored = true
-            end
-            SetStatus("Đã ghim máy! Chờ Killer rời đi...")
-            
-            -- Chờ killer rời xa 5m
-            local oldGenPos = targetPos
-            repeat
-                if not getgenv().AutoFarm then break end
-                local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
-                if curHum and curHum.Health <= 0 then
-                    SmartServerHop()
-                    return
-                end
-                
-                local currentKiller = GetKiller()
-                if not currentKiller or not currentKiller:FindFirstChild("HumanoidRootPart") then break end
-                if not isSurvivorModel(LocalPlayer.Character) then
-                    IsInMatch = false
-                    break
-                end
-                
-                local kPosNew = currentKiller.HumanoidRootPart.Position
-                local distKillerToOldGen = (kPosNew - oldGenPos).Magnitude
-                if distKillerToOldGen > 5 then
-                    break
-                else
-                    task.wait(0.2)
-                end
-            until false
-            
-            -- Quay về máy
-            if getgenv().AutoFarm and IsInMatch then
-                root.Anchored = false
-                task.wait(0.5)
-                pcall(function()
-                    root.CFrame = CFrame.lookAt(dropPos, lookAt)
-                end)
-                root.Velocity = Vector3.zero
-                task.wait(0.5)
-                if getgenv().AutoFarm_V1 then
-                    root.Anchored = true
-                end
-                SetStatus("Killer đã đi! Về lại máy...")
-                task.wait(0.3)
-            end
-        end
-    end
-end
+                                    elseif getgenv().AutoEvade_V2 then
+                                        if distToKiller <= 10 then
+                                            if prompt then pcall(function() prompt:InputHoldEnd() end) end
+                                            SetStatus("Killer áp sát 10m! Tốc biến (V2)😱")
+                                            Notify("KILLER ĐẾN GẦN! TỐC BIẾN!")
+                                            
+                                            local furthestSpawnPos = GetFurthestSpawnPoint(killer.HumanoidRootPart.Position)
+                                            if furthestSpawnPos then
+                                                root.Anchored = false
+                                                task.wait(0.1)
+                                                
+                                                root.CFrame = CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0)) 
+                                                root.Velocity = Vector3.zero
+                                                root.Anchored = true
+                                                SetStatus("Đã ghim máy! Chờ Killer rời đi 5m...")
+                                                
+                                                local oldGenPos = targetPos
+                                                repeat
+                                                    if not getgenv().AutoFarm then break end
+                                                    local curHum = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("Humanoid")
+                                                    if curHum and curHum.Health <= 0 then SmartServerHop(); return end
+                                                    
+                                                    if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                                                        LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(furthestSpawnPos + Vector3.new(0, 5, 0))
+                                                        LocalPlayer.Character.HumanoidRootPart.Velocity = Vector3.zero
+                                                    end
+
+                                                    local currentKiller = GetKiller()
+                                                    if not currentKiller or not currentKiller:FindFirstChild("HumanoidRootPart") then break end
+                                                    if not isSurvivorModel(LocalPlayer.Character) then IsInMatch = false; break end
+
+                                                    local kPosNew = currentKiller.HumanoidRootPart.Position
+                                                    local distKillerToOldGen = (kPosNew - oldGenPos).Magnitude
+                                                    if distKillerToOldGen > 5 then 
+                                                        break 
+                                                    else 
+                                                        task.wait(0.1) 
+                                                    end
+                                                until false
+                                                
+                                                if getgenv().AutoFarm and IsInMatch then
+                                                    root.Anchored = false
+                                                    task.wait(0.1)
+                                                    root.CFrame = CFrame.lookAt(dropPos, lookAt)
+                                                    root.Velocity = Vector3.zero
+                                                    if getgenv().AutoFarm_V1 then root.Anchored = true end
+                                                    SetStatus("Killer đã đi! Về lại máy ghim...")
+                                                    task.wait(0.2)
+                                                end
+                                            end
                                         end
                                     end
                                 end
                                 
                                 local interactDelay = getgenv().AutoFarm_V2 and 0.75 or 1.1 -- [AUTO FARM V2.5 FREE]: Sửa một vạch 0.75s
-                                 if tick() - lastInteract >= interactDelay then
-    pcall(function()
-        if prompt then 
-            prompt:InputHoldBegin() 
-        elseif gen:FindFirstChild("Remotes") and gen.Remotes:FindFirstChild("RE") then 
-            gen.Remotes.RE:FireServer() 
-        end
-    end)
-    lastInteract = tick()
-end
-                               
+                                if tick() - lastInteract >= interactDelay then
+                                    if prompt then pcall(function() prompt:InputHoldBegin() end) end
+                                    if gen:FindFirstChild("Remotes") and gen.Remotes:FindFirstChild("RE") then gen.Remotes.RE:FireServer() end
+                                    lastInteract = tick()
+                                end
+                                
+                                task.wait(0.1) 
+                                
                                 if getgenv().AutoFarm_V2 and GetProgress(gen) >= checkProgress then
                                     if prompt then pcall(function() prompt:InputHoldEnd() end) end 
                                     HitCycle[gen] = true
